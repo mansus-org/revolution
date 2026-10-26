@@ -7,14 +7,17 @@
     "es": "Publicamos lo que no vamos a construir. Ideas, edificios, ideologías enteras. Llévatelas."
   },
   "handover": {
-    "en": "We don't have the time or the money to build any of this.",
-    "es": "No tenemos el tiempo ni el dinero para construir nada de esto."
+    "en": "We don't have the time or the money to build most of this.",
+    "es": "No tenemos el tiempo ni el dinero para construir casi nada de esto."
   },
   "handover_article": {
-    "en": "We don't have the time or the money to build this one.",
-    "es": "No tenemos el tiempo ni el dinero para construir esta."
+    "en": "We don't have the time or the money to build this right now.",
+    "es": "No tenemos el tiempo ni el dinero para construir esto ahora mismo."
   },
-  "turn": { "en": "Maybe you do.", "es": "Quizá tú sí." },
+  "turn": {
+    "en": "Maybe you do.",
+    "es": "Quizá tú sí."
+  },
   "contents_lede": {
     "en": "Everything we have written down so far, newest first. None of it is finished.",
     "es": "Todo lo que hemos escrito hasta ahora, lo último primero. Nada está terminado."
@@ -26,5 +29,10 @@
   "needs_label": {
     "en": "what it takes",
     "es": "lo que hace falta"
+  },
+  "contact": {
+    "url": "https://github.com/nemoNoboru/revolution/issues",
+    "en": "Talk to us on GitHub",
+    "es": "Escríbenos en GitHub"
   }
 }

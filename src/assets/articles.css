@@ -822,3 +822,6 @@ blockquote footer { font-size: 0.82em; font-variation-settings: "wdth" 112; font
   .keys button:active { transform: none; }
 }
 .contents-empty { margin: 0; max-width: 40ch; }
+
+/* Titles over 40 characters: a size down and a wider line, so they stay within four lines. */
+.article-title--long { font-size: clamp(2.6rem, 6.6vw, 7rem); max-width: 15ch; }

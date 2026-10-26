@@ -8,7 +8,7 @@ pageType: article
 
   <header class="article-head">
     <span class="misprint" data-glyph="{{ category }}" data-misprint aria-hidden="true"></span>
-    <h1 class="article-title">
+    <h1 class="article-title{% if title | length > 40 %} article-title--long{% endif %}">
       <span lang="en">{{ title }}</span>
       <span lang="es">{{ title_es or title }}</span>
     </h1>
@@ -54,8 +54,8 @@ pageType: article
 <section class="turn" aria-labelledby="turn-title">
   <div class="handover">
     <p class="handover__lead">
-      <span lang="en">{{ site.handover_article.en }}</span>
-      <span lang="es">{{ site.handover_article.es }}</span>
+      <span lang="en">{{ handover or site.handover_article.en }}</span>
+      <span lang="es">{{ handover_es or handover or site.handover_article.es }}</span>
     </p>
     <h2 class="handover__turn" id="turn-title">
       <span lang="en">{{ site.turn.en }}</span>
@@ -73,6 +73,7 @@ pageType: article
     </div>
     {%- endif %}
     <ul class="back-links">
+      <li><a href="{{ site.contact.url }}"><span lang="en">{{ site.contact.en }}</span><span lang="es">{{ site.contact.es }}</span></a></li>
       <li><a href="/articles/"><span lang="en">Back to the contents</span><span lang="es">Volver al índice</span></a></li>
       <li><a href="/"><span lang="en">Back to the front page</span><span lang="es">Volver a la portada</span></a></li>
     </ul>
