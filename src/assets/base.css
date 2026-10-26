@@ -124,7 +124,7 @@ svg { display: block; color: currentColor; }
   border-top: 4px solid var(--ink);
   padding-top: 20px;
 }
-.legend__item { display: grid; grid-template-columns: 56px minmax(0, 1fr); column-gap: 16px; }
+.legend__item { display: grid; grid-template-columns: 56px minmax(0, 1fr); grid-template-rows: auto 1fr; align-items: start; column-gap: 16px; }
 .legend__item dt {
   display: contents;
   font-variation-settings: "wdth" 125;
