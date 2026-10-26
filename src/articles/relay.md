@@ -1,138 +1,113 @@
 ---
-title: "Relay: a micro-social network you run yourselves"
-title_es: "Relay: una microrred social que lleváis vosotros mismos"
-dek: The things a group of friends shares end up on someone else's computer, under someone else's rules. Relay is one program, one host, and an invitation link instead of an account.
-dek_es: Lo que comparte un grupo de amigos acaba en el ordenador de otro, con las reglas de otro. Relay es un programa, una persona que lo aloja y un enlace de invitación en lugar de una cuenta.
-summary: One program, one host, and an invitation link instead of an account. No feed algorithm, no counts, no company in the middle.
-summary_es: Un programa, una persona que lo aloja y un enlace de invitación en lugar de una cuenta. Sin algoritmo, sin contadores, sin empresa en medio.
+title: "Relay: a micro social network for the people near you"
+title_es: "Relay: una microrred social para la gente que tienes cerca"
+dek: Relay started as a private room for a few friends. It is now a location-based micro social network. You see what was posted near you, and anyone can join a node from anywhere. Most of it is still being built.
+dek_es: Relay empezó como una sala privada para unos pocos amigos. Ahora es una microrred social basada en la ubicación. Ves lo que se publicó cerca de ti y cualquiera puede unirse a un nodo desde cualquier sitio. Casi todo se está construyendo todavía.
+summary: Relay pivoted from an invite-only room for friends to a neighbourhood commons. You see posts made within about 10 km of where you are. Planned and in progress, not finished.
+summary_es: Relay pasó de una sala solo por invitación a un procomún de barrio. Ves lo publicado a unos 10 km de donde estás. Planeado y en marcha, no terminado.
 category: ideology
 number: 3
 date: 2026-10-26
-needs_summary: groups willing to host a node and tell us what breaks
-needs_summary_es: grupos dispuestos a alojar un nodo y contarnos qué falla
+needs_summary: React Native developers, Python backend help, and people to run a node in their neighbourhood
+needs_summary_es: desarrollo en React Native, ayuda con el backend en Python y gente que levante un nodo en su barrio
 handover: We are building this slowly, in the time we have. It would go faster with you.
 handover_es: Lo estamos construyendo despacio, en el tiempo que tenemos. Contigo iría más rápido.
 needs_label: where help would land
 needs_label_es: dónde ayudaría
 needs:
-  - A group that runs a node for a month and reports what breaks
-  - Go work on host operations, backup, export and invite expiry
-  - Someone who knows Webmention and Micropub, for the interchange layer
+  - React Native and Expo developers to finish the screens
+  - Python and FastAPI help on the node backend
+  - People who will run a node for their neighbourhood and tell us what breaks
+  - Moderation evaluation on political and everyday text in Portuguese, Spanish and English
   - Writing and design work that keeps jargon off every screen
 needs_es:
-  - Un grupo que tenga un nodo un mes y nos cuente qué falla
-  - Trabajo en Go para la operación del nodo, copias, exportación y caducidad de invitaciones
-  - Alguien que conozca Webmention y Micropub, para la capa de intercambio
+  - Gente de React Native y Expo para terminar las pantallas
+  - Ayuda con Python y FastAPI en el backend del nodo
+  - Personas que lleven un nodo para su barrio y nos cuenten qué falla
+  - Evaluación de moderación sobre texto político y cotidiano en portugués, español e inglés
   - Textos y diseño que mantengan la jerga fuera de todas las pantallas
 ---
 
+## What changed
+
+The first Relay was a small private room. A group of four to twenty-nine friends, an invitation link instead of an account, one Go program on one computer, and every post a static page. We still like most of the ideas in it: no feed algorithm, no counts, a server that belongs to a person and not to a company.
+
+We stopped short of recommending it, because it was missing the one thing we kept wishing for. Our friends were not the ones missing from our lives. The people missing were the ones on our own street.
+
+So Relay has pivoted. Relay 2.0 is a location-based micro social network. It is a plan and a work in progress, and this article says which parts are which.
+
 ## What goes wrong in the big rooms
 
-A group of friends shares a lot. Photos from a weekend, a link worth reading, a poster for a show, a long message someone clearly spent an evening on. Most of it lands in products. The photos are in one app, the links in another, the long writing somewhere else, and the group's memory belongs to a company that can change the rules, count everyone, or close the door.
+Local community has eroded, and we do not think that is an accident of taste. There is no low-friction digital commons for a neighbourhood. The big platforms are built to reach everyone, so a post about a lost cat, a Sunday market or a broken lift competes with the whole planet and loses. Neighbourhood groups end up in chat apps, where nothing can be found a week later, or in feeds tuned for attention, where the useful things sink.
 
-We think three things go wrong when a group lives inside a platform.
+Three things go wrong when a place lives inside a platform.
 
-The first is ownership. The pictures and the words are yours in a legal sense and theirs in every practical one. You can export, sometimes, into a zip file nobody opens. The address of the thing you made belongs to the company, and so does the decision about whether it is still there next year.
+The first is ownership. The memory of the place belongs to a company that can change the rules, count everyone, or close the door.
 
-The second is moderation. A platform with a very large number of users needs one set of rules for all of them, written by people who have never met any of them and enforced at a scale where mistakes are a statistic. A small group has no say in those rules. It also cannot set its own, because the room is shared with everyone else.
+The second is moderation. One set of rules, written far away, for people who will never meet the writers. A neighbourhood cannot set its own.
 
-The third is decay. Platforms change shape to keep growing. The feed starts showing things nobody in the group posted, the counts start mattering, the features the group relied on get moved or removed. None of it is malicious. It is what a business that needs more attention every quarter does to the place where you keep your memories.
+The third is decay. Platforms change shape to keep growing, and the feed starts showing things nobody near you posted.
 
-## Small on purpose
-
-Relay is our answer, and it starts from two constraints we do not intend to relax.
-
-**Micro.** A Relay node is for a group of roughly 4 to 29 people. Not a community, not an audience: the people you would actually invite to dinner, plus the ones they vouch for. Inside that size, moderation stops being a policy problem and becomes a conversation among people who know each other.
-
-**Run yourselves.** A node is one Go program and one folder of data on a computer that someone in the group keeps. There is no database to set up, no external service, no company account. The host is not a moderator by default. They are the person with the keys to the server, the way someone in a group of friends is the person with the car.
+## The one rule
 
 ::: note 1
-Revocation follows the invitation tree. If the host revokes Alice, the people Alice invited lose their links too, and the people they invited. The host can re-invite anyone who should stay.
+The exact figures, the privacy rules and what the server does with them are in the companion piece on the locality model.
 :::
 
-There is no sign-up. People join through an invitation link, and the link is the account. There is nothing to remember and nothing to recover: no email, no password, no reset form. Any member can invite someone they trust, so the group grows by vouching, and removing someone removes the branch they brought in.[^1] The cost is real and we say it plainly: whoever holds the link is the member, so a link has to be treated like a password.
+You only see posts that were created within about 10 km of where you are now. Your posts are only visible to people who are currently within about 10 km of where you posted.[^1] That is the whole product idea. There is no global feed, no follower graph to climb and no trending page, because the unit is a place and not a person.
 
-## What is not there
-
-Relay's home page lists what everyone shared, newest first. That is the whole ordering. There is no feed algorithm deciding what you see, because there is nothing to optimise: no ads to place, no time-on-site to grow, no company in the middle that needs either.
-
-There are no follower counts, no likes and no reposts. Each member has a page listing what they shared, and friends talk in comments under a post. If you want to pass something on, you make your own post about it and link to it, which is slower than pressing a button and is meant to be.
-
-Every post is a small static website at an ordinary address under the node: a page of writing, a gallery, a link with a preview, an event, a few songs. Eleven templates cover the common kinds without a build step. Because posts are plain files, you can back them up, link to them from anywhere, and take them with you if the group ever moves.
+Locality belongs to the post, not to the account. You can post from one city today and from another next week, and each post reaches the people near where it was made. A post is tied to a real physical moment: you cannot post "from" a neighbourhood you are not in.
 
 ::: pull
-Everyone else answers "who are you?" with a domain, an account or a key. Relay answers with an invitation.
+Location shapes visibility, not membership.
 :::
+
+## Anyone can join, from anywhere
+
+The old Relay was invite-only. The new one is open by default: anyone can join a node from anywhere in the world. Where you are decides what you can see and who can see you, not whether you may belong. Someone on holiday keeps their node and sees the beach town while they are in it.
+
+Open doors invite spam, and we know it. Invite-only remains as a setting for closed circles that want it. For the open case, nodes will be able to screen posts with a small moderation model; that is described in the article on the app and moderation, and it is planned, not built.
 
 ## Who it is for, and who it is not
 
-Relay is for the group chat that wants somewhere to put things. A group of friends, a small collective, a family, a band and the people around it. It works best when one person in the group is comfortable keeping a small server running, or is willing to learn.
+Relay is for the neighbourhood that wants somewhere to put things: a market on Sunday, a question about the metro line, a poster for a show, an event on the corner. It works best when someone local is comfortable running a node, or willing to learn how.
 
-It is not for reaching strangers. There is no directory, no discovery page, no trending list and no way to browse other people's nodes. If you want an audience, a public blog or a Mastodon account will serve you better. It is not for large communities either: past a few dozen people the room stops being a room. It does not hide you from the host, who can see everything on the machine they keep. And it is not for groups where nobody wants to run anything at all. Someone has to keep the computer on.
+It is not for reaching an audience. There is no way to broadcast beyond your radius, which is deliberate. It does not hide you from whoever runs the node you are on, who can see what the server stores. It is not a safe place to say things that must stay secret. And it will only be as good as the people near you who show up, which at the start is nobody.
+
+## How it is built
+
+::: figure Fig. 1
+![The Relay feed in the Expo app mockup, headed Pinheiros 10 km](/articles/images/relay-app-feed.png){colour}
+The feed from the mobile mockups: what was posted within 10 km of where you are, newest first. Mockups, not the shipped app.
+:::
+
+A phone is where location lives, so the main client is a mobile app, built with Expo and React Native for iOS and Android from one codebase. The app is a design and a work in progress: the mockups of about thirty screens are done, the Expo project is set up and the screens are being built. There is a second article on the app.
+
+Behind it, each node is one server that you or someone near you runs. We rewrote the backend from Go to Python with FastAPI, with SQLite by default, Postgres as an option, JWT auth, and one Docker image. That rewrite is in progress. One app talks to any node, so there is nothing to build per neighbourhood.
 
 ## The IndieWeb got the values right
 
-Relay did not invent the idea that people should own what they publish. The [IndieWeb](https://indieweb.org/) has argued it for years, and has built the standards to go with it:
-
-- own your domain, so your address cannot be taken from you;
-- [Webmention](https://indieweb.org/Webmention), so a reply on one site can notify the post it replies to on another;
-- [Micropub](https://indieweb.org/Micropub), so any compatible app can publish to your site;
-- [IndieAuth](https://indieweb.org/IndieAuth), so your website address can be your login;
-- [POSSE](https://indieweb.org/POSSE): publish on your own site first, then post copies elsewhere that link back to the original.
-
-We agree with nearly all of it. The question we kept coming back to is why so few people live this way. Our list:
-
-1. Onboarding is hard. A domain, hosting and the right plugins is a weekend project, not a thirty-second sign-up.
-2. There is no network effect. A platform hands you an audience. The IndieWeb hands you freedom and an empty room you have to fill and promote yourself.
-3. The jargon filters people out. Microformats, Webmention and POSSE are precise words, and they tell a newcomer this is not for them.
-4. There is no killer app. Mastodon became the friendly face of ActivityPub. The IndieWeb has no equivalent most people would recognise.
-5. The loops are weak. Replies and likes between sites take manual plumbing, and finding people is hard.
-6. It is a philosophy more than a product. That attracts people who already agree and rarely anyone else.
-
-## How Relay tries to close the gap
-
-Relay does not try to fix the whole IndieWeb. It cannot give everyone their own domain and a public stage, and it should not try. It goes after the gaps a group can close.
-
-Onboarding is one command on the host's machine, or one container. Members never touch a server; they open a link. The empty room is not empty, because the audience is the group that is already there. The jargon stays off the screen: the plan is to say "share to Mastodon" rather than POSSE, and "replies from the web" rather than Webmention.
-
-```keep a node
-curl --proto '=https' --tlsv1.2 -sSfL \
-  https://raw.githubusercontent.com/nemoNoboru/relay/main/install.sh | sh
-
-relay node --name my-group --data /var/lib/relay --listen :8080
-```
-
-::: note 2
-Everything in this section after the install command is a design note in the repository, not shipped behaviour.
-:::
-
-The connection to the wider web is planned in four steps, cheapest first.[^2] First, feeds and microformats markup, so any IndieWeb tool can read a node. Then receiving Webmentions, so a reply from elsewhere can appear under a post as a moderated comment. Then Micropub and IndieAuth, using each member's profile address as their identity, so standard apps can post to the node. Last, posting copies out to Mastodon or Bluesky that link back to the original. Through all of it the shape stays the same: one node, one group, an invitation as the door. We would rather be a good on-ramp for groups than a weaker version of a personal blog.
+Relay did not invent the idea that people should own what they publish. The [IndieWeb](https://indieweb.org/) has argued it for years, with [Webmention](https://indieweb.org/Webmention), [Micropub](https://indieweb.org/Micropub) and [POSSE](https://indieweb.org/POSSE). We agree with nearly all of it. The first Relay planned an IndieWeb bridge; the pivot puts that on hold, because the first job is to make a node that a neighbourhood can use without learning any of those words.
 
 ## Where it sits among the others
 
-There are good projects close to this one, and the differences are the point.
+| Network | Who runs it | The unit |
+| --- | --- | --- |
+| [Mastodon](https://joinmastodon.org/) / ActivityPub | Many operators, one protocol | An account, public timelines |
+| [Nostr](https://github.com/nostr-protocol/nostr) | Nobody: anyone's relays | A key, many relays |
+| Neighbourhood chat groups | A phone number's owner | One group, no search |
+| Relay | Someone near you | A place and a moment |
 
-| Network | Who runs it | Who you are | The unit |
-| --- | --- | --- | --- |
-| [Mastodon](https://joinmastodon.org/) / ActivityPub | Many operators, one protocol | An account on someone's instance | One account, public timelines |
-| [Micro.blog](https://micro.blog/) | A hosted service, or yourself | Your own domain | One person, one public site |
-| [WriteFreely](https://writefreely.org/) | Yourself, or a hosted flagship | An account on an instance | One writer, one blog |
-| [Nostr](https://github.com/nostr-protocol/nostr) | Nobody: anyone's relays | A cryptographic key | One key, many relays |
-| [Scuttlebutt](https://scuttlebutt.nz/) | Everyone: peer to peer | A cryptographic key | One key, a local log |
-| Relay | One person in the group | An invitation link | One group, one node |
-
-Micro.blog is the closest in spirit: no counts, no trending, small by design. The difference is that it gives one person a public site, and Relay gives a group a private room. Mastodon shares the instinct that a server should belong to a person rather than a platform, and then builds a public network with handles on domains you do not own. Nostr's relays are interchangeable stores for strangers' messages; a Relay node is a room for people you know, which makes the shared name a little unlucky. Scuttlebutt asks every friend to run something and spreads the group's data across everyone's logs. Relay asks one friend to run one program and keeps the group's data in one folder anyone can back up. Each choice buys something. Ours buys a five-minute setup and a clear guest list, and costs trusting one host.
+Mastodon shares the instinct that a server should belong to people and not to a platform, and then builds a public network with handles. Nostr's relays are interchangeable stores for strangers' messages. A Relay node is closer to a noticeboard that follows you around.
 
 ## What works and what does not, yet
 
-Built and working: invitation links with delegated invites and cascade revoke, a host console, a welcome page for new members, the chronological home and profile pages, comments with host moderation, publishing from the browser or the command line, the eleven templates, re-hosting a video or a page from a link, keeping the last ten versions of every post with rollback, and HTTPS.
+Planned and in progress: everything in this article. The mobile mockups exist. The Expo project is set up. The Python backend is being rewritten. The locality feed and open membership are specified. AI moderation is planned, with a spike to measure how it behaves on political text before anything ships.
 
-Not built yet: the host operations a node needs before we would recommend it to people who are not us. Backup and export, invitation expiry, limits, and better moderation tools. The IndieWeb work above is design, not code.
+Not built: a finished app, a node you can point a friend at, and any of the moderation. We would rather say that than have you find out.
 
 ## How to help
 
-We started Relay because we wanted it for our own friends, and we keep working on it in the time we have. That time is not much. If you want this to exist sooner, there are concrete ways in.
+We are working on Relay in the time we have, and that time is not much. The most useful help is people who can finish the app and the backend, and above all people who would run a node for their own neighbourhood and tell us what breaks.
 
-The most useful thing is a group that runs a node for a month and tells us what broke and what confused them. You need one person who can keep a small Linux machine or a container online; nobody else needs anything but the link. After that, the work is mostly Go for the host operations, someone who knows Webmention and Micropub for the interchange layer, and careful writing and design so none of it ever shows up as jargon.
-
-The code is at [github.com/nemoNoboru/relay](https://github.com/nemoNoboru/relay). Open an issue there for anything about Relay itself, or on [this site's repository](https://github.com/nemoNoboru/revolution/issues) to talk about the idea. We read both.
+The code is at [github.com/nemoNoboru/relay](https://github.com/nemoNoboru/relay); it does not have a licence file yet, so it is not open source in the formal sense. Open an issue there for anything about Relay itself, or on [this site's repository](https://github.com/nemoNoboru/revolution/issues) to talk about the idea. We read both.

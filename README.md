@@ -73,6 +73,8 @@ HTML is allowed too, for example a table that needs a caption. On top of that:
 | `[^1]` | The small boxed reference to note 1 inside the text. |
 | `::: pull` … `:::` | Pull quote: the inked cut-out. |
 | `::: figure Fig. 1` … `:::` | A figure. An optional first line `![alt text](image.png)`, then the caption. The image is dithered to 1-bit on the page; with no image, the page draws a labelled placeholder. |
+| `![alt](/articles/images/x.png){colour}` as the figure's image line | The same figure, but the picture keeps its real colours instead of being dithered. |
+| `::: gallery Fig. 2` … `:::` | A row of undithered pictures, for phone screenshots: several `![label](/articles/images/x.png)` lines (the label is printed under each shot), then the caption. Sideways scroll on phones. |
 | ```` ```ledger rule ```` | A code block. The text after the backticks becomes its label. |
 | `> -- Name, Source` | In a blockquote, a paragraph starting with `-- ` is the attribution. |
 

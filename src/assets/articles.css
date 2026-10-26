@@ -825,3 +825,43 @@ blockquote footer { font-size: 0.82em; font-variation-settings: "wdth" 112; font
 
 /* Titles over 40 characters: a size down and a wider line, so they stay within four lines. */
 .article-title--long { font-size: clamp(2.6rem, 6.6vw, 7rem); max-width: 15ch; }
+
+/* Gallery: undithered pictures (phone screenshots) in a row, real colours. */
+.figure--gallery .figure__frame { padding: 12px; background: var(--ink); }
+.gallery {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 12px;
+}
+.gallery li { min-width: 0; }
+.gallery img { display: block; width: 100%; height: auto; border: 2px solid var(--paper); background: var(--paper); }
+.gallery span {
+  display: block;
+  margin-top: 0.4em;
+  color: var(--paper);
+  font-variation-settings: "wdth" 112;
+  font-weight: 700;
+  font-size: 0.75rem;
+  line-height: 1.2;
+}
+@media (max-width: 760px) {
+  .gallery {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 10px;
+    padding-bottom: 6px;
+  }
+  .gallery li { flex: 0 0 min(58vw, 240px); scroll-snap-align: start; }
+}
+
+/* Undithered single pictures stay inside the frame. */
+.figure__frame { min-width: 0; }
+.figure img { display: block; max-width: 100%; height: auto; }
+.figure--gallery .gallery { max-width: 100%; }
+@media (min-width: 761px) {
+  .figure__frame:has(> img) { justify-self: start; width: min(100%, 320px); }
+}

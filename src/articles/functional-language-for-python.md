@@ -89,6 +89,103 @@ print(norm((3, 4)))
 
 A few rules make it feel native. Names are mangled the way [Hy](https://github.com/hylang/hy) does it, so `my-fn` becomes `my_fn` and `valid?` becomes `is_valid`, and Python code can call them without quoting tricks. Self tail calls are rewritten into `while` loops, because Python has no tail-call elimination and a functional language without it hits the recursion limit on the first real list. Mutual recursion goes through a small trampoline. An [`importlib`](https://docs.python.org/3/library/importlib.html) hook lets Python `import` a `.pyl` module directly, and the compiled result is cached as `.pyc` like any other module.
 
+## A longer example
+
+::: note 2
+Illustrative only. The language does not exist, and none of this has been run. The Python is what we expect the compiler to emit, written by hand and tidied for reading.
+:::
+
+The small snippets above show the reader and the emitter. Here is a whole small program in the same syntax:[^2] read a CSV of sales, total the revenue by region without mutating anything, and report the top regions. It uses the standard `csv` module, a macro, a lazy sequence, an immutable fold and a `match`. The `match` belongs to the later pattern-matching work, not to the first release.
+
+```sales.pyl (hypothetical)
+import csv
+from functools import reduce
+from itertools import islice
+
+; (-> x (f a) g) becomes (g (f x a)): thread x through the forms as first argument
+defmacro -> x . forms
+  reduce
+    fn acc form
+      let : f : if (list? form) form [form]
+        `(,(first f) ,acc ,@(rest f))
+    . forms x
+
+defn read-rows path
+  with f : open path newline=""
+    tuple : csv.DictReader f
+
+defn revenue row
+  * : int : get row "units"
+    . float : get row "price"
+
+; filter is lazy: rows are tested only as the caller consumes them (read-rows has already loaded the file)
+defn paid-rows path
+  filter (fn r : > (revenue r) 0) : read-rows path
+
+defn by-region rows
+  reduce
+    fn acc row
+      let : region : get row "region"
+        assoc acc region : + (acc.get region 0) : revenue row
+    . rows {}
+
+defn top-regions path n
+  -> (paid-rows path)
+    by-region
+    .items
+    sorted key=(fn kv : - : get kv 1)
+    islice n
+    tuple
+
+defn describe top
+  match top
+    [] : "no sales"
+    [[region total] . _] : f"best: {region} ({total:.0f})"
+
+print : describe : top-regions "sales.csv" 3
+```
+
+`->` is an ordinary macro: it runs at compile time, rewrites the tree, and leaves nothing behind. `assoc` returns a new frozen mapping and leaves its argument alone, so the fold never mutates. Here is roughly what the compiler would emit:
+
+```emitted python
+import csv
+from functools import reduce
+from itertools import islice
+from types import MappingProxyType
+from pyl.core import assoc  # returns a new MappingProxyType
+
+def read_rows(path):
+    with open(path, newline="") as f:
+        return tuple(csv.DictReader(f))
+
+def revenue(row):
+    return int(row["units"]) * float(row["price"])
+
+def paid_rows(path):
+    return filter(lambda r: revenue(r) > 0, read_rows(path))
+
+def by_region(rows):
+    def _fn1(acc, row):
+        region = row["region"]
+        return assoc(acc, region, acc.get(region, 0) + revenue(row))
+    return reduce(_fn1, rows, MappingProxyType({}))
+
+def top_regions(path, n):
+    return tuple(islice(sorted(by_region(paid_rows(path)).items(),
+                               key=lambda kv: -kv[1]), n))
+
+def describe(top):
+    match top:
+        case ():
+            return "no sales"
+        case ((region, total), *_):
+            return f"best: {region} ({total:.0f})"
+
+print(describe(top_regions("sales.csv", 3)))
+```
+
+Python can use it too. With the import hook installed, `from sales import top_regions` works like any module, and `top_regions("sales.csv", 3)` returns an ordinary tuple of tuples. The functions are named `top_regions` and `paid_rows` because of the mangling rule above. The hoisting problem is invisible here, and that is the point: the hard cases are the ones where an `if` or a `let` sits in the middle of a call.
+
 ## Semantics
 
 The point of a new language is the defaults, so here are ours.

@@ -44,6 +44,23 @@ eleventyExcludeFromCollections: true
     </div>
   </section>
 
+  <!-- Every article, newest first. Rendered server-side, so it works without JS. -->
+  <section class="all" id="all" aria-labelledby="all-name">
+    <h2 class="all__title" id="all-name"><span lang="en">All articles</span><span lang="es">Todos los artículos</span></h2>
+    <ol class="all__list">
+    {%- for a in collections.articles %}
+      {%- set d = a.data %}
+      {%- set cat = d.category | category(categories) %}
+      <li class="all__row" data-cat="{{ d.category }}">
+        <span class="all__num"><span class="sr"><span lang="en">Issue </span><span lang="es">Número </span></span>{{ d.number | pad2 }}</span>
+        <a class="all__link" href="{{ a.url }}"><span lang="en">{{ d.title }}</span><span lang="es">{{ d.title_es or d.title }}</span></a>
+        <span class="all__cat"><span lang="en">{{ cat.en }}</span><span lang="es">{{ cat.es }}</span></span>
+        <time class="all__date" datetime="{{ a.date | isoDate }}">{{ a.date | dotDate }}</time>
+      </li>
+    {%- endfor %}
+    </ol>
+  </section>
+
   <!-- Back: the R faces you again. Layout mirrored. -->
   <section class="face face--back" id="yours">
     <span class="spine spine--back" aria-hidden="true">EVOLUTION</span>
