@@ -1,0 +1,89 @@
+---
+layout: layouts/base.njk
+pageType: contents
+permalink: /articles/
+eleventyExcludeFromCollections: true
+description: "Everything Mansus has written down so far: ideas, architecture, ideology, essays and influences, newest first."
+---
+{%- set entries = collections.articles | leadFirst -%}
+<main>
+  <header class="contents-head">
+    <span class="bitmap" data-bitmap="front" data-sweep aria-hidden="true"></span>
+    <h1 class="contents-title"><span lang="en">Contents</span><span lang="es">Índice</span></h1>
+    <p class="lede">
+      <span lang="en">{{ site.contents_lede.en }}</span>
+      <span lang="es">{{ site.contents_lede.es }}</span>
+    </p>
+  </header>
+
+  <div class="filter">
+    <ul class="keys" aria-label="Show one category / Ver una categoría">
+      <li><button type="button" class="key-all" data-filter="all" aria-pressed="true">
+        <span class="bitmap" data-bitmap="front" aria-hidden="true"></span>
+        <span class="sr"><span lang="en">Everything</span><span lang="es">Todo</span></span>
+      </button></li>
+      {%- for c in categories %}
+      <li><button type="button" data-filter="{{ c.key }}" aria-pressed="false">
+        <span data-glyph="{{ c.key }}" aria-hidden="true"></span>
+        <span class="sr"><span lang="en">{{ c.en }}</span><span lang="es">{{ c.es }}</span></span>
+      </button></li>
+      {%- endfor %}
+    </ul>
+    <p class="filter__status" role="status" aria-live="polite"></p>
+  </div>
+
+  <section class="contents" aria-labelledby="toc-label">
+    <h2 class="sr" id="toc-label"><span lang="en">Entries</span><span lang="es">Entradas</span></h2>
+    {%- if entries.length == 0 %}
+    <p class="contents-empty">
+      <span lang="en">Nothing here yet. We are still arguing about the first one.</span>
+      <span lang="es">Aquí no hay nada todavía. Seguimos discutiendo el primero.</span>
+    </p>
+    {%- endif %}
+    <ol class="toc" reversed>
+    {%- for a in entries %}
+      {%- set d = a.data %}
+      {%- set cat = d.category | category(categories) %}
+
+      <li class="entry{% if loop.first %} entry--lead{% endif %}" data-cat="{{ d.category }}">
+        <div class="entry__side" aria-hidden="true"><span class="entry__cat"><span lang="en">{{ cat.en }}</span><span lang="es">{{ cat.es }}</span></span><span class="entry__sign" data-glyph="{{ d.category }}"></span></div>
+        <div class="entry__text">
+          <h3 class="entry__head">
+            <a href="{{ a.url }}"><span lang="en">{{ d.title }}</span><span lang="es">{{ d.title_es or d.title }}</span></a>
+            {%- if not loop.first %}
+            <span class="leader" aria-hidden="true"></span>
+            {%- endif %}
+          </h3>
+          {%- if d.dek %}
+          <p class="entry__dek">
+            <span lang="en">{{ d.dek }}</span>
+            <span lang="es">{{ d.dek_es or d.dek }}</span>
+          </p>
+          {%- endif %}
+          <p class="entry__meta">
+            <span class="cat"><span lang="en">{{ cat.en }}</span><span lang="es">{{ cat.es }}</span></span>
+            <time datetime="{{ a.date | isoDate }}">{{ a.date | dotDate }}</time>
+            <span><span lang="en">{{ d.minutes }} min read</span><span lang="es">{{ d.minutes }} min de lectura</span></span>
+          </p>
+          {%- if d.needs_summary %}
+          <p class="stamp"><b><span lang="en">Needs</span><span lang="es">Necesita</span></b>
+            <span><span lang="en">{{ d.needs_summary }}</span><span lang="es">{{ d.needs_summary_es or d.needs_summary }}</span></span></p>
+          {%- endif %}
+        </div>
+        <p class="entry__num"><span class="sr"><span lang="en">Issue </span><span lang="es">Número </span></span>{{ d.number | pad2 }}</p>
+      </li>
+    {%- endfor %}
+
+    </ol>
+  </section>
+
+  <footer class="contents-foot">
+    {%- if collections.articles | anySample %}
+    <p>
+      <span lang="en">{{ site.sample_note.en }}</span>
+      <span lang="es">{{ site.sample_note.es }}</span>
+    </p>
+    {%- endif %}
+    <p><a href="/"><span lang="en">Back to the front page</span><span lang="es">Volver a la portada</span></a></p>
+  </footer>
+</main>

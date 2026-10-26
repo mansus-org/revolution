@@ -1,0 +1,30 @@
+{
+  "title": "(R)Evolution",
+  "group": "Mansus",
+  "description": "Mansus publishes ideas, architectures, ideologies and essays we won't build ourselves. Take them.",
+  "statement": {
+    "en": "We publish the things we won't build. Ideas, buildings, whole ideologies. Take them.",
+    "es": "Publicamos lo que no vamos a construir. Ideas, edificios, ideologías enteras. Llévatelas."
+  },
+  "handover": {
+    "en": "We don't have the time or the money to build any of this.",
+    "es": "No tenemos el tiempo ni el dinero para construir nada de esto."
+  },
+  "handover_article": {
+    "en": "We don't have the time or the money to build this one.",
+    "es": "No tenemos el tiempo ni el dinero para construir esta."
+  },
+  "turn": { "en": "Maybe you do.", "es": "Quizá tú sí." },
+  "contents_lede": {
+    "en": "Everything we have written down so far, newest first. None of it is finished.",
+    "es": "Todo lo que hemos escrito hasta ahora, lo último primero. Nada está terminado."
+  },
+  "sample_note": {
+    "en": "Sample entries for the draft, not published yet.",
+    "es": "Entradas de ejemplo para el borrador, aún sin publicar."
+  },
+  "needs_label": {
+    "en": "what it takes",
+    "es": "lo que hace falta"
+  }
+}
