@@ -122,9 +122,10 @@
   // One dither cell is a whole number of CSS pixels (3, or 2 on phones), so the pattern never
   // gets resampled into uneven blocks.
   const cellFor = (cv) => (cv.parentElement.clientWidth < 600 ? 2 : 3);
-  function dither(cv) {
+  // `brightness(x, y, w, h)` returns 0 (ink) to 1 (paper) for each cell.
+  function dither(cv, brightness = scene, ratio = 9 / 16) {
     const w = Math.max(80, Math.floor(cv.parentElement.clientWidth / cellFor(cv)));
-    const h = Math.round((w * 9) / 16);
+    const h = Math.round(w * ratio);
     if (cv.width === w && cv.height === h && cv.dataset.done) return;
     cv.width = w;
     cv.height = h;
@@ -135,16 +136,52 @@
     for (let y = 0; y < h; y++) {
       for (let x = 0; x < w; x++) {
         const threshold = (BAYER[(y % 4) * 4 + (x % 4)] + 0.5) / 16;
-        const c = scene(x, y, w, h) > threshold ? PAPER : INK;
+        const c = brightness(x, y, w, h) > threshold ? PAPER : INK;
         const i = (y * w + x) * 4;
         img.data[i] = c[0]; img.data[i + 1] = c[1]; img.data[i + 2] = c[2]; img.data[i + 3] = 255;
       }
     }
     ctx.putImageData(img, 0, 0);
   }
-  const canvases = document.querySelectorAll("canvas[data-dither]");
-  canvases.forEach(dither);
-  window.addEventListener("resize", () => canvases.forEach(dither));
+
+  // Real images: read their pixels, then dither them the same way.
+  function fromImage(source) {
+    return (cv) => {
+      const ratio = source.naturalHeight / source.naturalWidth;
+      const w = Math.max(80, Math.floor(cv.parentElement.clientWidth / cellFor(cv)));
+      const h = Math.round(w * ratio);
+      const off = document.createElement("canvas");
+      off.width = w;
+      off.height = h;
+      const octx = off.getContext("2d", { willReadFrequently: true });
+      octx.drawImage(source, 0, 0, w, h);
+      const px = octx.getImageData(0, 0, w, h).data;
+      dither(cv, (x, y) => {
+        const i = (y * w + x) * 4;
+        return (0.2126 * px[i] + 0.7152 * px[i + 1] + 0.0722 * px[i + 2]) / 255;
+      }, ratio);
+    };
+  }
+
+  const painters = [];
+  document.querySelectorAll("canvas[data-dither]").forEach((cv) => painters.push([cv, (c) => dither(c)]));
+  document.querySelectorAll("img[data-dither]").forEach((img) => {
+    const cv = document.createElement("canvas");
+    cv.setAttribute("role", "img");
+    cv.setAttribute("aria-label", img.alt);
+    const start = () => {
+      try {
+        const paint = fromImage(img);
+        img.replaceWith(cv);
+        paint(cv);
+        painters.push([cv, (c) => { c.dataset.done = ""; paint(c); }]);
+      } catch (e) { /* cross-origin image: leave the original in place */ }
+    };
+    if (img.complete && img.naturalWidth) start();
+    else img.addEventListener("load", start, { once: true });
+  });
+  painters.forEach(([cv, paint]) => paint(cv));
+  window.addEventListener("resize", () => painters.forEach(([cv, paint]) => paint(cv)));
 
   // ---------- word count, measured rather than typed ----------
   const prose = document.querySelector(".prose");
