@@ -1,9 +1,17 @@
-# (Я)Evolution, landing page design draft
+# (Я)Evolution, design draft
 
-A visual draft for review, not the production site. Open `landing/index.html` in a browser.
-Plain HTML, CSS and one small script (`landing/bitmap.js`), Google Fonts only, no build step.
-Screenshots: `screenshots/revolution-landing-desktop.png` (1440 wide) and
-`screenshots/revolution-landing-mobile.png` (390 wide).
+A visual draft for review, not the production site. Three pages, linked to each other:
+
+- `landing/index.html`: the front page, the letter turning around.
+- `articles/index.html`: the contents.
+- `articles/currency-that-expires.html`: one article opened, to judge long text.
+
+Plain HTML, CSS and a little script, Google Fonts only, no build step. Shared pieces live in
+`shared/`: `base.css` (palette, type, chrome), `bitmap.js` (the R, the Я, the five signs and the
+dither) and `lang.js` (the EN/ES switch, remembered across pages).
+
+Screenshots in `screenshots/`, desktop at 1440 wide and mobile at 390 wide:
+`revolution-landing-*`, `revolution-articles-*` (contents) and `revolution-article-*`.
 
 This replaces the first draft (iPod menu, serif newspaper layout), which the client rejected.
 
@@ -69,7 +77,52 @@ an empty state instead of filler.
   has a text name in both languages, and the panel is a labelled tabpanel.
 - All controls are at least 44×44 px (56 on phones, 64 on desktop) with a 3px ink focus ring.
 
+## Contents and article pages
+
+The client said v2 reminded them of personal zines, so these two pages push the paste-up further
+while staying 1-bit: strips look stuck down by hand, black edges fray into dither like a tired
+photocopier, and every grey is still made of pixels. Dials: ENERGY 2 / RHYTHM 2 / MOTION 1. The
+reading page is calmer than the landing on purpose.
+
+**Contents.** The word "Contents" fills its column next to the (Я), as the category names do on the
+landing. Each entry is a strip: category word and sign on the left, the title running into a
+leader of pixel dots, and the issue number set huge on the right like a page number in a zine's
+contents. Strips sit a few pixels off each other, as if glued by hand. The newest issue is a cut-out
+pasted on top, inked solid and a little crooked. The landing's keys are back as a filter. Pressing
+one does the e-ink full refresh, and entries from other categories stay in place as checkerboard
+ghosts (inert and hidden from screen readers) instead of disappearing. Press the lit key again, or
+the (Я) key, to bring everything back.
+
+**Article.** Body text is Anybody at width 102, weight 400, 17 to 19 px, line height 1.6, on a 66ch
+measure. That is 14.2:1 ink on paper. The boldness is kept to the edges:
+
+- the category sign printed twice, the second pass slipping off register;
+- an ultra-condensed title, a wide light dek and the issue number standing on its side;
+- section numbers hanging in the left margin over a heavy rule;
+- margin notes left of the text on wide screens, boxed in the flow on phones;
+- a pull quote as an inked cut-out stuck across the margin, with a toner fray;
+- a figure drawn by the page and dithered to 1-bit with a Bayer matrix, labelled as a placeholder;
+- tables and blockquotes ruled with pixel dots;
+- code set in the same family at width 80, because there is only one typeface;
+- the running head "EVOLUTION 08" up the right edge.
+
+The page ends with the R facing the reader, "Maybe you do.", the article's "Needs" list and links
+back to the contents and the front page.
+
+Bullets are single square pixels. The "Needs" line is a rubber stamp: a black label next to a boxed
+phrase. The dither tiles (checkerboard and one in four) are CSS conic-gradient patterns at 2 px
+cells. They are used as halftone texture, never as a colour gradient.
+
+**Content.** Entries, dates and reading times are samples, and the page says so. Every entry opens
+the same sample article. The article is draft copy for layout review. Its history (Gesell, Wörgl
+1932, the Keynes line from chapter 23 of the *General Theory*) is real and kept to what the
+standard accounts agree on. The scheme's numbers are the proposal's own, not claims. The body is
+English only. In Spanish the page says so and keeps the chrome, title and dek translated.
+
 ## Not done yet
 
 - No call to action link: there is no confirmed contact or submission address to point at.
 - Real wordmark and real entries to be supplied by Mansus.
+- Only one article page exists; the other contents entries all open it.
+- The article body has no Spanish translation yet.
+- The figure is a generated placeholder; the real image would go through the same 1-bit treatment.
