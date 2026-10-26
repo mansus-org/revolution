@@ -66,6 +66,23 @@ svg { display: block; color: currentColor; }
   align-items: center;
 }
 
+.chrome-link {
+  margin-left: auto;
+  margin-right: 16px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--ink);
+  font-variation-settings: "wdth" 125;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.18em;
+}
+.chrome-link:hover { text-decoration-thickness: 4px; }
+.chrome-link[aria-current] { text-decoration: none; }
+
 .lang { display: flex; gap: 6px; }
 
 .lang button {
@@ -84,3 +101,8 @@ svg { display: block; color: currentColor; }
 
 .lang button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
 
+
+@media (max-width: 420px) {
+  .chrome-link { margin-right: 8px; font-size: 0.875rem; }
+  .mark { font-size: 1.25rem; }
+}

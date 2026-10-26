@@ -1,0 +1,181 @@
+---
+layout: layouts/base.njk
+pageType: about
+permalink: /about/
+eleventyExcludeFromCollections: true
+description: "Felipe Vieira, Senior GenAI Engineer in A Coruña, and Mansus, the open collective behind (R)Evolution."
+---
+<main>
+  <header class="contents-head">
+    <span class="bitmap" data-bitmap="front" data-sweep aria-hidden="true"></span>
+    <h1 class="contents-title"><span lang="en">About</span><span lang="es">Sobre</span></h1>
+    <p class="lede">
+      <span lang="en">The person who writes this, and the house it is written from.</span>
+      <span lang="es">Quien escribe esto, y la casa desde la que se escribe.</span>
+    </p>
+  </header>
+
+  <!-- 1. Felipe -->
+  <section class="about" aria-labelledby="felipe-name">
+    <figure class="about__photo">
+      <div class="about__frame">
+        <img src="/assets/felipe.jpg" width="720" height="960" data-dither
+             alt="Felipe, smiling, sits on a sunlit stone balcony in A Coruña with a phone in his hands. An ornate white iron railing and tall old buildings are behind him.">
+      </div>
+      <figcaption>
+        <span lang="en">A Coruña, Galicia.</span>
+        <span lang="es">A Coruña, Galicia.</span>
+      </figcaption>
+    </figure>
+
+    <div class="about__text">
+      <h2 class="about__h" id="felipe-name"><span class="about__n" aria-hidden="true">01</span> Felipe Vieira</h2>
+      <p class="about__role">
+        <span lang="en">Senior GenAI Engineer, A Coruña, Galicia, Spain.</span>
+        <span lang="es">Senior GenAI Engineer, A Coruña, Galicia, España.</span>
+      </p>
+      <div class="about__prose">
+        <p lang="en">I have been building software for more than ten years: distributed platforms, async systems, AI, and technology from the ground up. I like working where research meets production engineering, where an idea has to survive contact with real traffic.</p>
+        <p lang="es">Llevo más de diez años haciendo software: plataformas distribuidas, sistemas asíncronos, IA y tecnología construida desde cero. Me gusta trabajar donde la investigación se encuentra con la ingeniería de producción, donde una idea tiene que sobrevivir al tráfico real.</p>
+      </div>
+
+      <h3 class="about__sub"><span lang="en">Where I have worked</span><span lang="es">Dónde he trabajado</span></h3>
+      <ol class="career">
+        <li>
+          <span class="career__when">2021–<span lang="en">now</span><span lang="es">hoy</span></span>
+          <span class="career__what"><b>DEUS</b>
+            <span lang="en">Human(ity)-centered AI. Senior GenAI Engineer since 2024, building LLM and agentic systems for Shell. Tech Lead in 2023–24 on Shell's Data Platform. ML and Fullstack Engineer 2021–23.</span>
+            <span lang="es">IA centrada en lo humano. Senior GenAI Engineer desde 2024, construyendo sistemas con LLM y agentes para Shell. Tech Lead en 2023–24 en la plataforma de datos de Shell. ML y Fullstack Engineer 2021–23.</span></span>
+        </li>
+        <li>
+          <span class="career__when">2017–2021</span>
+          <span class="career__what"><b>Accenture España</b>
+            <span lang="en">Creative Technologist doing R&amp;D across mobile, ML, voice and AR/VR, then Fullstack Engineer.</span>
+            <span lang="es">Creative Technologist haciendo I+D en móvil, ML, voz y AR/VR, y después Fullstack Engineer.</span></span>
+        </li>
+        <li>
+          <span class="career__when">2016</span>
+          <span class="career__what"><b>Google Summer of Code</b>
+            <span lang="en">Cap'n Proto: I wrote capnp-ruby, the Ruby bindings.</span>
+            <span lang="es">Cap'n Proto: escribí capnp-ruby, los bindings para Ruby.</span></span>
+        </li>
+        <li>
+          <span class="career__when"><span lang="en">Degree</span><span lang="es">Grado</span></span>
+          <span class="career__what"><b>Universidade de Vigo</b>
+            <span lang="en">B.Sc. in Computer Science.</span>
+            <span lang="es">Grado en Ingeniería Informática.</span></span>
+        </li>
+      </ol>
+
+      <h3 class="about__sub"><span lang="en">What I keep coming back to</span><span lang="es">A qué vuelvo siempre</span></h3>
+      <ul class="tags">
+        <li>LLMs &amp; agentic systems</li><li>RAG</li><li>ML, deep learning, RL</li>
+        <li>P2P, libp2p, IPFS</li><li>WebAssembly</li><li>Nix / NixOS</li>
+      </ul>
+      <p class="about__langs">
+        <b><span lang="en">Languages</span><span lang="es">Lenguajes</span></b>
+        Python, TypeScript, Rust, Go, Ruby, Lua, C/C++
+      </p>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section class="projects" aria-labelledby="projects-name">
+    <h2 class="about__h" id="projects-name"><span lang="en">Selected projects</span><span lang="es">Proyectos escogidos</span></h2>
+    <ul class="proj">
+      <li class="proj__row">
+        <a class="proj__name" href="https://github.com/nemoNoboru/relay">relay</a>
+        <p class="proj__desc">
+          <span lang="en">The federated web, and the last mile for independent websites. A folder becomes a website, a machine behind NAT becomes reachable, and the address belongs to the key you hold.</span>
+          <span lang="es">La web federada, y el último tramo para los sitios independientes. Una carpeta se convierte en un sitio web, una máquina tras un NAT pasa a ser accesible y la dirección es de quien tiene la clave.</span>
+          <span class="proj__more"><span lang="en">On this site:</span><span lang="es">En este sitio:</span>
+            <a href="/articles/relay/">Relay</a>, <a href="/articles/relay-locality/">locality</a>, <a href="/articles/relay-app/">the app</a>.</span>
+        </p>
+      </li>
+      <li class="proj__row">
+        <a class="proj__name" href="https://github.com/nemoNoboru/zerverless">zerverless</a>
+        <p class="proj__desc">
+          <span lang="en">Volunteer-powered distributed compute: torrents, but for computation. Sandboxed, federated execution of WASM, Python, Lua and JS over libp2p and IPFS.</span>
+          <span lang="es">Cómputo distribuido hecho por voluntarios: torrents, pero para computación. Ejecución federada y aislada de WASM, Python, Lua y JS sobre libp2p e IPFS.</span>
+        </p>
+      </li>
+      <li class="proj__row">
+        <a class="proj__name" href="https://github.com/nemoNoboru/almadel">almadel</a>
+        <p class="proj__desc">
+          <span lang="en">A self-hosted control plane for autonomous coding agents. A kanban where the columns are prompts and agents pick up tickets on their own branches.</span>
+          <span lang="es">Un plano de control autoalojado para agentes de programación autónomos. Un kanban donde las columnas son prompts y los agentes cogen tickets en sus propias ramas.</span>
+        </p>
+      </li>
+      <li class="proj__row">
+        <a class="proj__name" href="https://github.com/nemoNoboru/revolution">revolution</a>
+        <p class="proj__desc">
+          <span lang="en">This site.</span>
+          <span lang="es">Este sitio.</span>
+        </p>
+      </li>
+      <li class="proj__row">
+        <a class="proj__name" href="https://github.com/nemoNoboru/k3s-hetzner-gitops">k3s-hetzner-gitops</a>
+        <p class="proj__desc">
+          <span lang="en">A small GitOps setup for a k3s cluster.</span>
+          <span lang="es">Una configuración GitOps pequeña para un clúster k3s.</span>
+        </p>
+      </li>
+      <li class="proj__row">
+        <a class="proj__name" href="https://github.com/nemoNoboru/mansus-book">mansus-book</a>
+        <p class="proj__desc">
+          <span lang="en">A little book in the making.</span>
+          <span lang="es">Un librito en preparación.</span>
+        </p>
+      </li>
+      <li class="proj__row">
+        <a class="proj__name" href="https://github.com/nemoNoboru/GEN0">GEN0</a>
+        <p class="proj__desc">
+          <span lang="en">A genetic-algorithm framework for neural networks and RL, written from scratch on NumPy.</span>
+          <span lang="es">Un framework de algoritmos genéticos para redes neuronales y RL, escrito desde cero sobre NumPy.</span>
+        </p>
+      </li>
+      <li class="proj__row">
+        <a class="proj__name" href="https://github.com/nemoNoboru/capnp-ruby">capnp-ruby</a>
+        <p class="proj__desc">
+          <span lang="en">Ruby bindings for Cap'n Proto, from Google Summer of Code 2016.</span>
+          <span lang="es">Bindings de Ruby para Cap'n Proto, del Google Summer of Code 2016.</span>
+        </p>
+      </li>
+      <li class="proj__row">
+        <a class="proj__name" href="https://github.com/nemoNoboru/jisp-educational">jisp-educational</a>
+        <p class="proj__desc">
+          <span lang="en">An educational Lisp interpreter in JavaScript.</span>
+          <span lang="es">Un intérprete de Lisp educativo en JavaScript.</span>
+        </p>
+      </li>
+    </ul>
+
+    <p class="about__links">
+      <a href="https://github.com/nemoNoboru">GitHub</a>
+      <a href="https://www.linkedin.com/in/felipe-vieira-750961159">LinkedIn</a>
+      <a href="mailto:felipetavres@gmail.com">felipetavres@gmail.com</a>
+    </p>
+  </section>
+
+  <!-- 2. Mansus: the inked cut-out -->
+  <section class="mansus" aria-labelledby="mansus-name">
+    <div class="mansus__sheet toner">
+      <h2 class="about__h" id="mansus-name"><span class="about__n" aria-hidden="true">02</span> Mansus</h2>
+      <blockquote class="mansus__quote">
+        <p lang="en">A house without walls, where people can be what they truly are.</p>
+        <p lang="es">Una casa sin muros, donde las personas pueden ser lo que de verdad son.</p>
+      </blockquote>
+      <div class="mansus__prose">
+        <p lang="en">I started Mansus as an open collective. Right now it is me and a swarm of agents, and the door is open.</p>
+        <p lang="es">Fundé Mansus como un colectivo abierto. Ahora mismo somos yo y un enjambre de agentes, y la puerta está abierta.</p>
+        <p lang="en">This notebook is the house's front room. It is where we leave the ideas we won't build ourselves, in case you will. <a href="/articles/relay/">Relay</a> is the same idea in code: a website that needs no landlord, an address that belongs to whoever holds the key. A house without walls needs that kind of ground.</p>
+        <p lang="es">Este cuaderno es la entrada de la casa. Aquí dejamos las ideas que no vamos a construir nosotros, por si las construyes tú. <a href="/articles/relay/">Relay</a> es la misma idea hecha código: un sitio web que no necesita casero, una dirección que es de quien tiene la clave. Una casa sin muros necesita ese tipo de suelo.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="contents-foot about-foot">
+    <p><a href="/articles/"><span lang="en">Read the contents</span><span lang="es">Ver el índice</span></a></p>
+    <p><a href="/"><span lang="en">Back to the front page</span><span lang="es">Volver a la portada</span></a></p>
+  </footer>
+</main>

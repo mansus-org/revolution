@@ -318,3 +318,7 @@
   .all__cat, .all__date { font-size: 0.875rem; }
   .all__date { text-align: right; }
 }
+
+.to-about { margin: 28px 0 0; font-variation-settings: "wdth" 125; font-weight: 700; font-size: clamp(1rem, 1.3vw, 1.25rem); }
+.to-about a { display: inline-flex; align-items: center; min-height: 44px; color: inherit; text-decoration-thickness: 2px; text-underline-offset: 0.18em; }
+.to-about a:hover { text-decoration-thickness: 4px; }

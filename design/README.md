@@ -5,12 +5,13 @@ root `README.md`); this file keeps the reasoning behind the design.
 
 - Landing: `src/index.njk`, styles `src/assets/landing.css`, script `src/assets/landing.js`.
 - Contents: `src/contents.njk`.
+- About: `src/about.njk`, styles `src/assets/about.css`; the photo is `src/assets/felipe.jpg` (720 px wide), dithered to 1-bit by `articles.js`.
 - Article: `src/_includes/layouts/article.njk`, one markdown file per article in `src/articles/`.
 - Shared: `src/assets/base.css` (palette, type, chrome), `bitmap.js` (the R, the Я, the five signs
   and the dither), `lang.js` (the EN/ES switch, remembered across pages), `articles.css/js`.
 
 Screenshots of the built site in `screenshots/`, desktop at 1440 wide and mobile at 390 wide:
-`revolution-landing-*`, `revolution-articles-*` (contents) and `revolution-article-*`.
+`revolution-landing-*`, `revolution-articles-*` (contents) and `revolution-article-*` and `about-*`.
 
 This replaces the first draft (iPod menu, serif newspaper layout), which the client rejected.
 
