@@ -465,7 +465,7 @@ html[data-lang="en"] .untranslated-note { display: none; }
   font-size: 0.5em;
   line-height: 1.6;
 }
-.prose h2 .h-text { grid-column: text / end; max-width: 20ch; }
+.prose h2 .h-text { grid-column: text / end; max-width: 26ch; text-wrap: balance; }
 .prose h2:first-child { margin-top: 0; }
 
 .prose h3 {
@@ -513,6 +513,7 @@ html[data-lang="en"] .untranslated-note { display: none; }
 }
 
 .prose pre {
+  font-family: inherit;
   grid-column: text / wide;
   margin: 0.4em 0 1.6em;
   padding: 0;
@@ -597,6 +598,7 @@ blockquote {
   line-height: 1.45;
 }
 blockquote p { margin: 0 0 0.4em; }
+blockquote cite { font-style: normal; font-weight: 640; }
 blockquote footer { font-size: 0.82em; font-variation-settings: "wdth" 112; font-weight: 400; }
 
 /* Figure: the image is generated and dithered to 1-bit on the page. */
