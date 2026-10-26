@@ -22,16 +22,16 @@ Create `src/articles/<slug>.md`. The file name becomes the URL: `/revolution/art
 
 ```markdown
 ---
-title: A currency that expires every winter
-title_es: Una moneda que caduca cada invierno
-dek: Money that loses a little each month and turns into firewood on the shortest day.
+title: A functional language that speaks Python
+title_es: Un lenguaje funcional que habla Python
+dek: A small Lisp where indentation does the grouping, compiled to Python.
 category: ideas
-number: 8
+number: 2
 date: 2026-10-19
-needs_summary: a town willing to run it for one year
+needs_summary: someone with a compilers background who knows Python internals
 needs:
-  - A council willing to run it for one season
-  - A local bank to hold the backing
+  - Programming language theory, enough to own the semantics
+  - Python internals, the ast module and the import system
 ---
 
 ## First section
@@ -52,13 +52,14 @@ Text…
 | `needs_summary` / `needs_summary_es` | no | The "Needs" stamp on the contents strip and article header. |
 | `needs` / `needs_es` | no | List under "Maybe you do." at the end of the article. |
 | `needs_label` / `needs_label_es` | no | Text beside that list's stamp. Default: "what it takes". |
+| `handover` / `handover_es` | no | The line above "Maybe you do." Default: "We don't have the time or the money to build this right now." |
 | `lead` | no | `true` puts this entry in the cut-out instead of the newest one. |
 | `sample` | no | `true` marks placeholder content; the pages show the "sample entries" note. |
 | `draft` | no | `true` leaves the file out of the site completely. |
 
 Article bodies are written in English; in Spanish the page says so and translates the title, dek
-and chrome. Category names, the landing statement and other fixed copy are in
-`src/_data/categories.json` and `src/_data/site.json`.
+and chrome. Category names, the landing statement, the contact link at the end of every article and other
+fixed copy are in `src/_data/categories.json` and `src/_data/site.json`.
 
 ### Markdown conventions
 

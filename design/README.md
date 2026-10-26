@@ -65,9 +65,9 @@ e-ink language. Dials: ENERGY 3 / RHYTHM 3 / MOTION 2.
 
 ## Content
 
-The statement, categories and the "maybe you do" line are real copy for review. The entries are
-samples and say so on the page ("Sample entries, not published yet."). Empty categories show
-an empty state instead of filler.
+The statement, categories and the "maybe you do" line are real copy. Empty categories show an
+empty state instead of filler. Entries marked `sample: true` get a "Sample entries" note; none
+are marked today.
 
 ## Accessibility
 
@@ -112,16 +112,14 @@ Bullets are single square pixels. The "Needs" line is a rubber stamp: a black la
 phrase. The dither tiles (checkerboard and one in four) are CSS conic-gradient patterns at 2 px
 cells. They are used as halftone texture, never as a colour gradient.
 
-**Content.** Entries are samples (`sample: true`), and the pages say so. Each one has its own
-stub page. The article is draft copy for layout review. Its history (Gesell, Wörgl
-1932, the Keynes line from chapter 23 of the *General Theory*) is real and kept to what the
-standard accounts agree on. The scheme's numbers are the proposal's own, not claims. The body is
-English only. In Spanish the page says so and keeps the chrome, title and dek translated.
+**Content.** The site launched with three real articles: Relay (ideology), a functional language
+hosted on Python (ideas) and an Obsidian memory system for AI agents (architecture). Article
+bodies are English only. In Spanish the page says so and keeps the chrome, title and dek
+translated. Every article ends with a link to the repository's GitHub issues.
 
 ## Not done yet
 
-- No call to action link: there is no confirmed contact or submission address to point at.
-- Real wordmark and real entries to be supplied by Mansus.
-- Only one article is written out; the other entries are short stubs.
-- The article body has no Spanish translation yet.
-- The figure is a generated placeholder; the real image would go through the same 1-bit treatment.
+- The only contact is GitHub issues; there is no email on purpose.
+- Real wordmark to be supplied by Mansus.
+- Article bodies have no Spanish translation yet.
+- Essays and Influences have no articles yet and show their empty state.
