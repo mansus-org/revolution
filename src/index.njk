@@ -1,0 +1,68 @@
+---
+layout: layouts/base.njk
+pageType: landing
+permalink: /
+eleventyExcludeFromCollections: true
+---
+<main>
+
+  <!-- Front: the R has just turned away. The old R lingers as an e-ink ghost. -->
+  <section class="face face--front" id="top">
+    <h1 class="title">
+      <span class="sr">(R)Evolution</span>
+      <span class="bitmap" data-bitmap="front" data-sweep aria-hidden="true"></span>
+      <span class="spine" aria-hidden="true">EVOLUTION</span>
+      <noscript><span class="fallback" aria-hidden="true">(Я)</span></noscript>
+    </h1>
+    <p class="statement">
+      <span lang="en">{{ site.statement.en }}</span>
+      <span lang="es">{{ site.statement.es }}</span>
+    </p>
+  </section>
+
+  <!-- The one control: five glyphs, one panel. -->
+  <section class="index" id="index" aria-labelledby="index-name">
+    <div class="dial" role="tablist" aria-label="Categories / Categorías">
+      {%- for c in categories %}
+      <button role="tab" id="tab-{{ c.key }}" aria-controls="panel" data-cat="{{ c.key }}" aria-selected="{{ 'true' if loop.first else 'false' }}"{% if not loop.first %} tabindex="-1"{% endif %}>
+        <span class="glyph" data-glyph="{{ c.key }}" aria-hidden="true"></span>
+        <span class="sr"><span lang="en">{{ c.en }}</span><span lang="es">{{ c.es }}</span></span>
+      </button>
+      {%- endfor %}
+    </div>
+
+    <div class="panel" id="panel" role="tabpanel" aria-labelledby="index-name" tabindex="0">
+      <div class="sigil" aria-hidden="true">
+        <span class="sigil__ghost"></span>
+        <span class="sigil__ink"></span>
+      </div>
+      <h2 class="cat-name" id="index-name" aria-live="polite"></h2>
+      <div class="panel__list">
+        <ul class="entries"></ul>
+        <p class="to-contents"><a href="/articles/"><span lang="en">Everything, in the contents</span><span lang="es">Todo, en el índice</span></a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Back: the R faces you again. Layout mirrored. -->
+  <section class="face face--back" id="yours">
+    <span class="spine spine--back" aria-hidden="true">EVOLUTION</span>
+    <div class="handover">
+      <p class="handover__lead">
+        <span lang="en">{{ site.handover.en }}</span>
+        <span lang="es">{{ site.handover.es }}</span>
+      </p>
+      <p class="handover__turn">
+        <span lang="en">{{ site.turn.en }}</span>
+        <span lang="es">{{ site.turn.es }}</span>
+      </p>
+    </div>
+    <span class="bitmap" data-bitmap="back" aria-hidden="true"></span>
+  </section>
+
+</main>
+
+<!-- Entry data, generated from src/articles/*.md. -->
+<script type="application/json" id="catalogue">
+{{ collections.articles | catalogue(categories) | safe }}
+</script>

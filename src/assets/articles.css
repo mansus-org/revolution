@@ -1,0 +1,827 @@
+/* (R)Evolution contents and article pages. Tokens and chrome: base.css.
+   Zine paste-up in two inks: strips stuck down by hand, toner that frays into dither,
+   leaders and ghosts made of pixels, never of grey. */
+
+:root {
+  /* Dither tiles. 2px squares, so they stay 1-bit at any zoom.
+     checker: half the pixels inked. sparse: one in four. */
+  --checker: conic-gradient(var(--ink) 25%, transparent 0 50%, var(--ink) 0 75%, transparent 0);
+  --sparse: conic-gradient(from 90deg at 2px 2px, var(--ink) 25%, transparent 0);
+  --checker-paper: conic-gradient(var(--paper) 25%, transparent 0 50%, var(--paper) 0 75%, transparent 0);
+  --measure: 66ch;
+}
+
+a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: 4px; }
+
+/* ---------- chrome additions: where you are ---------- */
+
+.chrome { gap: 16px; }
+
+.crumbs {
+  margin: 0 auto 0 clamp(8px, 3vw, 48px);
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 0.5em;
+  font-variation-settings: "wdth" 125;
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+.crumbs li + li::before { content: "/"; margin-right: 0.5em; font-weight: 400; }
+.crumbs a { display: inline-flex; align-items: center; min-height: 44px; }
+.crumbs [aria-current] { text-decoration: none; }
+
+/* ---------- toner: a black edge that frays into dither, like a bad photocopy ---------- */
+
+.toner { position: relative; }
+.toner::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 100%;
+  height: 8px;
+  background: var(--checker) 0 0 / 4px 4px repeat-x, var(--sparse) 0 4px / 4px 4px repeat-x;
+  pointer-events: none;
+}
+
+/* A pixel rule: one row of sparse dots. */
+.dots {
+  height: 4px;
+  background: var(--sparse) 0 -2px / 4px 4px repeat-x;
+  border: 0;
+  margin: 0;
+}
+
+/* The "Needs:" stamp, inked in a box like a rubber stamp. */
+.stamp {
+  display: inline-flex;
+  align-items: stretch;
+  max-width: 100%;
+  border: 2px solid currentColor;
+  font-variation-settings: "wdth" 112;
+  font-size: 0.9375rem;
+  line-height: 1.3;
+}
+.stamp b {
+  flex: none;
+  padding: 0.3em 0.55em;
+  background: currentColor;
+  font-variation-settings: "wdth" 70;
+  font-weight: 900;
+  letter-spacing: 0.01em;
+}
+.stamp b > span { color: var(--paper); }
+.entry--lead .stamp b > span { color: var(--ink); }
+.stamp > span { padding: 0.3em 0.6em; }
+
+/* ---------- the keys (same object as the landing dial) ---------- */
+
+.keys {
+  --key: 64px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.keys button {
+  appearance: none;
+  width: var(--key);
+  height: var(--key);
+  padding: 12px;
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+.keys button:hover { box-shadow: inset 0 0 0 3px var(--ink); }
+.keys button:active { transform: translateY(2px); }
+.keys button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.keys svg { width: 100%; height: auto; }
+.keys .key-all { padding: 8px 6px; }
+
+/* =====================================================================
+   CONTENTS
+   ===================================================================== */
+
+.contents-head {
+  display: grid;
+  grid-template-columns: clamp(140px, 22vw, 340px) minmax(0, 1fr);
+  grid-template-areas:
+    "mark title"
+    "mark lede";
+  column-gap: clamp(16px, 2.5vw, 40px);
+  align-items: end;
+  padding: clamp(16px, 3vw, 40px) var(--pad) 0;
+}
+.contents-head .bitmap { grid-area: mark; align-self: start; }
+.contents-head .bitmap svg { width: 100%; height: auto; }
+
+/* The word is set to fill its column, like the category names on the landing. */
+.contents-title {
+  grid-area: title;
+  margin: 0;
+  font-variation-settings: "wdth" 50;
+  font-weight: 900;
+  font-size: 21.5vw; /* fitted by articles.js */
+  line-height: 0.78;
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+  min-width: 0;
+}
+.contents-title [lang] { display: inline-block; }
+
+.lede {
+  grid-area: lede;
+  margin: 0.8em 0 0;
+  max-width: 30ch;
+  font-variation-settings: "wdth" 150;
+  font-weight: 330;
+  font-size: clamp(1.125rem, 1.9vw, 1.75rem);
+  line-height: 1.15;
+}
+
+/* Filter strip: the keys, and a line saying what is lit. */
+.filter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 24px;
+  margin: clamp(48px, 7vw, 96px) var(--pad) 0;
+  padding-left: calc(clamp(140px, 22vw, 340px) + clamp(16px, 2.5vw, 40px));
+}
+.filter__status {
+  margin: 0;
+  font-variation-settings: "wdth" 125;
+  font-size: 0.9375rem;
+}
+
+.contents {
+  margin: clamp(32px, 4vw, 56px) 0 0;
+  padding: 0 var(--pad);
+}
+.contents.flash { background: var(--ink); }
+.contents.flash > * { visibility: hidden; }
+
+.toc { list-style: none; margin: 0; padding: 0; }
+
+/* One entry: sign, title running into a pixel leader, the issue number as a page number. */
+.entry {
+  display: grid;
+  grid-template-columns: clamp(140px, 22vw, 340px) minmax(0, 1fr) auto;
+  grid-template-areas:
+    "sign head num"
+    "sign body num";
+  column-gap: clamp(16px, 2.5vw, 40px);
+  padding: 28px 0 32px;
+  background: var(--sparse) 0 0 / 4px 4px repeat-x;
+}
+.entry:first-child, .entry--lead + .entry { background: none; }
+
+/* Pasted by hand: no two strips land in exactly the same place. */
+.entry:nth-child(4n + 2) .entry__text { translate: 14px 0; }
+.entry:nth-child(4n + 3) .entry__text { translate: -6px 0; }
+.entry:nth-child(4n) .entry__text { translate: 26px 0; }
+
+/* Left column: the category word, condensed, running into its sign. */
+.entry__side {
+  grid-area: sign;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  gap: 14px;
+  min-width: 0;
+}
+.entry__cat {
+  margin-top: 2px;
+  font-variation-settings: "wdth" 50;
+  font-weight: 900;
+  font-size: clamp(1.25rem, 2.1vw, 2rem);
+  line-height: 0.9;
+  text-align: right;
+}
+.entry__sign { display: block; flex: none; width: 72px; margin-top: 4px; }
+.entry__sign svg { width: 100%; height: auto; }
+.entry__meta .cat { display: none; }
+
+.entry__text { grid-area: head / head / body / body; min-width: 0; }
+
+.entry__head {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin: 0;
+  font-variation-settings: "wdth" 118;
+  font-weight: 640;
+  font-size: clamp(1.25rem, 2vw, 1.875rem);
+  line-height: 1.12;
+}
+.entry__head a { text-decoration: none; max-width: 30ch; }
+.entry__head a:hover { text-decoration: underline; }
+.entry__head a::after { content: ""; position: absolute; inset: 0; } /* whole strip is the target */
+.entry { position: relative; }
+.entry .stamp, .entry__meta { position: relative; z-index: 1; }
+
+.leader {
+  flex: 1 1 40px;
+  min-width: 40px;
+  height: 4px;
+  align-self: last baseline;
+  background: var(--sparse) 0 -2px / 4px 4px repeat-x;
+  translate: 0 -0.2em;
+}
+
+.entry__dek {
+  margin: 0.5em 0 0;
+  max-width: 52ch;
+  font-variation-settings: "wdth" 104;
+  font-size: 1.0625rem;
+  line-height: 1.45;
+}
+
+.entry__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 18px;
+  margin: 0.8em 0 0;
+  font-variation-settings: "wdth" 125;
+  font-size: 0.875rem;
+}
+.entry__meta .cat { font-weight: 700; }
+.entry .stamp { margin-top: 12px; }
+
+.entry__num {
+  grid-area: num;
+  margin: 0;
+  min-width: 2ch;
+  text-align: right;
+  font-variation-settings: "wdth" 50;
+  font-weight: 900;
+  font-size: clamp(3.5rem, 7vw, 6.5rem);
+  line-height: 0.8;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Filtered out: the strip stays where it was, as an e-ink ghost. */
+.entry.is-ghost { mask: var(--checker) 0 0 / 4px 4px; }
+
+/* The newest issue: a cut-out pasted on top, inked solid, a little crooked. */
+.entry.entry--lead {
+  margin: 0 0 40px;
+  padding: clamp(24px, 3vw, 44px) clamp(20px, 3vw, 44px) clamp(28px, 3.5vw, 48px);
+  background: var(--ink);
+  color: var(--paper);
+  rotate: -0.6deg;
+  grid-template-columns: clamp(120px, 22vw - 44px, 296px) minmax(0, 1fr) auto;
+}
+.entry--lead .entry__text { translate: none; }
+.entry--lead .entry__side { flex-direction: column; justify-content: flex-start; gap: 18px; }
+.entry--lead .entry__sign { width: min(100%, 200px); margin-top: 0; }
+.entry--lead .entry__cat { order: 2; text-align: left; font-size: clamp(1.5rem, 2.6vw, 2.5rem); }
+.entry--lead .entry__head {
+  font-variation-settings: "wdth" 50;
+  font-weight: 900;
+  font-size: clamp(2.5rem, 6vw, 6rem);
+  line-height: 0.86;
+  letter-spacing: -0.01em;
+}
+.entry--lead .entry__head a { max-width: 22ch; }
+.entry--lead .leader { display: none; }
+.entry--lead .entry__dek {
+  max-width: 34ch;
+  font-variation-settings: "wdth" 150;
+  font-weight: 330;
+  font-size: clamp(1.125rem, 1.7vw, 1.625rem);
+  line-height: 1.2;
+  margin-top: 0.8em;
+}
+.entry--lead .entry__num { font-size: clamp(5rem, 12vw, 11rem); }
+.entry--lead :focus-visible { outline-color: var(--paper); }
+.entry--lead::after { /* toner fray under the cut-out */
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 100%;
+  height: 8px;
+  background: var(--checker) 0 0 / 4px 4px repeat-x, var(--sparse) 0 4px / 4px 4px repeat-x;
+}
+
+.contents-foot {
+  margin: clamp(40px, 6vw, 72px) var(--pad) 0;
+  padding: 0 0 var(--pad) calc(clamp(140px, 22vw, 340px) + clamp(16px, 2.5vw, 40px));
+  font-variation-settings: "wdth" 112;
+  font-size: 0.9375rem;
+}
+.contents-foot p { margin: 0 0 0.6em; max-width: 52ch; }
+
+/* =====================================================================
+   ARTICLE
+   ===================================================================== */
+
+.article-head {
+  display: grid;
+  grid-template-columns: clamp(120px, 20vw, 300px) minmax(0, 1fr) auto;
+  grid-template-areas:
+    "sign title num"
+    "sign dek   num"
+    "sign meta  meta";
+  column-gap: clamp(16px, 2.5vw, 40px);
+  padding: clamp(24px, 4vw, 56px) var(--pad) 0;
+}
+
+/* The sign printed twice, the second pass slipping off register. */
+.misprint { position: relative; display: block; aspect-ratio: 1; }
+.misprint__ghost, .misprint__ink { position: absolute; inset: 0; }
+.misprint__ghost { translate: 7% -5%; }
+.misprint svg { width: 100%; height: auto; }
+
+.article-head .misprint { grid-area: sign; align-self: start; }
+
+.article-title {
+  grid-area: title;
+  margin: 0;
+  font-variation-settings: "wdth" 50;
+  font-weight: 900;
+  font-size: clamp(3rem, 8.4vw, 9rem);
+  line-height: 0.84;
+  letter-spacing: -0.012em;
+  max-width: 11ch;
+  text-wrap: balance;
+}
+
+.article-num {
+  grid-area: num;
+  margin: 0;
+  writing-mode: vertical-rl;
+  font-variation-settings: "wdth" 50;
+  font-weight: 900;
+  font-size: clamp(1.25rem, 1.8vw, 1.75rem);
+  line-height: 1;
+}
+.article-num b {
+  display: block;
+  font-size: 3.4em;
+  line-height: 0.8;
+  writing-mode: horizontal-tb;
+  margin-top: 0.15em;
+}
+
+.article-dek {
+  grid-area: dek;
+  margin: 0.7em 0 0;
+  max-width: 34ch;
+  font-variation-settings: "wdth" 150;
+  font-weight: 330;
+  font-size: clamp(1.25rem, 2.1vw, 2rem);
+  line-height: 1.15;
+}
+
+.article-meta {
+  grid-area: meta;
+  margin: clamp(28px, 3.5vw, 48px) 0 0;
+  padding: 14px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 28px;
+  background: var(--checker) 0 0 / 4px 4px repeat-x;
+  background-size: 4px 4px;
+  background-repeat: repeat-x;
+  font-variation-settings: "wdth" 118;
+  font-size: 0.9375rem;
+}
+.article-meta dl { display: contents; }
+.article-meta div { display: flex; gap: 0.45em; }
+.article-meta dt { font-weight: 800; }
+.article-meta dd { margin: 0; }
+
+.untranslated-note {
+  margin: 24px var(--pad) 0;
+  padding: 0.6em 0.9em;
+  border: 2px solid var(--ink);
+  max-width: 60ch;
+}
+html[data-lang="en"] .untranslated-note { display: none; }
+
+/* ---------- the reading column ---------- */
+
+.article-wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: clamp(16px, 2.5vw, 40px);
+  padding: clamp(40px, 6vw, 88px) var(--pad) 0;
+}
+
+/* Running head, on its side, the way EVOLUTION stands on the landing. */
+.runner {
+  align-self: start;
+  position: sticky;
+  top: 16px;
+  writing-mode: vertical-rl;
+  font-variation-settings: "wdth" 50;
+  font-weight: 900;
+  font-size: 1.5rem;
+  line-height: 1;
+  user-select: none;
+}
+
+.prose {
+  --note: clamp(140px, 20vw, 300px);
+  display: grid;
+  grid-template-columns: [margin] var(--note) [text] minmax(0, var(--measure)) [wide] minmax(0, 1fr) [end];
+  column-gap: clamp(16px, 2.5vw, 40px);
+  align-items: start;
+  font-variation-settings: "wdth" 102;
+  font-weight: 400;
+  font-size: clamp(1.0625rem, 0.95rem + 0.35vw, 1.1875rem);
+  line-height: 1.62;
+}
+.prose > * { grid-column: text; margin: 0 0 1.05em; }
+
+.prose p { hanging-punctuation: first; }
+.prose strong { font-weight: 720; }
+
+.prose h2 {
+  grid-column: margin / end;
+  display: grid;
+  grid-template-columns: subgrid;
+  margin: 1.6em 0 0.7em;
+  padding-top: 22px;
+  border-top: 3px solid var(--ink);
+  font-variation-settings: "wdth" 50;
+  font-weight: 900;
+  font-size: clamp(2rem, 3.4vw, 3.25rem);
+  line-height: 0.92;
+  letter-spacing: -0.005em;
+}
+.prose h2 .h-num {
+  justify-self: end;
+  font-variation-settings: "wdth" 150;
+  font-weight: 330;
+  font-size: 0.5em;
+  line-height: 1.6;
+}
+.prose h2 .h-text { grid-column: text / end; max-width: 26ch; text-wrap: balance; }
+.prose h2:first-child { margin-top: 0; }
+
+.prose h3 {
+  margin: 1.5em 0 0.4em;
+  font-variation-settings: "wdth" 130;
+  font-weight: 760;
+  font-size: 1.25em;
+  line-height: 1.2;
+}
+
+.prose ul, .prose ol { padding-left: 0; list-style: none; }
+.prose li { position: relative; padding-left: 2.2em; margin: 0 0 0.55em; }
+.prose ol { counter-reset: step; }
+.prose ol > li { counter-increment: step; }
+.prose ol > li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0.05em;
+  font-variation-settings: "wdth" 50;
+  font-weight: 900;
+  font-size: 1.35em;
+  line-height: 1.1;
+}
+/* bullets are single ink pixels, scaled up */
+.prose ul > li::before {
+  content: "";
+  position: absolute;
+  left: 0.5em;
+  top: 0.62em;
+  width: 8px;
+  height: 8px;
+  background: var(--ink);
+}
+
+.prose code {
+  font-family: inherit;
+  font-variation-settings: "wdth" 80;
+  font-weight: 560;
+  font-size: 0.94em;
+  padding: 0.05em 0.3em;
+  outline: 1.5px solid var(--ink);
+  outline-offset: -1.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.prose pre {
+  font-family: inherit;
+  grid-column: text / wide;
+  margin: 0.4em 0 1.6em;
+  padding: 0;
+  border: 2px solid var(--ink);
+  max-width: calc(var(--measure) + 8ch);
+  overflow-x: auto;
+}
+.prose pre .label {
+  display: block;
+  padding: 0.25em 0.75em;
+  background: var(--ink);
+  color: var(--paper);
+  font-variation-settings: "wdth" 112;
+  font-weight: 700;
+  font-size: 0.8125rem;
+}
+.prose pre code {
+  display: block;
+  padding: 1em 1.1em;
+  outline: none;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  white-space: pre;
+  tab-size: 2;
+}
+
+/* Margin notes: left of the text on wide screens, inline boxes on phones. */
+.note {
+  grid-column: margin;
+  margin: 0.2em 0 1em;
+  font-variation-settings: "wdth" 112;
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+.note .n {
+  display: inline-block;
+  min-width: 1.6em;
+  margin-right: 0.3em;
+  background: var(--ink);
+  color: var(--paper);
+  text-align: center;
+  font-weight: 800;
+}
+.prose sup { line-height: 0; font-size: 0.7em; font-weight: 800; }
+.prose sup a { text-decoration: none; padding: 0 0.15em; outline: 1.5px solid var(--ink); outline-offset: -1px; }
+.prose sup a:focus-visible { outline-width: 3px; }
+
+/* Pull quote: a cut-out strip, inked, stuck across the margin. */
+.pull {
+  grid-column: text / end;
+  margin: 1.2em 0 2em;
+  padding: clamp(20px, 2.5vw, 32px) clamp(20px, 3vw, 40px);
+  background: var(--ink);
+  color: var(--paper);
+  rotate: 0.8deg;
+  font-variation-settings: "wdth" 150;
+  font-weight: 330;
+  font-size: clamp(1.5rem, 2.8vw, 2.5rem);
+  line-height: 1.12;
+  max-width: 26ch;
+  justify-self: start;
+}
+.pull::after { /* toner fray */
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 100%;
+  height: 8px;
+  background: var(--checker) 0 0 / 4px 4px repeat-x, var(--sparse) 0 4px / 4px 4px repeat-x;
+}
+.pull { position: relative; }
+.pull p { margin: 0; }
+
+blockquote {
+  margin: 0.6em 0 1.6em;
+  padding: 18px 0 18px 2.2em;
+  background:
+    var(--sparse) 0 0 / 4px 4px repeat-x,
+    var(--sparse) 0 100% / 4px 4px repeat-x;
+  font-variation-settings: "wdth" 125;
+  font-weight: 460;
+  font-size: 1.08em;
+  line-height: 1.45;
+}
+blockquote p { margin: 0 0 0.4em; }
+blockquote cite { font-style: normal; font-weight: 640; }
+blockquote footer { font-size: 0.82em; font-variation-settings: "wdth" 112; font-weight: 400; }
+
+/* Figure: the image is generated and dithered to 1-bit on the page. */
+.figure {
+  grid-column: margin / end;
+  display: grid;
+  grid-template-columns: subgrid;
+  margin: 1em 0 1.8em;
+}
+.figure__frame {
+  grid-column: text / end;
+  position: relative;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+}
+.figure canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+}
+.figure figcaption {
+  grid-column: margin;
+  grid-row: 1;
+  align-self: end;
+  font-variation-settings: "wdth" 112;
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+.figure figcaption b { display: block; font-weight: 800; }
+.placeholder-tag {
+  position: absolute;
+  top: 10px; left: 10px;
+  padding: 0.2em 0.5em;
+  background: var(--ink);
+  color: var(--paper);
+  font-variation-settings: "wdth" 100;
+  font-weight: 800;
+  font-size: 0.8125rem;
+}
+
+.table-wrap { overflow-x: auto; max-width: 100%; }
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variation-settings: "wdth" 108;
+  font-size: 0.9375rem;
+  line-height: 1.35;
+  font-variant-numeric: tabular-nums;
+}
+.prose caption {
+  caption-side: top;
+  text-align: left;
+  padding-bottom: 0.6em;
+  font-weight: 760;
+}
+.prose th, .prose td {
+  text-align: left;
+  padding: 0.5em 0.9em 0.5em 0;
+  vertical-align: top;
+  background: var(--sparse) 0 100% / 4px 4px repeat-x;
+}
+.prose thead th {
+  font-variation-settings: "wdth" 70;
+  font-weight: 900;
+  font-size: 1.05em;
+  border-bottom: 3px solid var(--ink);
+  background: none;
+}
+.prose td.num, .prose th.num { text-align: right; }
+.prose tr.last td { font-weight: 760; background: none; border-top: 2px solid var(--ink); }
+
+/* ---------- the turn: the R faces you again ---------- */
+
+.turn {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(200px, 34vw, 520px);
+  grid-template-areas: "hand title";
+  column-gap: clamp(16px, 2.5vw, 40px);
+  align-items: end;
+  margin-top: clamp(64px, 9vw, 140px);
+  padding: 40px var(--pad) var(--pad);
+  border-top: 3px solid var(--ink);
+}
+.turn .bitmap { grid-area: title; }
+.turn .bitmap svg { width: 100%; height: auto; }
+
+.handover { grid-area: hand; justify-self: end; text-align: right; }
+.handover__lead {
+  margin: 0 0 0.5em auto;
+  max-width: 22ch;
+  font-variation-settings: "wdth" 150;
+  font-weight: 330;
+  font-size: clamp(1.25rem, 2.1vw, 2rem);
+  line-height: 1.12;
+}
+.handover__turn {
+  margin: 0;
+  font-variation-settings: "wdth" 50;
+  font-weight: 900;
+  font-size: clamp(3.5rem, 8.5vw, 9rem);
+  line-height: 0.85;
+}
+.needs {
+  margin: 28px 0 0 auto;
+  max-width: 46ch;
+  text-align: left;
+}
+.needs ul { list-style: none; margin: 0; padding: 0; border: 2px solid var(--ink); border-top: 0; }
+.needs li { padding: 0.5em 0.8em; line-height: 1.4; }
+.needs li + li { background: var(--sparse) 0 0 / 4px 4px repeat-x; }
+.needs .stamp { width: 100%; }
+.back-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px 24px;
+  margin: 28px 0 0;
+  padding: 0;
+  list-style: none;
+  font-variation-settings: "wdth" 125;
+  font-weight: 640;
+}
+.back-links a { display: inline-flex; align-items: center; min-height: 44px; }
+
+/* =====================================================================
+   narrower screens
+   ===================================================================== */
+
+@media (max-width: 1100px) {
+  .prose { --note: clamp(120px, 18vw, 180px); grid-template-columns: [margin] var(--note) [text] minmax(0, 1fr) [wide] 0 [end]; }
+  .pull { grid-column: text / end; }
+}
+
+@media (max-width: 760px) {
+  .keys { --key: 52px; gap: 6px; }
+  .keys button { padding: 9px; }
+  .keys .key-all { padding: 6px 4px; }
+  .crumbs { display: none; }
+
+  .contents-head {
+    grid-template-columns: 34% minmax(0, 1fr);
+    grid-template-areas:
+      "mark title"
+      "lede lede";
+    row-gap: 20px;
+  }
+  .contents-title { align-self: end; }
+  .lede { margin: 0; }
+  .filter { padding-left: 0; margin-top: 40px; }
+  .contents-foot { padding-left: 0; }
+
+  .entry {
+    grid-template-columns: 36px minmax(0, 1fr) auto;
+    grid-template-areas:
+      "sign head num"
+      "body body body";
+    column-gap: 14px;
+    padding: 22px 0 26px;
+  }
+  .entry__text { grid-area: head / head / body / num; }
+  .entry__text { translate: none !important; }
+  .entry__side { justify-content: flex-start; }
+  .entry__cat { display: none; }
+  .entry__meta .cat { display: inline; }
+  .entry__sign { width: 36px; margin-top: 2px; }
+  .entry__head { padding-right: 3.2rem; }
+  .entry__num { grid-area: num; grid-row: 1; font-size: 2.75rem; align-self: start; }
+  .leader { display: none; }
+  .entry__dek { font-size: 1rem; }
+
+  .entry--lead {
+    rotate: -0.4deg;
+    margin-inline: -4px;
+    grid-template-columns: 72px minmax(0, 1fr) auto;
+  }
+  .entry--lead .entry__sign { width: 72px; }
+  .entry--lead .entry__head { padding-right: 0; margin-top: 14px; font-size: 2.6rem; }
+  .entry--lead .entry__num { font-size: 4.5rem; }
+  .entry--lead .entry__text { grid-area: body / body / body / body; }
+
+  .article-head {
+    grid-template-columns: 96px minmax(0, 1fr);
+    grid-template-areas:
+      "sign num"
+      "title title"
+      "dek dek"
+      "meta meta";
+    row-gap: 18px;
+  }
+  .article-num { writing-mode: horizontal-tb; justify-self: end; align-self: end; text-align: right; }
+  .article-num b { font-size: 4rem; }
+  .article-dek { margin: 0; }
+  .article-meta { margin-top: 10px; gap: 6px 20px; }
+
+  .article-wrap { grid-template-columns: minmax(0, 1fr); }
+  .runner { display: none; }
+
+  .prose { display: block; font-size: 1.0625rem; line-height: 1.6; }
+  .prose h2 { display: block; font-size: 2.1rem; }
+  .prose h2 .h-num { display: block; font-size: 1rem; margin-bottom: 0.3em; }
+  .note {
+    margin: 0 0 1.2em;
+    padding: 0.7em 0.9em;
+    border: 2px solid var(--ink);
+  }
+  .pull { rotate: -0.6deg; margin: 1.4em 4px 2em; font-size: 1.5rem; }
+  .figure { display: block; }
+  .figure figcaption { margin-top: 0.7em; }
+  .prose pre { margin-inline: 0; }
+
+  .turn {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "hand" "title";
+    row-gap: 32px;
+  }
+  .turn .bitmap { width: 70%; justify-self: end; }
+  .handover { justify-self: stretch; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .keys button:active { transform: none; }
+}
+.contents-empty { margin: 0; max-width: 40ch; }
+
+/* Titles over 40 characters: a size down and a wider line, so they stay within four lines. */
+.article-title--long { font-size: clamp(2.6rem, 6.6vw, 7rem); max-width: 15ch; }

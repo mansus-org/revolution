@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% if pageType == "article" %}{{ title }} · {% elif pageType == "contents" %}Contents · {% endif %}{{ site.title }} · {{ site.group }}</title>
+<meta name="description" content="{{ dek or description or site.description }}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,300..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/base.css">
+<link rel="stylesheet" href="/assets/{{ 'landing.css' if pageType == 'landing' else 'articles.css' }}">
+</head>
+<body>
+
+<header class="chrome">
+{%- if pageType == "landing" %}
+  <a class="mark" href="#top" aria-label="Mansus, back to top">mansus</a>
+{%- else %}
+  <a class="mark" href="/" aria-label="Mansus, (R)Evolution front page">mansus</a>
+  <nav aria-label="Breadcrumb / Ruta">
+    <ol class="crumbs">
+      <li><a href="/">(Я)Evolution</a></li>
+      <li><a href="/articles/"{% if pageType == "contents" %} aria-current="page"{% endif %}><span lang="en">Contents</span><span lang="es">Índice</span></a></li>
+      {%- if pageType == "article" %}
+      <li><a href="{{ page.url }}" aria-current="page"><span lang="en">Issue {{ number | pad2 }}</span><span lang="es">Número {{ number | pad2 }}</span></a></li>
+      {%- endif %}
+    </ol>
+  </nav>
+{%- endif %}
+  <div class="lang" role="group" aria-label="Language / Idioma">
+    <button type="button" data-set-lang="en" aria-pressed="true">EN</button>
+    <button type="button" data-set-lang="es" aria-pressed="false">ES</button>
+  </div>
+</header>
+
+{{ content | safe }}
+
+<script src="/assets/bitmap.js"></script>
+<script src="/assets/lang.js"></script>
+<script src="/assets/{{ 'landing.js' if pageType == 'landing' else 'articles.js' }}"></script>
+</body>
+</html>

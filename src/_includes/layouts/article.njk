@@ -1,0 +1,84 @@
+---
+layout: layouts/base.njk
+pageType: article
+---
+{%- set cat = category | category(categories) -%}
+<main>
+<article>
+
+  <header class="article-head">
+    <span class="misprint" data-glyph="{{ category }}" data-misprint aria-hidden="true"></span>
+    <h1 class="article-title{% if title | length > 40 %} article-title--long{% endif %}">
+      <span lang="en">{{ title }}</span>
+      <span lang="es">{{ title_es or title }}</span>
+    </h1>
+    <p class="article-num"><span lang="en">Issue</span><span lang="es">Número</span> <b>{{ number | pad2 }}</b></p>
+    {%- if dek %}
+    <p class="article-dek">
+      <span lang="en">{{ dek }}</span>
+      <span lang="es">{{ dek_es or dek }}</span>
+    </p>
+    {%- endif %}
+    <div class="article-meta">
+      <dl>
+        <div><dt><span lang="en">Category</span><span lang="es">Categoría</span></dt>
+          <dd><a href="/articles/"><span lang="en">{{ cat.en }}</span><span lang="es">{{ cat.es }}</span></a></dd></div>
+        <div><dt><span lang="en">Date</span><span lang="es">Fecha</span></dt>
+          <dd><time datetime="{{ page.date | isoDate }}">{{ page.date | dotDate }}</time></dd></div>
+        <div><dt><span lang="en">Length</span><span lang="es">Extensión</span></dt>
+          <dd data-wordcount>{{ minutes }} min</dd></div>
+      </dl>
+      {%- if needs_summary %}
+      <p class="stamp"><b><span lang="en">Needs</span><span lang="es">Necesita</span></b>
+        <span><span lang="en">{{ needs_summary }}</span><span lang="es">{{ needs_summary_es or needs_summary }}</span></span></p>
+      {%- endif %}
+    </div>
+  </header>
+
+  <p class="untranslated-note" lang="es" data-untranslated>Este texto todavía solo está en inglés.</p>
+
+  <div class="article-wrap">
+  <div lang="en" data-untranslated>
+  <div class="prose">
+
+{{ content | safe }}
+
+  </div>
+  </div>
+  <span class="runner" aria-hidden="true">EVOLUTION {{ number | pad2 }}</span>
+  </div>
+
+</article>
+
+<!-- The R faces you again: the idea is handed over. -->
+<section class="turn" aria-labelledby="turn-title">
+  <div class="handover">
+    <p class="handover__lead">
+      <span lang="en">{{ handover or site.handover_article.en }}</span>
+      <span lang="es">{{ handover_es or handover or site.handover_article.es }}</span>
+    </p>
+    <h2 class="handover__turn" id="turn-title">
+      <span lang="en">{{ site.turn.en }}</span>
+      <span lang="es">{{ site.turn.es }}</span>
+    </h2>
+    {%- if needs and needs.length %}
+    <div class="needs">
+      <p class="stamp"><b><span lang="en">Needs</span><span lang="es">Necesita</span></b>
+        <span><span lang="en">{{ needs_label or site.needs_label.en }}</span><span lang="es">{{ needs_label_es or site.needs_label.es }}</span></span></p>
+      <ul>
+        {%- for n in needs %}
+        <li><span lang="en">{{ n }}</span><span lang="es">{{ needs_es[loop.index0] if needs_es else n }}</span></li>
+        {%- endfor %}
+      </ul>
+    </div>
+    {%- endif %}
+    <ul class="back-links">
+      <li><a href="{{ site.contact.url }}"><span lang="en">{{ site.contact.en }}</span><span lang="es">{{ site.contact.es }}</span></a></li>
+      <li><a href="/articles/"><span lang="en">Back to the contents</span><span lang="es">Volver al índice</span></a></li>
+      <li><a href="/"><span lang="en">Back to the front page</span><span lang="es">Volver a la portada</span></a></li>
+    </ul>
+  </div>
+  <span class="bitmap" data-bitmap="back" aria-hidden="true"></span>
+</section>
+
+</main>
