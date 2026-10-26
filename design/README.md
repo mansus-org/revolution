@@ -1,50 +1,75 @@
-# (R)Evolution — landing page design draft
+# (Я)Evolution, landing page design draft
 
-A visual draft for review, not the production site. Open `landing/index.html` in a browser
-(plain HTML/CSS, a few lines of vanilla JS, Google Fonts only). Screenshots:
-`screenshots/desktop.png` (1440 wide) and `screenshots/mobile.png` (390 wide).
+A visual draft for review, not the production site. Open `landing/index.html` in a browser.
+Plain HTML, CSS and one small script (`landing/bitmap.js`), Google Fonts only, no build step.
+Screenshots: `screenshots/revolution-landing-desktop.png` (1440 wide) and
+`screenshots/revolution-landing-mobile.png` (390 wide).
 
-## Direction
+This replaces the first draft (iPod menu, serif newspaper layout), which the client rejected.
 
-An old iPod crossed with a reMarkable tablet, as designed by someone who has only read about both.
-Paper-white e-ink, carbon black, thin rules, huge type. The literary calm of the Mansus site
-(handwritten wordmark, spaced uppercase nav, serif body, lots of air) pushed bigger and stranger.
+## The idea
 
-## Type
+The whole page is one letter turning around.
 
-- **Instrument Serif**: display. The title runs edge to edge (`22.4vw`), and the same face sets
-  entry titles, the manifesto lede and the call to action.
-- **Newsreader**: reading text. An optical-size serif that reads well at e-reader sizes. Justified
-  on desktop like the Mansus site, ragged-right on phones.
-- **JetBrains Mono**: all UI labels, the status bar, metadata and the iPod menu, in spaced uppercase.
-- **Mrs Saint Delafield**: the handwritten "Mansus" mark, a nod to the existing signature wordmark.
-  Swap in the real logo SVG for production.
+At the top, a giant 1-bit (Я) has just repainted, the way an e-ink screen does, and the R it
+used to be still shows through as a dithered ghost. That is Mansus keeping the ideas: they face
+away. At the bottom the same bitmap faces the reader again, (R) with a ghost of the Я, next to
+"Maybe you do." The ideas now belong to whoever builds them. The layout mirrors with the letter:
+the `EVOLUTION` spine reads up the right edge at the top and down the left edge at the bottom,
+and text that sat right of the letter moves to its left.
 
-## Palette
+Design read: a publisher's landing page for readers and would-be builders, in an alien 1-bit
+e-ink language. Dials: ENERGY 3 / RHYTHM 3 / MOTION 2.
 
-Two inks. Paper `#f3f2ec`, ink `#0b0b0b`, plus one secondary grey `#4a4a47` for marginalia
-(about 8:1 contrast on paper). No colours, gradients, shadows or images. Emphasis comes from
-inversion: the selected menu row and the whole "maybe you do" section flip to white on black,
-the way an e-ink screen refreshes.
+## How the brief became principles
 
-## Grid
+- **iPod: one object, one control.** The middle of the page is a single surface with a single
+  control: five square keys. Pressing one refreshes the whole surface. No cards, no lists of
+  sections, no chrome beyond the name and the language switch.
+- **E-ink: paper grey, refresh, ghosting, dithering.** Two inks only. Changing category flashes
+  the panel black for one frame and repaints, and the previous sign stays behind as a ghost.
+  The title bitmap paints row by row on load (half-tone first, then solid).
+- **Alien: notation, proportions, reading direction.** The categories have their own signs, all
+  built from parts of the R on a 7×7 grid: Ideas is the bowl with no stem, Architecture the stem
+  carrying floors, Ideology the stem and the leg, Essays lines of text read downwards, Influences
+  rings spreading from a corner. Type swings between ultra-condensed black and ultra-wide light
+  in the same family, and the title runs on its side.
 
-A 12-part grid with fluid gutters (`clamp(20px, 4vw, 64px)`). Section labels sit in a narrow left
-column (`§ 00`, `§ 01` … `§ ∞`), content in the wide middle, marginal notes on the right.
-Everything collapses to one column under 640px. Hard 1–2px rules separate the sections.
+## Decisions, one line each
 
-## The mirrored R
+- **Palette:** paper `#e4e2db` and ink `#141414` (14.2:1). Grey only ever appears as dither, the
+  way e-ink makes grey.
+- **Typeface:** Anybody, one variable family. Its width axis (50 to 150) gives non-human
+  proportions without mixing faces: width 50 / weight 900 for display, width 150 / weight 330
+  for statements, around width 112 for reading. Nothing handwritten, nothing serif, nothing mono.
+- **Bitmaps:** the Я, R, parentheses and the five signs are drawn cell by cell in `bitmap.js`
+  and rendered as crisp SVG. The dither is made of real squares on a sub-grid, so it stays
+  1-bit at any size.
+- **Category name:** set to fill its column whatever the word, so every category reads at a
+  different size, like a page that reflows.
+- **Layout:** front and back faces mirror each other around the bitmap. The index uses its own
+  narrower sign column so the name has room.
+- **Motion:** two moments only, both e-ink behaviour: the title painting in once, and the panel
+  flash on change. Both are off under `prefers-reduced-motion`.
+- **Mansus mark:** the word "mansus" in Anybody width 150 / weight 860. A placeholder for the
+  real wordmark, deliberately not a script imitation.
+- **Language:** EN/ES switch, remembered in `localStorage`. Only the active language is rendered
+  and announced.
 
-The title is `(R)Evolution` in the markup. The R is wrapped in a span with
-`display: inline-block; transform: scaleX(-1)`, so it looks like Я without using a Cyrillic
-character. The `<h1>` carries `aria-label="(R)Evolution"` and the visual span is `aria-hidden`,
-so screen readers and search engines read the plain word. A margin note ("Fig. 1 — The R faces
-back") acknowledges it.
+## Content
 
-## Odd details
+The statement, categories and the "maybe you do" line are real copy for review. The entries are
+samples and say so on the page ("Sample entries, not published yet."). Empty categories show
+an empty state instead of filler.
 
-- An e-reader status bar: page `001 / ∞`, Madrid coordinates and a battery glyph.
-- The index is an iPod Classic split screen: a menu on the left, a preview on the right, and a
-  working click wheel (prev/next/menu/select) beside it. Hovering or focusing an item selects it.
-- Categories are numbered 01, 02, 03, 05, 08 (Fibonacci); entries are № 007, 013, 031.
-- Each entry ends with a mono "→ Needs:" line listing what it would take to build it.
+## Accessibility
+
+- The `<h1>` carries the plain text "(R)Evolution"; the bitmap and spine are `aria-hidden`.
+- The category keys are a proper tablist: arrow keys, Home and End move between them, each key
+  has a text name in both languages, and the panel is a labelled tabpanel.
+- All controls are at least 44×44 px (56 on phones, 64 on desktop) with a 3px ink focus ring.
+
+## Not done yet
+
+- No call to action link: there is no confirmed contact or submission address to point at.
+- Real wordmark and real entries to be supplied by Mansus.
