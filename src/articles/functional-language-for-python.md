@@ -118,7 +118,7 @@ defn revenue row
   * : int : get row "units"
     . float : get row "price"
 
-; filter is lazy: nothing is read past what the caller asks for
+; filter is lazy: rows are tested only as the caller consumes them (read-rows has already loaded the file)
 defn paid-rows path
   filter (fn r : > (revenue r) 0) : read-rows path
 
