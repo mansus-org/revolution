@@ -322,3 +322,12 @@
 .to-about { margin: 28px 0 0; font-variation-settings: "wdth" 125; font-weight: 700; font-size: clamp(1rem, 1.3vw, 1.25rem); }
 .to-about a { display: inline-flex; align-items: center; min-height: 44px; color: inherit; text-decoration-thickness: 2px; text-underline-offset: 0.18em; }
 .to-about a:hover { text-decoration-thickness: 4px; }
+
+.cat-desc {
+  padding-top: 14px;
+  margin: 0 0 20px;
+  max-width: 34ch;
+  font-variation-settings: "wdth" 125;
+  font-size: clamp(1.0625rem, 1.5vw, 1.375rem);
+  line-height: 1.25;
+}
