@@ -54,10 +54,10 @@ description: "Everything Mansus has written down so far: ideas, architecture, id
             <span class="leader" aria-hidden="true"></span>
             {%- endif %}
           </h3>
-          {%- if d.dek %}
+          {%- if d.summary or d.dek %}
           <p class="entry__dek">
-            <span lang="en">{{ d.dek }}</span>
-            <span lang="es">{{ d.dek_es or d.dek }}</span>
+            <span lang="en">{{ d.summary or d.dek }}</span>
+            <span lang="es">{{ d.summary_es or d.dek_es or d.summary or d.dek }}</span>
           </p>
           {%- endif %}
           <p class="entry__meta">

@@ -3,10 +3,11 @@ title: A currency that expires every winter
 title_es: Una moneda que caduca cada invierno
 dek: Money that loses a little each month and turns into firewood on the shortest day. Notes for a town that wants to try it for one year.
 dek_es: Dinero que pierde un poco cada mes y se convierte en leña el día más corto del año. Notas para un pueblo que quiera probarlo durante un año.
+summary: Money that loses a little each month and turns into firewood on the shortest day.
+summary_es: Dinero que pierde un poco cada mes y se convierte en leña el día más corto del año.
 category: ideas
 number: 8
 date: 2026-10-19
-reading_time: 9
 sample: true
 needs_summary: a town willing to run it for one year
 needs_summary_es: un pueblo dispuesto a probarlo un año
