@@ -1,179 +1,126 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>(R)Evolution — by Mansus</title>
-  <meta name="description" content="A public notebook of ideas we haven't built yet, architecture deep-dives, ideological stances and long-form essays. By Mansus.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=JetBrains+Mono:wght@400;500&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>(R)Evolution · Mansus</title>
+<meta name="description" content="Mansus publishes ideas, architectures, ideologies and essays we won't build ourselves. Take them.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,300..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <a class="skip" href="#manifesto">Skip to content</a>
 
-  <!-- Status bar: e-reader chrome -->
-  <div class="status" aria-hidden="true">
-    <span>MNS/R-EVO</span>
-    <span class="status__mid">PAGE 001 / ∞</span>
-    <span class="status__right">40.4168°N 3.7038°W <i class="battery"><i></i></i></span>
+<header class="chrome">
+  <a class="mark" href="#top" aria-label="Mansus, back to top">mansus</a>
+  <div class="lang" role="group" aria-label="Language / Idioma">
+    <button type="button" data-set-lang="en" aria-pressed="true">EN</button>
+    <button type="button" data-set-lang="es" aria-pressed="false">ES</button>
   </div>
+</header>
 
-  <header class="masthead">
-    <nav class="topnav" aria-label="Primary">
-      <a href="#index">Index</a>
-      <a href="#entries">Latest</a>
-      <a href="#maybe-you">Take one</a>
-      <a href="#colophon">About</a>
-    </nav>
+<main>
 
-    <h1 class="title" aria-label="(R)Evolution">
-      <span aria-hidden="true">(<span class="r">R</span>)Evolution</span>
+  <!-- Front: the R has just turned away. The old R lingers as an e-ink ghost. -->
+  <section class="face face--front" id="top">
+    <h1 class="title">
+      <span class="sr">(R)Evolution</span>
+      <span class="bitmap" data-bitmap="front" aria-hidden="true"></span>
+      <span class="spine" aria-hidden="true">EVOLUTION</span>
+      <noscript><span class="fallback" aria-hidden="true">(Я)</span></noscript>
     </h1>
+    <p class="statement">
+      <span lang="en">We publish the things we won't build. Ideas, buildings, whole ideologies. Take them.</span>
+      <span lang="es">Publicamos lo que no vamos a construir. Ideas, edificios, ideologías enteras. Llévatelas.</span>
+    </p>
+  </section>
 
-    <div class="masthead__foot">
-      <p class="by"><span class="by__label">by</span> <span class="by__mark">Mansus</span></p>
-      <p class="fig" aria-hidden="true">↑ Fig. 1 — The R faces back.<br>We checked. It is not a typo.</p>
-      <p class="edition">Edition 0.0<br>Unbuilt things, published anyway</p>
+  <!-- The one control: five glyphs, one panel. -->
+  <section class="index" id="index" aria-labelledby="index-name">
+    <div class="dial" role="tablist" aria-label="Categories / Categorías">
+      <button role="tab" id="tab-ideas" aria-controls="panel" data-cat="ideas" aria-selected="true">
+        <span class="glyph" data-glyph="ideas" aria-hidden="true"></span>
+        <span class="sr"><span lang="en">Ideas</span><span lang="es">Ideas</span></span>
+      </button>
+      <button role="tab" id="tab-architecture" aria-controls="panel" data-cat="architecture" aria-selected="false" tabindex="-1">
+        <span class="glyph" data-glyph="architecture" aria-hidden="true"></span>
+        <span class="sr"><span lang="en">Architecture</span><span lang="es">Arquitectura</span></span>
+      </button>
+      <button role="tab" id="tab-ideology" aria-controls="panel" data-cat="ideology" aria-selected="false" tabindex="-1">
+        <span class="glyph" data-glyph="ideology" aria-hidden="true"></span>
+        <span class="sr"><span lang="en">Ideology</span><span lang="es">Ideología</span></span>
+      </button>
+      <button role="tab" id="tab-essays" aria-controls="panel" data-cat="essays" aria-selected="false" tabindex="-1">
+        <span class="glyph" data-glyph="essays" aria-hidden="true"></span>
+        <span class="sr"><span lang="en">Essays</span><span lang="es">Ensayos</span></span>
+      </button>
+      <button role="tab" id="tab-influences" aria-controls="panel" data-cat="influences" aria-selected="false" tabindex="-1">
+        <span class="glyph" data-glyph="influences" aria-hidden="true"></span>
+        <span class="sr"><span lang="en">Influences</span><span lang="es">Influencias</span></span>
+      </button>
     </div>
-  </header>
 
-  <main>
-    <section class="manifesto" id="manifesto" aria-labelledby="manifesto-h">
-      <p class="label" id="manifesto-h"><span class="label__n">§&nbsp;00</span> Manifesto</p>
-      <div class="manifesto__body">
-        <p class="lede">We keep a drawer of things we would build if we had the hours. This is the drawer, opened.</p>
-        <p>(R)Evolution is where Mansus publishes ideas before they exist: products we sketched and shelved, system designs worked out to the last queue, positions we hold about how technology should treat people, and essays that needed more room than a post. None of it is finished. All of it is free to take.</p>
-        <p>We write each piece as a handover. If one of them keeps you up at night, it is yours now.</p>
+    <div class="panel" id="panel" role="tabpanel" aria-labelledby="index-name" tabindex="0">
+      <div class="sigil" aria-hidden="true">
+        <span class="sigil__ghost"></span>
+        <span class="sigil__ink"></span>
       </div>
-      <p class="marginal" aria-hidden="true">∴ read slowly<br>refresh&nbsp;rate:<br>one idea / month</p>
-    </section>
+      <h2 class="cat-name" id="index-name" aria-live="polite"></h2>
+      <ul class="entries"></ul>
+    </div>
+  </section>
 
-    <section class="index" id="index" aria-labelledby="index-h">
-      <p class="label" id="index-h"><span class="label__n">§&nbsp;01</span> Index</p>
+  <!-- Back: the R faces you again. Layout mirrored. -->
+  <section class="face face--back" id="yours">
+    <span class="spine spine--back" aria-hidden="true">EVOLUTION</span>
+    <div class="handover">
+      <p class="handover__lead">
+        <span lang="en">We don't have the time or the money to build any of this.</span>
+        <span lang="es">No tenemos el tiempo ni el dinero para construir nada de esto.</span>
+      </p>
+      <p class="handover__turn">
+        <span lang="en">Maybe you do.</span>
+        <span lang="es">Quizá tú sí.</span>
+      </p>
+    </div>
+    <span class="bitmap" data-bitmap="back" aria-hidden="true"></span>
+  </section>
 
-      <div class="device">
-        <div class="screen">
-          <div class="screen__bar" aria-hidden="true">
-            <span>▶</span>
-            <span>(R)Evolution</span>
-            <i class="battery"><i></i></i>
-          </div>
-          <div class="screen__split">
-            <ul class="menu" role="list">
-              <li><a href="#ideas" data-desc="Products, services and tools we designed and never shipped. Each one comes with the problem, the sketch and the reason we stopped." class="is-selected"><span class="menu__n">01</span><span class="menu__t">Ideas</span><span class="menu__c">12</span></a></li>
-              <li><a href="#architecture" data-desc="Deep-dives into how a thing would actually work: data models, failure modes, costs, the boring parts that decide everything."><span class="menu__n">02</span><span class="menu__t">Architecture</span><span class="menu__c">07</span></a></li>
-              <li><a href="#ideology" data-desc="Where we stand. On ownership, on attention, on who software should answer to. Short, plain, arguable."><span class="menu__n">03</span><span class="menu__t">Ideology</span><span class="menu__c">05</span></a></li>
-              <li><a href="#essays" data-desc="Long-form pieces that need an evening. Read them on paper if you can, or on something that pretends to be paper."><span class="menu__n">05</span><span class="menu__t">Essays</span><span class="menu__c">09</span></a></li>
-              <li><a href="#influences" data-desc="Books, machines, people and old manuals that shaped how we think. A reading list with notes in the margins."><span class="menu__n">08</span><span class="menu__t">Influences</span><span class="menu__c">23</span></a></li>
-            </ul>
-            <div class="preview" aria-live="polite">
-              <p class="preview__glyph" aria-hidden="true">◬</p>
-              <p class="preview__text" id="preview-text">Products, services and tools we designed and never shipped. Each one comes with the problem, the sketch and the reason we stopped.</p>
-            </div>
-          </div>
-        </div>
+</main>
 
-        <div class="wheel" role="group" aria-label="Index controls">
-          <button class="wheel__btn wheel__menu" type="button" data-act="top">Menu</button>
-          <button class="wheel__btn wheel__prev" type="button" data-act="prev" aria-label="Previous category">◀◀</button>
-          <button class="wheel__btn wheel__next" type="button" data-act="next" aria-label="Next category">▶▶</button>
-          <button class="wheel__btn wheel__play" type="button" data-act="open" aria-label="Open selected category">▶ ❚❚</button>
-          <button class="wheel__center" type="button" data-act="open" aria-label="Open selected category"></button>
-        </div>
-      </div>
-      <p class="index__note" aria-hidden="true">Numbering follows Fibonacci. Gaps are drawers we have not opened yet.</p>
-    </section>
-
-    <section class="entries" id="entries" aria-labelledby="entries-h">
-      <p class="label" id="entries-h"><span class="label__n">§&nbsp;02</span> Recently left on the table</p>
-
-      <ol class="entry-list" role="list">
-        <li class="entry">
-          <div class="entry__meta">
-            <span class="entry__num">№&nbsp;007</span>
-            <span>Idea</span>
-            <span>11 min</span>
-            <span class="entry__status">Unbuilt</span>
-          </div>
-          <div class="entry__main">
-            <h2 class="entry__title"><a href="#">A tool library for a whole street</a></h2>
-            <p class="entry__excerpt">Forty households own forty drills that are used for nine minutes a year. We worked out the lending, the insurance, the shelf and the app that should barely exist. It needs one person who knows their neighbours.</p>
-            <p class="entry__handover">→ Needs: one organiser, a garage, €3k</p>
-          </div>
-        </li>
-        <li class="entry">
-          <div class="entry__meta">
-            <span class="entry__num">№&nbsp;013</span>
-            <span>Architecture</span>
-            <span>26 min</span>
-            <span class="entry__status">Specified</span>
-          </div>
-          <div class="entry__main">
-            <h2 class="entry__title"><a href="#">A local-first archive that survives its company</a></h2>
-            <p class="entry__excerpt">Every note lives on your device as plain files. Sync is a convenience, not a dependency. We walk through the CRDT choice, the storage layout, the export path, and what happens on the day the servers switch off.</p>
-            <p class="entry__handover">→ Needs: two engineers, six months</p>
-          </div>
-        </li>
-        <li class="entry">
-          <div class="entry__meta">
-            <span class="entry__num">№&nbsp;031</span>
-            <span>Essay</span>
-            <span>18 min</span>
-            <span class="entry__status">Argued</span>
-          </div>
-          <div class="entry__main">
-            <h2 class="entry__title"><a href="#"><em>Against the roadmap</em></a></h2>
-            <p class="entry__excerpt">A roadmap is a promise made to people who are not in the room. We think ideas should be released early, like seeds, and owned by whoever plants them. This is why we publish what we will never build.</p>
-            <p class="entry__handover">→ Needs: a reader who disagrees</p>
-          </div>
-        </li>
-      </ol>
-      <p class="entries__more"><a href="#index">All 56 entries ↗</a></p>
-    </section>
-
-    <section class="cta" id="maybe-you" aria-labelledby="cta-h">
-      <p class="label label--inv"><span class="label__n">§&nbsp;∞</span> Handover</p>
-      <h2 class="cta__h" id="cta-h">We don’t have the time or money to build this right now — <em>but maybe you&nbsp;do.</em></h2>
-      <div class="cta__row">
-        <p class="cta__p">Take any idea here. No licence fee, no permission needed. If you start one, write to us and we will share our notes, our mistakes, and an hour of our time.</p>
-        <a class="cta__btn" href="mailto:hello@mansus.example">I’ll take one <span aria-hidden="true">→</span></a>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer" id="colophon">
-    <p class="footer__mark">Mansus</p>
-    <p>(R)Evolution is written by the Mansus group.<br>Set in Instrument Serif, Newsreader and JetBrains Mono.</p>
-    <p>No tracking. No comments.<br>Printed on no paper.</p>
-    <p aria-hidden="true" class="footer__coord">◐ 2026.10<br>END OF PAGE</p>
-  </footer>
-
-  <script>
-    (function () {
-      var items = Array.prototype.slice.call(document.querySelectorAll('.menu a'));
-      var text = document.getElementById('preview-text');
-      var i = 0;
-      function select(n) {
-        i = (n + items.length) % items.length;
-        items.forEach(function (a, k) { a.classList.toggle('is-selected', k === i); });
-        text.textContent = items[i].dataset.desc;
-      }
-      items.forEach(function (a, k) {
-        a.addEventListener('mouseenter', function () { select(k); });
-        a.addEventListener('focus', function () { select(k); });
-      });
-      document.querySelectorAll('.wheel [data-act]').forEach(function (b) {
-        b.addEventListener('click', function () {
-          var act = b.dataset.act;
-          if (act === 'prev') select(i - 1);
-          if (act === 'next') select(i + 1);
-          if (act === 'top') select(0);
-          if (act === 'open') items[i].focus();
-        });
-      });
-    })();
-  </script>
+<!-- Entry data. Sample entries for the draft, not real publications. -->
+<script type="application/json" id="catalogue">
+{
+  "ideas": {
+    "name": { "en": "Ideas", "es": "Ideas" },
+    "entries": [
+      { "en": "A currency that expires every winter", "es": "Una moneda que caduca cada invierno" },
+      { "en": "Lending libraries for tools nobody owns twice", "es": "Bibliotecas de herramientas que nadie compra dos veces" }
+    ]
+  },
+  "architecture": {
+    "name": { "en": "Architecture", "es": "Arquitectura" },
+    "entries": [
+      { "en": "A library you can only enter by bringing a book", "es": "Una biblioteca donde solo se entra trayendo un libro" }
+    ]
+  },
+  "ideology": {
+    "name": { "en": "Ideology", "es": "Ideología" },
+    "entries": []
+  },
+  "essays": {
+    "name": { "en": "Essays", "es": "Ensayos" },
+    "entries": [
+      { "en": "Why nobody finishes a cathedral anymore", "es": "Por qué ya nadie termina una catedral" }
+    ]
+  },
+  "influences": {
+    "name": { "en": "Influences", "es": "Influencias" },
+    "entries": []
+  }
+}
+</script>
+<script src="bitmap.js"></script>
 </body>
 </html>
