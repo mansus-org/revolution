@@ -268,7 +268,6 @@ a:hover { text-decoration-thickness: 4px; }
 
 /* Filtered out: the strip stays where it was, as an e-ink ghost. */
 .entry.is-ghost { mask: var(--checker) 0 0 / 4px 4px; }
-.entry.is-ghost .stamp b { background: transparent; }
 
 /* The newest issue: a cut-out pasted on top, inked solid, a little crooked. */
 .entry.entry--lead {

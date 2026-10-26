@@ -151,6 +151,24 @@
   line-height: 1.2;
 }
 
+.panel__list { grid-area: list; align-self: end; min-width: 0; }
+
+.to-contents {
+  margin: 28px 0 0;
+  font-variation-settings: "wdth" 125;
+  font-weight: 700;
+  font-size: clamp(1rem, 1.3vw, 1.25rem);
+}
+.to-contents a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: inherit;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.18em;
+}
+.to-contents a:hover { text-decoration-thickness: 4px; }
+
 .entries .sample,
 .entries .empty { font-size: 0.95rem; }
 .entries .empty { font-size: inherit; }
