@@ -40,6 +40,7 @@ export default function (eleventyConfig) {
     for (const c of categories) {
       out[c.key] = {
         name: { en: c.en, es: c.es },
+        desc: { en: c.desc_en, es: c.desc_es },
         entries: items
           .filter((i) => i.data.category === c.key)
           .map((i) => ({
