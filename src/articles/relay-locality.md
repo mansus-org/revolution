@@ -73,4 +73,4 @@ Local community has eroded, and there is no low-friction digital commons to repl
 
 Specified: the feed rules, the cell precision, the per-request viewer location, open and invite-only membership. In progress: the Python backend that will implement the query. Not built: the shipped app. The privacy claims above are design intent and need an outside review before anyone should rely on them.
 
-Relay has no licence file yet, so we do not call it open source. The repository is at [github.com/nemoNoboru/relay](https://github.com/nemoNoboru/relay). Issues about the idea can go to [this site's repository](https://github.com/nemoNoboru/revolution/issues).
+Relay has no licence file yet, so we do not call it open source. The repository is at [github.com/mansus-org/relay](https://github.com/mansus-org/relay). Issues about the idea can go to [this site's repository](https://github.com/mansus-org/revolution/issues).

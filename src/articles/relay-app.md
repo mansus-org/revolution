@@ -94,4 +94,4 @@ The node server has been rewritten from Go to Python with FastAPI, with SQLite b
 
 ## How to help
 
-React Native and Expo developers are the clearest need: the screens are the biggest piece of work left. After that, people who can help evaluate moderation on real posts in three languages, and anyone who would run a node. The code is at [github.com/nemoNoboru/relay](https://github.com/nemoNoboru/relay). It has no licence file yet, so we do not call it open source. Open an issue on [this site's repository](https://github.com/nemoNoboru/revolution/issues) to talk to us.
+React Native and Expo developers are the clearest need: the screens are the biggest piece of work left. After that, people who can help evaluate moderation on real posts in three languages, and anyone who would run a node. The code is at [github.com/mansus-org/relay](https://github.com/mansus-org/relay). It has no licence file yet, so we do not call it open source. Open an issue on [this site's repository](https://github.com/mansus-org/revolution/issues) to talk to us.
