@@ -1,0 +1,12 @@
+node_modules
+_site
+.git
+.github
+.k3s
+.claude
+paseo.json
+Dockerfile
+.dockerignore
+*.md
+!src/**/*.md
+design
