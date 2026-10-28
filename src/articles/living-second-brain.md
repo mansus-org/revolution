@@ -127,4 +127,4 @@ Things we do not know yet:
 
 We think there is a product here. We suspect many people who use AI agents for real work have hit the same memory wall, and plenty of them already keep notes in markdown. A tool that installed the schema, the protocol and the passes into an existing vault, and made the agents' memory something you can read and correct, would be useful to a lot of people.
 
-We are not going to build that product. If you have run agents with MCP for real work, have a note schema that survived years, or want to turn this into something people can install, open an issue on [this site's repository](https://github.com/nemoNoboru/revolution/issues). We will share the design notes as they are and tell you what we learned from running them.
+We are not going to build that product. If you have run agents with MCP for real work, have a note schema that survived years, or want to turn this into something people can install, open an issue on [this site's repository](https://github.com/mansus-org/revolution/issues). We will share the design notes as they are and tell you what we learned from running them.

@@ -110,4 +110,4 @@ Not built: a finished app, a node you can point a friend at, and any of the mode
 
 We are working on Relay in the time we have, and that time is not much. The most useful help is people who can finish the app and the backend, and above all people who would run a node for their own neighbourhood and tell us what breaks.
 
-The code is at [github.com/nemoNoboru/relay](https://github.com/nemoNoboru/relay); it does not have a licence file yet, so it is not open source in the formal sense. Open an issue there for anything about Relay itself, or on [this site's repository](https://github.com/nemoNoboru/revolution/issues) to talk about the idea. We read both.
+The code is at [github.com/mansus-org/relay](https://github.com/mansus-org/relay); it does not have a licence file yet, so it is not open source in the formal sense. Open an issue there for anything about Relay itself, or on [this site's repository](https://github.com/mansus-org/revolution/issues) to talk about the idea. We read both.

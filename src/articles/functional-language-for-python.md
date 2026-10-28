@@ -244,4 +244,4 @@ By our estimate that is somewhere between 1,000 and 2,000 lines, most of it in t
 
 Someone with a programming languages background who also knows how Python works inside: the `ast` module, the import system, how tracebacks find their line numbers. It is a good project for one person with a few months of evenings, or for a small group that enjoys arguing about semantics.
 
-We have done the research and we know what we would build. If you want to build it, take the design, change what you disagree with, and tell us how it goes. Open an issue on [this site's repository](https://github.com/nemoNoboru/revolution/issues) and we will share our notes and help where we can.
+We have done the research and we know what we would build. If you want to build it, take the design, change what you disagree with, and tell us how it goes. Open an issue on [this site's repository](https://github.com/mansus-org/revolution/issues) and we will share our notes and help where we can.
