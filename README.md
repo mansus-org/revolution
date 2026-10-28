@@ -91,3 +91,19 @@ Actions tab. One-time setup: in the repository, go to Settings → Pages → Sou
 
 Links are written as root paths (`/articles/`) in the templates. The build adds the `/revolution/`
 prefix. To build for another prefix, set `PATH_PREFIX`, for example `PATH_PREFIX=/ npm run build`.
+
+## Self-hosting
+
+The `Dockerfile` builds the site with Bun and Eleventy (`PATH_PREFIX=/`, because it lives at the root
+of its own domain) and serves `_site/` with busybox `httpd` on port 8080 as user 10001. The image is
+a few MB and the server needs a few MB of RAM.
+
+```
+docker build -t revolution .
+docker run --rm -p 8080:8080 revolution
+```
+
+Merging to `main` also runs `.github/workflows/deploy.yml`, which pushes `ghcr.io/mansus-org/revolution`
+to GHCR. The k3s cluster picks up the new tag and serves it at <https://revolution.mansus.org>. Deploy
+settings are in `.k3s/values.yaml`. The GitHub Pages workflow is unchanged and still publishes under
+`/revolution/`.
