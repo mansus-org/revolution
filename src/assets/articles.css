@@ -882,10 +882,3 @@ blockquote footer { font-size: 0.82em; font-variation-settings: "wdth" 112; font
 /* Wide diagrams take the whole column; the picture links to the full-size file. */
 .figure--wide .figure__frame { width: 100%; }
 .figure--wide img { width: 100%; }
-
-/* Narrow phones: too few words per line to justify without gaps. */
-@media (max-width: 480px) {
-  .prose > p,
-  .prose > ul > li,
-  .prose > ol > li { text-align: left; }
-}
