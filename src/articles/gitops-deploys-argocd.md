@@ -149,7 +149,7 @@ The pitfalls we hit, one line each:
 - A brand-new app needs something sensible to run before the watcher has seen its first build.
 - Builds and apps on one machine share memory; a big build can starve a small app.
 
-None of the parts are ours. Argo CD, ApplicationSets, Image Updater, Helm, cert-manager, Sealed Secrets and the runners are all off-the-shelf and well documented. What we built is the wiring between them: the conventions and agreements that make them behave as one platform. That wiring is what you would be copying.
+None of the parts are ours. Argo CD, ApplicationSets, Image Updater, Helm, cert-manager, Sealed Secrets and the runners are all off-the-shelf and well documented. What we built is the wiring between them: the conventions and agreements that make them behave as one platform. That wiring is what you would be copying. The real config, trimmed to the lines that matter, is in the annex at the end.
 
 ## Limits and what's next
 
@@ -164,3 +164,314 @@ It is small and it works. It is also fragile in ways that will matter as more ap
 **Secrets in previews.** Previews either run without secrets or use test credentials sealed so broadly that anything on the cluster could open them. A narrower mechanism would be better.
 
 **Nobody is told when it breaks.** A failed build, a stuck deploy or a certificate that won't renew shows up in a dashboard, but no one gets a message. Today we find out in the browser.
+
+## Annex: the config that matters
+
+These are real excerpts from our cluster's config repo (private) and from [hello-k3s](https://github.com/mansus-org/hello-k3s), trimmed to the lines that carry the ideas above. `# …` marks where we cut something out. Nothing else is changed.
+
+### The org-scanning factory
+
+This is the centrepiece: the ApplicationSet that turns every repo with a `.k3s/values.yaml` into an Application. Look at three things. The `scmProvider` generator lists the organisation every three minutes and keeps only repos that have the file: the file is the switch. The template's label and annotations are what Image Updater reads, so the factory and the watcher meet on the same Application. And `ignoreApplicationDifferences` is the ownership agreement from "Why it's built this way": the factory leaves the Helm parameters alone, because the watcher writes the version there.
+
+```ledger apps/mansus-apps.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: mansus-apps
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - scmProvider:
+        # Rescan the org every 3 minutes (default is 30).
+        requeueAfterSeconds: 180
+        cloneProtocol: https
+        github:
+          organization: mansus-org
+          tokenRef:
+            secretName: mansus-github-scm
+            key: token
+        filters:
+          - pathsExist: [.k3s/values.yaml]
+  # Image Updater writes the new image tag into spec.sources[0].helm.parameters.
+  # Without this, the ApplicationSet controller would put the template back
+  # (no parameters) on its next pass and roll the app back to image.tag "latest".
+  ignoreApplicationDifferences:
+    - jsonPointers:
+        - /spec/sources/0/helm/parameters
+  template:
+    metadata:
+      name: '{{ .repository | lower }}'
+      namespace: argocd
+      labels:
+        mansus.org/app-platform: "true"
+      annotations:
+        argocd-image-updater.argoproj.io/image-list: 'app=ghcr.io/mansus-org/{{ .repository | lower }}'
+        argocd-image-updater.argoproj.io/app.update-strategy: newest-build
+        argocd-image-updater.argoproj.io/app.allow-tags: 'regexp:^sha-[0-9a-f]{7,40}$'
+        argocd-image-updater.argoproj.io/app.helm.image-name: image.repository
+        argocd-image-updater.argoproj.io/app.helm.image-tag: image.tag
+        argocd-image-updater.argoproj.io/write-back-method: argocd
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
+    spec:
+      project: default
+      sources:
+        # 0: the shared chart from this repo. Must stay first (see above).
+        # Ours points at our private config repo; use your own.
+        - repoURL: https://github.com/<you>/<your-gitops-repo>.git
+          targetRevision: HEAD
+          path: charts/app
+          helm:
+            releaseName: '{{ .repository | lower }}'
+            valueFiles:
+              - $values/.k3s/values.yaml
+        # 1: the app repo, only used for its .k3s/values.yaml.
+        - repoURL: '{{ .url }}'
+          targetRevision: '{{ .branch }}'
+          ref: values
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{ .repository | lower }}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+        # …
+```
+
+The two `sources` are the "one template, ten-line file" idea: source 0 is the shared chart, and source 1 only exists so the chart can read `$values/.k3s/values.yaml` from the app's own repo. `allow-tags` is "tags are identity": production only ever accepts `sha-…`.
+
+### How Image Updater finds the apps
+
+Image Updater checks the registry every two minutes, and a single `ImageUpdater` resource tells it which Applications to look after: every one with the `mansus.org/app-platform` label. `useAnnotations: true` makes it take each app's image, tag filter and write-back method from the annotations the factory stamped on above, so there is no per-app configuration here at all.
+
+```ledger apps/argocd-image-updater.yaml (Helm values)
+config:
+  # Check GHCR every 2 minutes.
+  interval: 2m
+  registries:
+    - name: GitHub Container Registry
+      api_url: https://ghcr.io
+      prefix: ghcr.io
+      ping: no
+      # Classic PAT with read:packages, sealed in deploy/app-platform/.
+      credentials: pullsecret:argocd/ghcr-pull
+# …
+extraObjects:
+  - apiVersion: argocd-image-updater.argoproj.io/v1alpha1
+    kind: ImageUpdater
+    metadata:
+      name: mansus-apps
+      namespace: argocd
+    # …
+    spec:
+      applicationRefs:
+        - namePattern: "*"
+          labelSelectors:
+            matchLabels:
+              mansus.org/app-platform: "true"
+          useAnnotations: true
+```
+
+### Previews
+
+The preview factory is a `matrix`: the same org scan (minus repos that opt out with a `.k3s/no-preview` file) crossed with the open pull requests of each repo. Its template uses the same chart, and overrides four values: preview mode on, the `pr-<n>-<sha7>` tag, and the preview's own address. Previews get a different label, so Image Updater never touches them.
+
+```ledger apps/mansus-previews.yaml
+spec:
+  generators:
+    - matrix:
+        generators:
+          - scmProvider:
+              requeueAfterSeconds: 180
+              # …
+              filters:
+                - pathsExist: [.k3s/values.yaml]
+                  pathsDoNotExist: [.k3s/no-preview]
+          - pullRequest:
+              requeueAfterSeconds: 120
+              github:
+                owner: mansus-org
+                repo: '{{ .repository }}'
+                # …
+  template:
+    metadata:
+      name: '{{ .repository | lower }}-pr-{{ .number }}'
+      # Not mansus.org/app-platform: Image Updater must not touch previews.
+      labels:
+        mansus.org/app-platform-preview: "true"
+      # …
+    spec:
+      sources:
+        - # … the same shared chart as above
+          helm:
+            # …
+            # These win over .k3s/values.yaml.
+            parameters:
+              - name: preview.enabled
+                value: "true"
+              - name: image.repository
+                value: 'ghcr.io/mansus-org/{{ .repository | lower }}'
+              - name: image.tag
+                value: 'pr-{{ .number }}-{{ substr 0 7 .head_sha }}'
+              - name: ingress.host
+                value: '{{ .repository | lower }}-pr-{{ .number }}.mansus.org'
+        # .k3s/values.yaml as it is in the PR's latest commit.
+        - repoURL: '{{ .url }}'
+          targetRevision: '{{ .head_sha }}'
+          ref: values
+```
+
+### The app side: hello-k3s
+
+This is everything a repo needs. First the switch, the whole file:
+
+```ledger hello-k3s/.k3s/values.yaml
+# Deploy settings for this repo on the mansus.org cluster.
+ingress:
+  host: hello.mansus.org
+
+port: 8080
+
+healthCheck:
+  path: /
+```
+
+Then the workflow, cut down to the parts that matter: it runs on the in-cluster runners, tags production builds `sha-<7 chars>` (plus `latest`, which a brand-new app runs before the watcher has seen its first build), and tags preview builds `pr-<n>-<sha7>`, a shape production will never accept.
+
+```ledger hello-k3s/.github/workflows/deploy.yml
+jobs:
+  build-and-push:
+    if: github.event_name != 'pull_request'
+    # Self-hosted ARC runners on the cluster.
+    runs-on: arc-runner
+    steps:
+      # …
+      # Tags: sha-<7 char commit> (what the cluster deploys) and latest.
+      - id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ steps.image.outputs.name }}
+          tags: |
+            type=sha,prefix=sha-,format=short
+            type=raw,value=latest
+      # … build and push with docker/build-push-action
+
+  preview:
+    # Branches of this repo only. A fork's code never gets built here.
+    if: >-
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: arc-runner
+    steps:
+      # …
+      # Tag pr-<number>-<7 char head sha>. It must never look like sha-*, or
+      # Image Updater would deploy it to production.
+      - id: image
+        shell: bash
+        env:
+          PR: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          repo="${GITHUB_REPOSITORY#*/}"
+          {
+            echo "name=ghcr.io/${GITHUB_REPOSITORY,,}"
+            echo "tag=pr-${PR}-${HEAD_SHA::7}"
+            echo "url=https://${repo,,}-pr-${PR}.mansus.org"
+          } >> "$GITHUB_OUTPUT"
+      # … build and push, then comment the preview URL on the PR
+```
+
+And the app itself, a static page served by busybox as an unprivileged user:
+
+```ledger hello-k3s/Dockerfile
+FROM busybox:stable
+RUN adduser -D -u 10001 app
+COPY index.html /www/index.html
+USER 10001
+EXPOSE 8080
+CMD ["httpd", "-f", "-p", "8080", "-h", "/www"]
+```
+
+### HTTPS: the front door and the certificate clerk
+
+In the shared chart, three lines of the Ingress template are the whole HTTPS story: an annotation asks cert-manager for a certificate, Traefik serves it on its HTTPS entrypoint, and the certificate lands in a secret named after the app.
+
+```ledger charts/app/templates/ingress.yaml
+metadata:
+  name: {{ $name }}
+  annotations:
+    cert-manager.io/cluster-issuer: {{ .Values.ingress.clusterIssuer }}
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    # …
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        {{- range $hosts }}
+        - {{ . }}
+        {{- end }}
+      secretName: {{ $name }}-tls
+  # …
+```
+
+The issuer it names proves control of the address over plain HTTP, through Traefik:
+
+```ledger deploy/cert-manager/clusterissuer.yaml
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: <you@example.com>
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    solvers:
+      - http01:
+          ingress:
+            class: traefik
+```
+
+### Runners inside the cluster
+
+The runner scale set registers with the whole organisation, scales to zero when idle, and runs Docker-in-Docker so workflows can build images. `arc-runner`, the name of this release, is what `runs-on` asks for.
+
+```ledger apps/arc-runner.yaml (Helm values)
+githubConfigUrl: https://github.com/mansus-org
+githubConfigSecret: arc-github-secret
+maxRunners: 3
+minRunners: 0
+# …
+containerMode:
+  type: dind
+```
+
+## Annex: further reading
+
+The upstream docs for each piece, and our two public examples.
+
+- [ApplicationSet SCM Provider generator](https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/Generators-SCM-Provider/): scanning a GitHub org, filters such as `pathsExist`, and the template fields it provides.
+- [Pull Request generator](https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/Generators-Pull-Request/): one Application per open PR, and the `number` and `head_sha` fields.
+- [Matrix generator](https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/Generators-Matrix/): combining two generators, as the preview factory does.
+- [Controlling resource modification](https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/Controlling-Resource-Modification/): `ignoreApplicationDifferences` and other ways to let something else own part of a generated Application.
+- [Multiple sources for an Application](https://argo-cd.readthedocs.io/en/stable/user-guide/multiple_sources/): a chart from one repo with a values file from another, through `ref`.
+- [Argo CD Image Updater](https://argocd-image-updater.readthedocs.io/en/stable/): overview and install.
+- [Image Updater update strategies](https://argocd-image-updater.readthedocs.io/en/stable/basics/update-strategies/): `newest-build`, semver and the others, and tag filters.
+- [Image Updater write-back methods](https://argocd-image-updater.readthedocs.io/en/stable/basics/update-methods/): writing to the Application (`argocd`) versus committing to git.
+- [Configuring applications in Image Updater](https://argocd-image-updater.readthedocs.io/en/stable/configuration/applications/): the `ImageUpdater` resource, label selectors and `useAnnotations`.
+- [Image Updater registry configuration](https://argocd-image-updater.readthedocs.io/en/stable/configuration/registries/): registries, credentials and pull secrets.
+- [Actions Runner Controller](https://docs.github.com/en/actions/concepts/runners/actions-runner-controller): GitHub's docs for running Actions runners on Kubernetes.
+- [cert-manager ACME](https://cert-manager.io/docs/configuration/acme/): Let's Encrypt issuers in cert-manager.
+- [cert-manager HTTP-01 challenge](https://cert-manager.io/docs/configuration/acme/http01/): proving control of an address through the ingress.
+- [Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets): encrypted secrets you can commit, and how scopes bind them to a namespace.
+- [k3s documentation](https://docs.k3s.io/): installing and running the lightweight Kubernetes we use.
+- [k3s networking services](https://docs.k3s.io/networking/networking-services): the Traefik ingress controller that ships with k3s.
+- [OpenGitOps](https://opengitops.dev/): the GitOps principles, stated by the CNCF working group.
+- [mansus-org/hello-k3s](https://github.com/mansus-org/hello-k3s): the smallest app on the platform, with the full workflow.
+- This site's own [.k3s/values.yaml](https://github.com/mansus-org/revolution/blob/main/.k3s/values.yaml) and [deploy workflow](https://github.com/mansus-org/revolution/blob/main/.github/workflows/deploy.yml): a second real example.
