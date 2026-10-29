@@ -865,3 +865,6 @@ blockquote footer { font-size: 0.82em; font-variation-settings: "wdth" 112; font
 @media (min-width: 761px) {
   .figure__frame:has(> img) { justify-self: start; width: min(100%, 320px); }
 }
+/* Wide diagrams take the whole column; the picture links to the full-size file. */
+.figure--wide .figure__frame { width: 100%; }
+.figure--wide img { width: 100%; }
