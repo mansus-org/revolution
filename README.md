@@ -58,7 +58,7 @@ Text…
 | `draft` | no | `true` leaves the file out of the site completely. |
 
 Article bodies are written in English; in Spanish the page says so and translates the title, dek
-and chrome. Category names, the landing statement, the contact link at the end of every article and other
+and chrome. Category names and their one-line meanings (shown in the landing panel), the landing statement, the contact link at the end of every article and other
 fixed copy are in `src/_data/categories.json` and `src/_data/site.json`.
 
 ### Markdown conventions

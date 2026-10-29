@@ -6,6 +6,7 @@
   const tabs = [...document.querySelectorAll('[role="tab"]')];
   const panel = document.getElementById("panel");
   const nameEl = panel.querySelector(".cat-name");
+  const descEl = panel.querySelector(".cat-desc");
   const list = panel.querySelector(".entries");
   const inkHost = panel.querySelector(".sigil__ink");
   const ghostHost = panel.querySelector(".sigil__ghost");
@@ -22,6 +23,7 @@
   function renderPanel() {
     const cat = data[current];
     nameEl.textContent = cat.name[lang];
+    descEl.textContent = cat.desc[lang];
     list.replaceChildren();
     if (cat.entries.length === 0) {
       const li = document.createElement("li");
