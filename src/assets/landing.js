@@ -59,13 +59,16 @@
 
   // The category name is set to fill its column, capped by the size of the sign.
   function fitName() {
-    nameEl.style.fontSize = "100px";
     const range = document.createRange();
     range.selectNodeContents(nameEl);
-    const natural = range.getBoundingClientRect().width;
-    const room = nameEl.clientWidth;
+    // The tracking, and the negative margin that takes it back, scale with the size: measure at each step.
+    let size = 100;
+    for (let i = 0; i < 2; i++) {
+      nameEl.style.fontSize = size + "px";
+      size = (size * nameEl.clientWidth) / range.getBoundingClientRect().width;
+    }
     const cap = panel.querySelector(".sigil").clientHeight * 0.75;
-    nameEl.style.fontSize = Math.min(cap, (100 * room) / natural) + "px";
+    nameEl.style.fontSize = Math.min(cap, size) + "px";
   }
   window.addEventListener("resize", fitName);
   document.fonts && document.fonts.ready.then(fitName);
