@@ -442,6 +442,20 @@ html[data-lang="en"] .untranslated-note { display: none; }
 .prose > * { grid-column: text; margin: 0 0 1.05em; }
 
 .prose p { hanging-punctuation: first; }
+
+/* Running copy only: a plain text face, justified. Headings, notes, pull quotes, captions, tables
+   and code keep Anybody. */
+.prose > p,
+.prose > ul > li,
+.prose > ol > li {
+  font-family: "Atkinson Hyperlegible Next", "Anybody", system-ui, sans-serif;
+  font-variation-settings: normal;
+  font-weight: 420;
+  line-height: 1.6;
+  text-align: justify;
+  hyphens: auto;
+  text-wrap: pretty;
+}
 .prose strong { font-weight: 720; }
 
 .prose h2 {
@@ -501,7 +515,7 @@ html[data-lang="en"] .untranslated-note { display: none; }
 }
 
 .prose code {
-  font-family: inherit;
+  font-family: "Anybody", system-ui, sans-serif;
   font-variation-settings: "wdth" 80;
   font-weight: 560;
   font-size: 0.94em;
