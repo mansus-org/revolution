@@ -1,5 +1,5 @@
 ---
-title: "A classic code factory"
+title: "A Classic Code Factory"
 title_es: "Una fábrica de código clásica"
 dek: We did not invent a new way to build software with AI. We kept the old one, tickets, branches, pull requests, review, previews and a human who merges, and put language models in some of the seats. This is how it works, why it is set up this way, and how to build your own.
 dek_es: No inventamos una forma nueva de hacer software con IA. Mantuvimos la de siempre, tickets, ramas, pull requests, revisión, vistas previas y una persona que hace merge, y sentamos modelos de lenguaje en algunos de los puestos. Así funciona, por qué está montado así y cómo montar el tuyo.
