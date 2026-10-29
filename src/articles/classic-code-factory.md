@@ -178,7 +178,7 @@ These are real excerpts, trimmed to the lines that carry the ideas above. The in
 
 This is the whole of the coordinator's `CLAUDE.md`, the file Claude Code reads first in the folder where the runner starts it. It sets the role: coordinate, delegate code, answer questions directly, protect the owner's work and the key.
 
-```ledger coordinator/CLAUDE.md
+```coordinator/CLAUDE.md
 # Itsaplan runner: coordinator
 
 This folder is where the Itsaplan runner (`@itsaplan/runner`) starts Claude Code for
@@ -199,7 +199,7 @@ tickets and chat. It isn't a code repo.
 
 The runner's configuration. It connects to our tracker as one agent, starts Claude Code on the strongest model in the coordinator's folder, runs up to three tickets at once, and gives each run two hours.
 
-```ledger itsaplan-runner.json
+```itsaplan-runner.json
 {
   "url": "https://plan.mansus.org/api",
   "apiKey": "<agent key>",
@@ -215,7 +215,7 @@ The runner's configuration. It connects to our tracker as one agent, starts Clau
 
 From the coordinator's orchestration skill. A worker knows nothing about the ticket or the conversation, so every brief follows this template. It is the developer's ticket, rewritten so it stands on its own.
 
-```ledger paseo-orchestrate/SKILL.md (worker prompt template)
+```paseo-orchestrate/SKILL.md (worker prompt template)
 You are working in a git worktree of <owner>/<repo>, on branch <branch>.
 Goal: <what to build/fix, and why, in plain terms>.
 Scope: <files/areas to touch; what NOT to touch>.
@@ -235,7 +235,7 @@ Final reply: the PR URL, a 2–4 line summary, test results, anything left undon
 
 Also from the skill, gathered in one place. These are the lines that make it behave like a team instead of a script.
 
-```ledger paseo-orchestrate/SKILL.md (excerpts)
+```paseo-orchestrate/SKILL.md (excerpts)
 - Coordinator: you don't edit code in repos yourself. Even a one-line fix goes to
   a worker. That way every change lands in a worktree and a PR.
 - Never edit files in a project's main checkout (/workspace/<repo>). It holds the
@@ -263,7 +263,7 @@ Also from the skill, gathered in one place. These are the lines that make it beh
 
 One of the agents' memory notes, with the personal details left out. The note says what to do, why it was written, and when it applies, so a later reader can tell whether it still holds.
 
-```ledger memory/js-package-manager-bun.md
+```memory/js-package-manager-bun.md
 Use bun for JS/TS projects: `bun install`, `bun run dev`, `bun.lock`.
 Tell Paseo workers this in their prompts.
 
