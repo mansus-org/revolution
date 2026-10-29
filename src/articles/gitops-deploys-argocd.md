@@ -173,7 +173,7 @@ These are real excerpts from our cluster's config repo (private) and from [hello
 
 This is the centrepiece: the ApplicationSet that turns every repo with a `.k3s/values.yaml` into an Application. Look at three things. The `scmProvider` generator lists the organisation every three minutes and keeps only repos that have the file: the file is the switch. The template's label and annotations are what Image Updater reads, so the factory and the watcher meet on the same Application. And `ignoreApplicationDifferences` is the ownership agreement from "Why it's built this way": the factory leaves the Helm parameters alone, because the watcher writes the version there.
 
-```ledger apps/mansus-apps.yaml
+```apps/mansus-apps.yaml
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
@@ -249,7 +249,7 @@ The two `sources` are the "one template, ten-line file" idea: source 0 is the sh
 
 Image Updater checks the registry every two minutes, and a single `ImageUpdater` resource tells it which Applications to look after: every one with the `mansus.org/app-platform` label. `useAnnotations: true` makes it take each app's image, tag filter and write-back method from the annotations the factory stamped on above, so there is no per-app configuration here at all.
 
-```ledger apps/argocd-image-updater.yaml (Helm values)
+```apps/argocd-image-updater.yaml (Helm values)
 config:
   # Check GHCR every 2 minutes.
   interval: 2m
@@ -281,7 +281,7 @@ extraObjects:
 
 The preview factory is a `matrix`: the same org scan (minus repos that opt out with a `.k3s/no-preview` file) crossed with the open pull requests of each repo. Its template uses the same chart, and overrides four values: preview mode on, the `pr-<n>-<sha7>` tag, and the preview's own address. Previews get a different label, so Image Updater never touches them.
 
-```ledger apps/mansus-previews.yaml
+```apps/mansus-previews.yaml
 spec:
   generators:
     - matrix:
@@ -330,7 +330,7 @@ spec:
 
 This is everything a repo needs. First the switch, the whole file:
 
-```ledger hello-k3s/.k3s/values.yaml
+```hello-k3s/.k3s/values.yaml
 # Deploy settings for this repo on the mansus.org cluster.
 ingress:
   host: hello.mansus.org
@@ -343,7 +343,7 @@ healthCheck:
 
 Then the workflow, cut down to the parts that matter: it runs on the in-cluster runners, tags production builds `sha-<7 chars>` (plus `latest`, which a brand-new app runs before the watcher has seen its first build), and tags preview builds `pr-<n>-<sha7>`, a shape production will never accept.
 
-```ledger hello-k3s/.github/workflows/deploy.yml
+```hello-k3s/.github/workflows/deploy.yml
 jobs:
   build-and-push:
     if: github.event_name != 'pull_request'
@@ -388,7 +388,7 @@ jobs:
 
 And the app itself, a static page served by busybox as an unprivileged user:
 
-```ledger hello-k3s/Dockerfile
+```hello-k3s/Dockerfile
 FROM busybox:stable
 RUN adduser -D -u 10001 app
 COPY index.html /www/index.html
@@ -401,7 +401,7 @@ CMD ["httpd", "-f", "-p", "8080", "-h", "/www"]
 
 In the shared chart, three lines of the Ingress template are the whole HTTPS story: an annotation asks cert-manager for a certificate, Traefik serves it on its HTTPS entrypoint, and the certificate lands in a secret named after the app.
 
-```ledger charts/app/templates/ingress.yaml
+```charts/app/templates/ingress.yaml
 metadata:
   name: {{ $name }}
   annotations:
@@ -421,7 +421,7 @@ spec:
 
 The issuer it names proves control of the address over plain HTTP, through Traefik:
 
-```ledger deploy/cert-manager/clusterissuer.yaml
+```deploy/cert-manager/clusterissuer.yaml
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
@@ -442,7 +442,7 @@ spec:
 
 The runner scale set registers with the whole organisation, scales to zero when idle, and runs Docker-in-Docker so workflows can build images. `arc-runner`, the name of this release, is what `runs-on` asks for.
 
-```ledger apps/arc-runner.yaml (Helm values)
+```apps/arc-runner.yaml (Helm values)
 githubConfigUrl: https://github.com/mansus-org
 githubConfigSecret: arc-github-secret
 maxRunners: 3
