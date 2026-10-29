@@ -48,7 +48,7 @@ e-ink language. Dials: ENERGY 3 / RHYTHM 3 / MOTION 2.
 - **Palette:** paper `#e4e2db` and ink `#141414` (14.2:1). Grey only ever appears as dither, the
   way e-ink makes grey.
 - **Typeface:** Anybody, one variable family. Its width axis (50 to 150) gives non-human
-  proportions without mixing faces: width 50 / weight 900 for display, width 150 / weight 330
+  proportions without mixing faces (the one exception is article running text, see below): width 50 / weight 900 for display, width 150 / weight 330
   for statements, around width 112 for reading. Nothing handwritten, nothing serif, nothing mono.
 - **Bitmaps:** the Я, R, parentheses and the five signs are drawn cell by cell in `bitmap.js`
   and rendered as crisp SVG. The dither is made of real squares on a sub-grid, so it stays
@@ -93,8 +93,13 @@ one does the e-ink full refresh, and entries from other categories stay in place
 ghosts (inert and hidden from screen readers) instead of disappearing. Press the lit key again, or
 the (Я) key, to bring everything back.
 
-**Article.** Body text is Anybody at width 102, weight 400, 17 to 19 px, line height 1.6, on a 66ch
-measure. That is 14.2:1 ink on paper. The boldness is kept to the edges:
+**Article.** Running body copy (paragraphs and list items in the article) is set in Atkinson
+Hyperlegible Next, weight 420, 17 to 19 px, line height 1.6, justified with `hyphens: auto` and
+`text-wrap: pretty`, on a 66ch measure. Anybody is a display face; even at a normal width its
+letterforms tire the eye over a whole article, so the text gets a face drawn for legibility
+(loaded from Google Fonts next to Anybody) while headings, notes, pull quotes, captions, tables
+and code stay in Anybody. At 480 px and below the text is left-aligned, because justifying so
+few words per line opens gaps. That is 14.2:1 ink on paper. The boldness is kept to the edges:
 
 - the category sign printed twice, the second pass slipping off register;
 - an ultra-condensed title, a wide light dek and the issue number standing on its side;
