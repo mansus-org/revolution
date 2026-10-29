@@ -31,6 +31,7 @@
   font-weight: 900;
   font-size: 40vw;
   line-height: 0.8;
+  letter-spacing: var(--title-tracking);
 }
 
 /* "EVOLUTION" stands on its end, reading up the edge of the page. */
@@ -42,7 +43,7 @@
   font-weight: 900;
   font-size: calc(var(--bitmap-w) / 1.2 / 3.75);
   line-height: 0.74;
-  letter-spacing: -0.01em;
+  letter-spacing: var(--title-tracking);
   align-self: end;
   user-select: none;
 }
@@ -123,17 +124,18 @@
 .sigil__ghost { transform: translate(5%, -4%); }
 .sigil svg { width: 100%; height: auto; }
 
-/* The name is set to fill its column, whatever the word. */
+/* The name is set to fill its column, whatever the word.
+   The negative right margin takes back the tracking after the last letter, so the word stays flush. */
 .cat-name {
   grid-area: name;
-  margin: clamp(24px, 3vw, 48px) 0 0;
+  margin: clamp(24px, 3vw, 48px) calc(var(--title-tracking) * -1) 0 0;
   padding-top: 0.1em; /* room for the ascenders under the dial */
   font-variation-settings: "wdth" 50;
   font-weight: 900;
   font-size: clamp(3rem, 10vw, 12rem); /* replaced by fitName() */
   min-width: 0;
   line-height: 0.8;
-  letter-spacing: -0.015em;
+  letter-spacing: var(--title-tracking);
   white-space: nowrap;
 }
 
@@ -218,6 +220,7 @@
   font-weight: 900;
   font-size: clamp(3.5rem, 8.5vw, 9rem);
   line-height: 0.85;
+  letter-spacing: var(--title-tracking);
 }
 
 /* ---------- narrow screens ---------- */
@@ -248,7 +251,7 @@
       "sigil name"
       "list list";
   }
-  .cat-name { align-self: end; margin: 0; }
+  .cat-name { align-self: end; margin: 0 calc(var(--title-tracking) * -1) 0 0; }
 
   .face--back {
     grid-template-columns: 1fr var(--bitmap-w);
@@ -278,6 +281,7 @@
   font-weight: 900;
   font-size: clamp(2.5rem, 7vw, 6rem);
   line-height: 0.85;
+  letter-spacing: var(--title-tracking);
 }
 .all__list { list-style: none; margin: 0; padding: 0; border-top: 4px solid var(--ink); }
 .all__row {
@@ -294,6 +298,7 @@
   font-weight: 900;
   font-size: 1.75rem;
   line-height: 1;
+  letter-spacing: var(--title-tracking-small);
 }
 .all__link {
   color: inherit;

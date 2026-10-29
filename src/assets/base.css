@@ -4,6 +4,10 @@
   --paper: #e4e2db;
   --ink: #141414;
   --pad: clamp(16px, 3vw, 48px);
+  /* Heavy condensed display type (weight 800-900, wdth 50-70) opens up a little.
+     --title-tracking-small is for the smaller ones. Use in em, so it scales with each word. */
+  --title-tracking: 0.03em;
+  --title-tracking-small: 0.02em;
   color-scheme: light;
 }
 

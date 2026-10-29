@@ -9,9 +9,13 @@
   function fitTitle() {
     if (!title) return;
     const word = title.querySelector(`[lang="${lang}"]`);
-    title.style.fontSize = "100px";
-    const natural = word.getBoundingClientRect().width;
-    title.style.fontSize = (100 * title.clientWidth) / natural + "px";
+    // The tracking, and the negative margin that takes it back, scale with the size: measure at each step.
+    let size = 100;
+    for (let i = 0; i < 2; i++) {
+      title.style.fontSize = size + "px";
+      size = (size * title.clientWidth) / word.getBoundingClientRect().width;
+    }
+    title.style.fontSize = size + "px";
   }
   window.addEventListener("resize", fitTitle);
   document.fonts && document.fonts.ready.then(fitTitle);
