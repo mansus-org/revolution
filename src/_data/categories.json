@@ -1,7 +1,27 @@
 [
-  { "key": "ideas", "en": "Ideas", "es": "Ideas" },
-  { "key": "architecture", "en": "Architecture", "es": "Arquitectura" },
-  { "key": "ideology", "en": "Ideology", "es": "Ideología" },
-  { "key": "essays", "en": "Essays", "es": "Ensayos" },
-  { "key": "influences", "en": "Influences", "es": "Influencias" }
+  {
+    "key": "ideas", "en": "Ideas", "es": "Ideas",
+    "desc_en": "Things we have not built yet, described in enough detail that someone else could build them.",
+    "desc_es": "Cosas que aún no hemos construido, descritas con el detalle suficiente para que otra persona pueda construirlas."
+  },
+  {
+    "key": "architecture", "en": "Architecture", "es": "Arquitectura",
+    "desc_en": "How a system is built, or would be: the technical design and the decisions behind it.",
+    "desc_es": "Cómo está construido un sistema, o cómo lo estaría: el diseño técnico y las decisiones detrás."
+  },
+  {
+    "key": "ideology", "en": "Ideology", "es": "Ideología",
+    "desc_en": "Why we build what we build: the stances and values behind the work.",
+    "desc_es": "Por qué construimos lo que construimos: las posturas y los valores detrás del trabajo."
+  },
+  {
+    "key": "essays", "en": "Essays", "es": "Ensayos",
+    "desc_en": "Longer writing and opinion pieces.",
+    "desc_es": "Textos más largos y artículos de opinión."
+  },
+  {
+    "key": "influences", "en": "Influences", "es": "Influencias",
+    "desc_en": "Work by other people that shaped ours, with links.",
+    "desc_es": "Trabajo de otras personas que ha dado forma al nuestro, con enlaces."
+  }
 ]
