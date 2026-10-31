@@ -8,6 +8,10 @@
      --title-tracking-small is for the smaller ones. Use in em, so it scales with each word. */
   --title-tracking: 0.03em;
   --title-tracking-small: 0.02em;
+  /* Display: Anybody, short big strings only. Reading: everything people read. Code: mono. */
+  --font-display: "Anybody", system-ui, sans-serif;
+  --font-text: "Atkinson Hyperlegible Next", system-ui, sans-serif;
+  --font-code: "Atkinson Hyperlegible Mono", ui-monospace, monospace;
   color-scheme: light;
 }
 
@@ -19,8 +23,8 @@ body {
   margin: 0;
   color: var(--ink);
   background: var(--paper);
-  font-family: "Anybody", system-ui, sans-serif;
-  font-variation-settings: "wdth" 112;
+  font-family: var(--font-text);
+  font-variation-settings: normal;
   font-weight: 420;
   font-size: 1.0625rem;
   line-height: 1.4;
@@ -61,6 +65,7 @@ svg { display: block; color: currentColor; }
 .mark {
   color: var(--ink);
   text-decoration: none;
+  font-family: var(--font-display);
   font-variation-settings: "wdth" 150;
   font-weight: 860;
   font-size: 1.5rem;
@@ -77,9 +82,8 @@ svg { display: block; color: currentColor; }
   align-items: center;
   min-height: 44px;
   color: var(--ink);
-  font-variation-settings: "wdth" 125;
   font-weight: 700;
-  font-size: 0.9375rem;
+  font-size: 1rem;
   text-decoration: underline;
   text-decoration-thickness: 2px;
   text-underline-offset: 0.18em;
@@ -99,7 +103,7 @@ svg { display: block; color: currentColor; }
   color: var(--ink);
   font: inherit;
   font-weight: 700;
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   cursor: pointer;
 }
 
@@ -107,6 +111,6 @@ svg { display: block; color: currentColor; }
 
 
 @media (max-width: 420px) {
-  .chrome-link { margin-right: 8px; font-size: 0.875rem; }
+  .chrome-link { margin-right: 8px; font-size: 0.9375rem; }
   .mark { font-size: 1.25rem; }
 }
