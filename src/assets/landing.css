@@ -27,6 +27,7 @@
 .face--front .bitmap { grid-area: title; width: var(--bitmap-w); }
 
 .fallback {
+  font-family: var(--font-display);
   font-variation-settings: "wdth" 50;
   font-weight: 900;
   font-size: 40vw;
@@ -39,6 +40,7 @@
   grid-area: spine;
   writing-mode: vertical-rl;
   transform: rotate(180deg);
+  font-family: var(--font-display);
   font-variation-settings: "wdth" 50;
   font-weight: 900;
   font-size: calc(var(--bitmap-w) / 1.2 / 3.75);
@@ -52,6 +54,7 @@
   grid-area: statement;
   margin: 0 0 0.2em;
   max-width: 17ch;
+  font-family: var(--font-display);
   font-variation-settings: "wdth" 150;
   font-weight: 330;
   font-size: clamp(1.25rem, 2.1vw, 2rem);
@@ -130,6 +133,7 @@
   grid-area: name;
   margin: clamp(24px, 3vw, 48px) calc(var(--title-tracking) * -1) 0 0;
   padding-top: 0.1em; /* room for the ascenders under the dial */
+  font-family: var(--font-display);
   font-variation-settings: "wdth" 50;
   font-weight: 900;
   font-size: clamp(3rem, 10vw, 12rem); /* replaced by fitName() */
@@ -148,16 +152,15 @@
   display: grid;
   gap: 0.9em;
   max-width: 30ch;
-  font-variation-settings: "wdth" 125;
+  font-weight: 500;
   font-size: clamp(1.125rem, 1.6vw, 1.5rem);
-  line-height: 1.2;
+  line-height: 1.3;
 }
 
 .panel__list { grid-area: list; align-self: end; min-width: 0; }
 
 .to-contents {
   margin: 28px 0 0;
-  font-variation-settings: "wdth" 125;
   font-weight: 700;
   font-size: clamp(1rem, 1.3vw, 1.25rem);
 }
@@ -179,7 +182,7 @@
 .entries a:hover { text-decoration-thickness: 3px; }
 
 .entries .sample,
-.entries .empty { font-size: 0.95rem; }
+.entries .empty { font-size: 1rem; }
 .entries .empty { font-size: inherit; }
 
 /* Full refresh: the whole surface goes black for a beat, then repaints. */
@@ -208,6 +211,7 @@
 .handover__lead {
   margin: 0 0 0.6em auto;
   max-width: 18ch;
+  font-family: var(--font-display);
   font-variation-settings: "wdth" 150;
   font-weight: 330;
   font-size: clamp(1.25rem, 2.1vw, 2rem);
@@ -216,6 +220,7 @@
 
 .handover__turn {
   margin: 0;
+  font-family: var(--font-display);
   font-variation-settings: "wdth" 50;
   font-weight: 900;
   font-size: clamp(3.5rem, 8.5vw, 9rem);
@@ -277,6 +282,7 @@
 .all { padding: 0 var(--pad) clamp(72px, 10vw, 160px); }
 .all__title {
   margin: 0 0 0.4em;
+  font-family: var(--font-display);
   font-variation-settings: "wdth" 50;
   font-weight: 900;
   font-size: clamp(2.5rem, 7vw, 6rem);
@@ -294,6 +300,7 @@
   border-bottom: 2px solid var(--ink);
 }
 .all__num {
+  font-family: var(--font-display);
   font-variation-settings: "wdth" 50;
   font-weight: 900;
   font-size: 1.75rem;
@@ -302,10 +309,9 @@
 }
 .all__link {
   color: inherit;
-  font-variation-settings: "wdth" 125;
   font-weight: 700;
   font-size: clamp(1.125rem, 1.8vw, 1.5rem);
-  line-height: 1.15;
+  line-height: 1.25;
   text-decoration: none;
 }
 .all__link::after { content: ""; position: absolute; inset: 0; } /* whole row is the target */
@@ -320,10 +326,10 @@
   }
   .all__num { grid-row: 1 / 3; }
   .all__link { grid-column: 2 / 4; }
-  .all__cat, .all__date { font-size: 0.875rem; }
+  .all__cat, .all__date { font-size: 0.9375rem; }
   .all__date { text-align: right; }
 }
 
-.to-about { margin: 28px 0 0; font-variation-settings: "wdth" 125; font-weight: 700; font-size: clamp(1rem, 1.3vw, 1.25rem); }
+.to-about { margin: 28px 0 0; font-weight: 700; font-size: clamp(1rem, 1.3vw, 1.25rem); }
 .to-about a { display: inline-flex; align-items: center; min-height: 44px; color: inherit; text-decoration-thickness: 2px; text-underline-offset: 0.18em; }
 .to-about a:hover { text-decoration-thickness: 4px; }

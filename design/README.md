@@ -47,9 +47,20 @@ e-ink language. Dials: ENERGY 3 / RHYTHM 3 / MOTION 2.
 
 - **Palette:** paper `#e4e2db` and ink `#141414` (14.2:1). Grey only ever appears as dither, the
   way e-ink makes grey.
-- **Typeface:** Anybody, one variable family. Its width axis (50 to 150) gives non-human
-  proportions without mixing faces (the one exception is article running text, see below): width 50 / weight 900 for display, width 150 / weight 330
-  for statements, around width 112 for reading. Nothing handwritten, nothing serif, nothing mono.
+- **Typeface: display and reading.** Every text style is one or the other.
+  - *Display* is Anybody (`--font-display`), short big strings only: the wordmark, page and
+    article titles, section headings at about 28 px and up, issue numbers, category names and the
+    landing's big statements. Its width axis (50 to 150) gives the non-human proportions: width 50 /
+    weight 900 for titles, width 150 / weight 330 for statements.
+  - *Reading* is Atkinson Hyperlegible Next (`--font-text`, the `body` default): paragraphs, lists,
+    deks, notes, pull quotes, captions, tables, nav, buttons, keys, labels, meta, entry text, the
+    about page and footers. Weight 420 for running text, 600 to 800 for emphasis; at least 14 px,
+    tracking 0, no display-only `font-variation-settings`. The e-ink character comes from weight,
+    size, colour and layout, not from the face.
+  - *Code* is Atkinson Hyperlegible Mono (`--font-code`). This is the one exception to "nothing
+    mono". Still nothing handwritten, nothing serif.
+  A sentence below 28 px is never display. Both Atkinson faces load from Google Fonts in
+  `base.njk`, next to Anybody.
 - **Bitmaps:** the Я, R, parentheses and the five signs are drawn cell by cell in `bitmap.js`
   and rendered as crisp SVG. The dither is made of real squares on a sub-grid, so it stays
   1-bit at any size.
@@ -97,8 +108,8 @@ the (Я) key, to bring everything back.
 Hyperlegible Next, weight 420, 17 to 19 px, line height 1.6, justified with `hyphens: auto` and
 `text-wrap: pretty`, on a 66ch measure. Anybody is a display face; even at a normal width its
 letterforms tire the eye over a whole article, so the text gets a face drawn for legibility
-(loaded from Google Fonts next to Anybody) while headings, notes, pull quotes, captions, tables
-and code stay in Anybody. At 480 px and below the text is left-aligned, because justifying so
+(loaded from Google Fonts next to Anybody) and the rest of the reading text (notes, pull quotes, captions, tables,
+nav) uses it too, with code in Atkinson Hyperlegible Mono; only titles and section headings stay in Anybody. At 480 px and below the text is left-aligned, because justifying so
 few words per line opens gaps. That is 14.2:1 ink on paper. The boldness is kept to the edges:
 
 - the category sign printed twice, the second pass slipping off register;
@@ -108,7 +119,7 @@ few words per line opens gaps. That is 14.2:1 ink on paper. The boldness is kept
 - a pull quote as an inked cut-out stuck across the margin, with a toner fray;
 - a figure drawn by the page and dithered to 1-bit with a Bayer matrix, labelled as a placeholder;
 - tables and blockquotes ruled with pixel dots;
-- code set in the same family at width 80, because there is only one typeface;
+- code set in Atkinson Hyperlegible Mono, boxed with a pixel outline;
 - the running head "EVOLUTION 08" up the right edge.
 
 The page ends with the R facing the reader, "Maybe you do.", the article's "Needs" list and links

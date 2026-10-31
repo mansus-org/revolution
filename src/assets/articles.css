@@ -26,9 +26,8 @@ a:hover { text-decoration-thickness: 4px; }
   flex-wrap: wrap;
   align-items: center;
   gap: 0 0.5em;
-  font-variation-settings: "wdth" 125;
   font-weight: 600;
-  font-size: 0.9375rem;
+  font-size: 1rem;
 }
 .crumbs li + li::before { content: "/"; margin-right: 0.5em; font-weight: 400; }
 .crumbs a { display: inline-flex; align-items: center; min-height: 44px; }
@@ -60,17 +59,15 @@ a:hover { text-decoration-thickness: 4px; }
   align-items: stretch;
   max-width: 100%;
   border: 2px solid currentColor;
-  font-variation-settings: "wdth" 112;
-  font-size: 0.9375rem;
+  font-size: 1rem;
   line-height: 1.3;
 }
 .stamp b {
   flex: none;
   padding: 0.3em 0.55em;
   background: currentColor;
-  font-variation-settings: "wdth" 70;
-  font-weight: 900;
-  letter-spacing: var(--title-tracking-small);
+  font-weight: 800;
+  letter-spacing: 0.02em;
 }
 .stamp b > span { color: var(--paper); }
 .entry--lead .stamp b > span { color: var(--ink); }
@@ -126,6 +123,7 @@ a:hover { text-decoration-thickness: 4px; }
 .contents-title {
   grid-area: title;
   margin: 0 calc(var(--title-tracking) * -1) 0 0;
+  font-family: var(--font-display);
   font-variation-settings: "wdth" 50;
   font-weight: 900;
   font-size: 21.5vw; /* fitted by articles.js */
@@ -139,11 +137,10 @@ a:hover { text-decoration-thickness: 4px; }
 .lede {
   grid-area: lede;
   margin: 0.8em 0 0;
-  max-width: 30ch;
-  font-variation-settings: "wdth" 150;
-  font-weight: 330;
-  font-size: clamp(1.125rem, 1.9vw, 1.75rem);
-  line-height: 1.15;
+  max-width: 34ch;
+  font-weight: 450;
+  font-size: clamp(1.125rem, 1.9vw, 1.625rem);
+  line-height: 1.3;
 }
 
 /* Filter strip: the keys, and a line saying what is lit. */
@@ -157,8 +154,7 @@ a:hover { text-decoration-thickness: 4px; }
 }
 .filter__status {
   margin: 0;
-  font-variation-settings: "wdth" 125;
-  font-size: 0.9375rem;
+  font-size: 1rem;
 }
 
 .contents {
@@ -199,11 +195,9 @@ a:hover { text-decoration-thickness: 4px; }
 }
 .entry__cat {
   margin-top: 2px;
-  font-variation-settings: "wdth" 50;
-  font-weight: 900;
-  font-size: clamp(1.25rem, 2.1vw, 2rem);
-  line-height: 0.9;
-  letter-spacing: var(--title-tracking-small);
+  font-weight: 700;
+  font-size: clamp(1.125rem, 1.6vw, 1.5rem);
+  line-height: 1.15;
   text-align: right;
 }
 .entry__sign { display: block; flex: none; width: 72px; margin-top: 4px; }
@@ -217,11 +211,9 @@ a:hover { text-decoration-thickness: 4px; }
   align-items: baseline;
   gap: 16px;
   margin: 0;
-  font-variation-settings: "wdth" 118;
-  font-weight: 640;
-  font-size: clamp(1.25rem, 2vw, 1.875rem);
-  line-height: 1.12;
-  letter-spacing: var(--title-tracking-small);
+  font-weight: 700;
+  font-size: clamp(1.25rem, 2vw, 1.75rem);
+  line-height: 1.2;
 }
 .entry__head a { text-decoration: none; max-width: 30ch; }
 .entry__head a:hover { text-decoration: underline; }
@@ -241,9 +233,8 @@ a:hover { text-decoration-thickness: 4px; }
 .entry__dek {
   margin: 0.5em 0 0;
   max-width: 52ch;
-  font-variation-settings: "wdth" 104;
   font-size: 1.0625rem;
-  line-height: 1.45;
+  line-height: 1.5;
 }
 
 .entry__meta {
@@ -251,8 +242,8 @@ a:hover { text-decoration-thickness: 4px; }
   flex-wrap: wrap;
   gap: 4px 18px;
   margin: 0.8em 0 0;
-  font-variation-settings: "wdth" 125;
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
+  line-height: 1.4;
 }
 .entry__meta .cat { font-weight: 700; }
 .entry .stamp { margin-top: 12px; }
@@ -262,6 +253,7 @@ a:hover { text-decoration-thickness: 4px; }
   margin: 0;
   min-width: 2ch;
   text-align: right;
+  font-family: var(--font-display);
   font-variation-settings: "wdth" 50;
   font-weight: 900;
   font-size: clamp(3.5rem, 7vw, 6.5rem);
@@ -285,8 +277,9 @@ a:hover { text-decoration-thickness: 4px; }
 .entry--lead .entry__text { translate: none; }
 .entry--lead .entry__side { flex-direction: column; justify-content: flex-start; gap: 18px; }
 .entry--lead .entry__sign { width: min(100%, 200px); margin-top: 0; }
-.entry--lead .entry__cat { order: 2; text-align: left; font-size: clamp(1.5rem, 2.6vw, 2.5rem); }
+.entry--lead .entry__cat { order: 2; text-align: left; font-size: clamp(1.25rem, 2vw, 1.75rem); }
 .entry--lead .entry__head {
+  font-family: var(--font-display);
   font-variation-settings: "wdth" 50;
   font-weight: 900;
   font-size: clamp(2.5rem, 6vw, 6rem);
@@ -296,11 +289,10 @@ a:hover { text-decoration-thickness: 4px; }
 .entry--lead .entry__head a { max-width: 22ch; }
 .entry--lead .leader { display: none; }
 .entry--lead .entry__dek {
-  max-width: 34ch;
-  font-variation-settings: "wdth" 150;
-  font-weight: 330;
-  font-size: clamp(1.125rem, 1.7vw, 1.625rem);
-  line-height: 1.2;
+  max-width: 40ch;
+  font-weight: 450;
+  font-size: clamp(1.125rem, 1.6vw, 1.5rem);
+  line-height: 1.3;
   margin-top: 0.8em;
 }
 .entry--lead .entry__num { font-size: clamp(5rem, 12vw, 11rem); }
@@ -316,8 +308,7 @@ a:hover { text-decoration-thickness: 4px; }
 .contents-foot {
   margin: clamp(40px, 6vw, 72px) var(--pad) 0;
   padding: 0 0 var(--pad) calc(clamp(140px, 22vw, 340px) + clamp(16px, 2.5vw, 40px));
-  font-variation-settings: "wdth" 112;
-  font-size: 0.9375rem;
+  font-size: 1rem;
 }
 .contents-foot p { margin: 0 0 0.6em; max-width: 52ch; }
 
@@ -347,6 +338,7 @@ a:hover { text-decoration-thickness: 4px; }
 .article-title {
   grid-area: title;
   margin: 0;
+  font-family: var(--font-display);
   font-variation-settings: "wdth" 50;
   font-weight: 900;
   font-size: clamp(3rem, 8.4vw, 9rem);
@@ -360,6 +352,7 @@ a:hover { text-decoration-thickness: 4px; }
   grid-area: num;
   margin: 0;
   writing-mode: vertical-rl;
+  font-family: var(--font-display);
   font-variation-settings: "wdth" 50;
   font-weight: 900;
   font-size: clamp(1.25rem, 1.8vw, 1.75rem);
@@ -378,11 +371,10 @@ a:hover { text-decoration-thickness: 4px; }
 .article-dek {
   grid-area: dek;
   margin: 0.7em 0 0;
-  max-width: 34ch;
-  font-variation-settings: "wdth" 150;
-  font-weight: 330;
-  font-size: clamp(1.25rem, 2.1vw, 2rem);
-  line-height: 1.15;
+  max-width: 44ch;
+  font-weight: 450;
+  font-size: clamp(1.25rem, 1.9vw, 1.75rem);
+  line-height: 1.3;
 }
 
 .article-meta {
@@ -396,8 +388,7 @@ a:hover { text-decoration-thickness: 4px; }
   background: var(--checker) 0 0 / 4px 4px repeat-x;
   background-size: 4px 4px;
   background-repeat: repeat-x;
-  font-variation-settings: "wdth" 118;
-  font-size: 0.9375rem;
+  font-size: 1rem;
 }
 .article-meta dl { display: contents; }
 .article-meta div { display: flex; gap: 0.45em; }
@@ -427,6 +418,7 @@ html[data-lang="en"] .untranslated-note { display: none; }
   position: sticky;
   top: 16px;
   writing-mode: vertical-rl;
+  font-family: var(--font-display);
   font-variation-settings: "wdth" 50;
   font-weight: 900;
   font-size: 1.5rem;
@@ -441,8 +433,7 @@ html[data-lang="en"] .untranslated-note { display: none; }
   grid-template-columns: [margin] var(--note) [text] minmax(0, var(--measure)) [wide] minmax(0, 1fr) [end];
   column-gap: clamp(16px, 2.5vw, 40px);
   align-items: start;
-  font-variation-settings: "wdth" 102;
-  font-weight: 400;
+  font-weight: 420;
   font-size: clamp(1.0625rem, 0.95rem + 0.35vw, 1.1875rem);
   line-height: 1.62;
 }
@@ -450,14 +441,11 @@ html[data-lang="en"] .untranslated-note { display: none; }
 
 .prose p { hanging-punctuation: first; }
 
-/* Running copy only: a plain text face, justified. Headings, notes, pull quotes, captions, tables
-   and code keep Anybody. */
+/* Running copy: justified. Everything else here is also reading text (body default); only
+   the h2 section headings are display. */
 .prose > p,
 .prose > ul > li,
 .prose > ol > li {
-  font-family: "Atkinson Hyperlegible Next", "Anybody", system-ui, sans-serif;
-  font-variation-settings: normal;
-  font-weight: 420;
   line-height: 1.6;
   text-align: justify;
   hyphens: auto;
@@ -472,6 +460,7 @@ html[data-lang="en"] .untranslated-note { display: none; }
   margin: 1.6em 0 0.7em;
   padding-top: 22px;
   border-top: 3px solid var(--ink);
+  font-family: var(--font-display);
   font-variation-settings: "wdth" 50;
   font-weight: 900;
   font-size: clamp(2rem, 3.4vw, 3.25rem);
@@ -480,8 +469,9 @@ html[data-lang="en"] .untranslated-note { display: none; }
 }
 .prose h2 .h-num {
   justify-self: end;
-  font-variation-settings: "wdth" 150;
-  font-weight: 330;
+  font-family: var(--font-text);
+  font-variation-settings: normal;
+  font-weight: 600;
   font-size: 0.5em;
   line-height: 1.6;
   letter-spacing: 0; /* light numeral, not display type: don't inherit the heading's tracking */
@@ -491,8 +481,7 @@ html[data-lang="en"] .untranslated-note { display: none; }
 
 .prose h3 {
   margin: 1.5em 0 0.4em;
-  font-variation-settings: "wdth" 130;
-  font-weight: 760;
+  font-weight: 720;
   font-size: 1.25em;
   line-height: 1.2;
 }
@@ -506,11 +495,9 @@ html[data-lang="en"] .untranslated-note { display: none; }
   position: absolute;
   left: 0;
   top: 0.05em;
-  font-variation-settings: "wdth" 50;
-  font-weight: 900;
-  font-size: 1.35em;
-  line-height: 1.1;
-  letter-spacing: var(--title-tracking-small);
+  font-weight: 800;
+  font-size: 1.2em;
+  line-height: 1.2;
 }
 /* bullets are single ink pixels, scaled up */
 .prose ul > li::before {
@@ -524,14 +511,12 @@ html[data-lang="en"] .untranslated-note { display: none; }
 }
 
 .prose code {
-  font-family: "Anybody", system-ui, sans-serif;
-  font-variation-settings: "wdth" 80;
-  font-weight: 560;
-  font-size: 0.94em;
+  font-family: var(--font-code);
+  font-weight: 450;
+  font-size: 0.92em;
   padding: 0.05em 0.3em;
   outline: 1.5px solid var(--ink);
   outline-offset: -1.5px;
-  font-variant-numeric: tabular-nums;
 }
 
 .prose pre {
@@ -548,9 +533,8 @@ html[data-lang="en"] .untranslated-note { display: none; }
   padding: 0.25em 0.75em;
   background: var(--ink);
   color: var(--paper);
-  font-variation-settings: "wdth" 112;
   font-weight: 700;
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
 }
 .prose pre code {
   display: block;
@@ -566,9 +550,8 @@ html[data-lang="en"] .untranslated-note { display: none; }
 .note {
   grid-column: margin;
   margin: 0.2em 0 1em;
-  font-variation-settings: "wdth" 112;
-  font-size: 0.875rem;
-  line-height: 1.45;
+  font-size: 0.9375rem;
+  line-height: 1.5;
 }
 .note .n {
   display: inline-block;
@@ -579,7 +562,7 @@ html[data-lang="en"] .untranslated-note { display: none; }
   text-align: center;
   font-weight: 800;
 }
-.prose sup { line-height: 0; font-size: 0.7em; font-weight: 800; }
+.prose sup { line-height: 0; font-size: 0.85em; font-weight: 800; }
 .prose sup a { text-decoration: none; padding: 0 0.15em; outline: 1.5px solid var(--ink); outline-offset: -1px; }
 .prose sup a:focus-visible { outline-width: 3px; }
 
@@ -591,11 +574,10 @@ html[data-lang="en"] .untranslated-note { display: none; }
   background: var(--ink);
   color: var(--paper);
   rotate: 0.8deg;
-  font-variation-settings: "wdth" 150;
-  font-weight: 330;
-  font-size: clamp(1.5rem, 2.8vw, 2.5rem);
-  line-height: 1.12;
-  max-width: 26ch;
+  font-weight: 500;
+  font-size: clamp(1.375rem, 2.4vw, 2rem);
+  line-height: 1.3;
+  max-width: 30ch;
   justify-self: start;
 }
 .pull::after { /* toner fray */
@@ -614,14 +596,13 @@ blockquote {
   background:
     var(--sparse) 0 0 / 4px 4px repeat-x,
     var(--sparse) 0 100% / 4px 4px repeat-x;
-  font-variation-settings: "wdth" 125;
-  font-weight: 460;
-  font-size: 1.08em;
-  line-height: 1.45;
+  font-weight: 450;
+  font-size: 1.05em;
+  line-height: 1.5;
 }
 blockquote p { margin: 0 0 0.4em; }
 blockquote cite { font-style: normal; font-weight: 640; }
-blockquote footer { font-size: 0.82em; font-variation-settings: "wdth" 112; font-weight: 400; }
+blockquote footer { font-size: 0.85em; font-weight: 420; }
 
 /* Figure: the image is generated and dithered to 1-bit on the page. */
 .figure {
@@ -646,9 +627,8 @@ blockquote footer { font-size: 0.82em; font-variation-settings: "wdth" 112; font
   grid-column: margin;
   grid-row: 1;
   align-self: end;
-  font-variation-settings: "wdth" 112;
-  font-size: 0.875rem;
-  line-height: 1.45;
+  font-size: 0.9375rem;
+  line-height: 1.5;
 }
 .figure figcaption b { display: block; font-weight: 800; }
 .placeholder-tag {
@@ -657,18 +637,16 @@ blockquote footer { font-size: 0.82em; font-variation-settings: "wdth" 112; font
   padding: 0.2em 0.5em;
   background: var(--ink);
   color: var(--paper);
-  font-variation-settings: "wdth" 100;
-  font-weight: 800;
-  font-size: 0.8125rem;
+  font-weight: 700;
+  font-size: 0.875rem;
 }
 
 .table-wrap { overflow-x: auto; max-width: 100%; }
 .prose table {
   width: 100%;
   border-collapse: collapse;
-  font-variation-settings: "wdth" 108;
   font-size: 0.9375rem;
-  line-height: 1.35;
+  line-height: 1.4;
   font-variant-numeric: tabular-nums;
 }
 .prose caption {
@@ -684,10 +662,7 @@ blockquote footer { font-size: 0.82em; font-variation-settings: "wdth" 112; font
   background: var(--sparse) 0 100% / 4px 4px repeat-x;
 }
 .prose thead th {
-  font-variation-settings: "wdth" 70;
-  font-weight: 900;
-  font-size: 1.05em;
-  letter-spacing: var(--title-tracking-small);
+  font-weight: 800;
   border-bottom: 3px solid var(--ink);
   background: none;
 }
@@ -713,6 +688,7 @@ blockquote footer { font-size: 0.82em; font-variation-settings: "wdth" 112; font
 .handover__lead {
   margin: 0 0 0.5em auto;
   max-width: 22ch;
+  font-family: var(--font-display);
   font-variation-settings: "wdth" 150;
   font-weight: 330;
   font-size: clamp(1.25rem, 2.1vw, 2rem);
@@ -720,6 +696,7 @@ blockquote footer { font-size: 0.82em; font-variation-settings: "wdth" 112; font
 }
 .handover__turn {
   margin: 0;
+  font-family: var(--font-display);
   font-variation-settings: "wdth" 50;
   font-weight: 900;
   font-size: clamp(3.5rem, 8.5vw, 9rem);
@@ -743,7 +720,6 @@ blockquote footer { font-size: 0.82em; font-variation-settings: "wdth" 112; font
   margin: 28px 0 0;
   padding: 0;
   list-style: none;
-  font-variation-settings: "wdth" 125;
   font-weight: 640;
 }
 .back-links a { display: inline-flex; align-items: center; min-height: 44px; }
@@ -867,10 +843,9 @@ blockquote footer { font-size: 0.82em; font-variation-settings: "wdth" 112; font
   display: block;
   margin-top: 0.4em;
   color: var(--paper);
-  font-variation-settings: "wdth" 112;
   font-weight: 700;
-  font-size: 0.75rem;
-  line-height: 1.2;
+  font-size: 0.875rem;
+  line-height: 1.3;
 }
 @media (max-width: 760px) {
   .gallery {
