@@ -562,7 +562,7 @@ html[data-lang="en"] .untranslated-note { display: none; }
   text-align: center;
   font-weight: 800;
 }
-.prose sup { line-height: 0; font-size: 0.82em; font-weight: 800; }
+.prose sup { line-height: 0; font-size: 0.85em; font-weight: 800; }
 .prose sup a { text-decoration: none; padding: 0 0.15em; outline: 1.5px solid var(--ink); outline-offset: -1px; }
 .prose sup a:focus-visible { outline-width: 3px; }
 
