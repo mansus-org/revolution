@@ -30,7 +30,7 @@ needs_es:
 
 ## What it is
 
-Here is what it feels like from the product owner's seat. You open our tracker and write a ticket: what you want, and how you will know it is done. Or you just say it in a chat with the agent there. Some minutes later a comment appears on the ticket with a link to a pull request. The pull request has a link to a live preview of the change. You open the preview, use it, and either say "not yet, and here is why" or press merge. Merging ships it.
+Start in the product owner's seat. You open our tracker and write a ticket: what you want, and how you will know it is done. Or you just say it in a chat with the agent there. A few minutes later a comment appears on the ticket with a link to a pull request. The pull request has a link to a live preview of the change. You open the preview, use it, and either say "not yet, and here is why" or press merge. Merging ships it.
 
 Between your ticket and that link, nothing unusual happened. Someone read the ticket and asked a question about the unclear part. Someone planned the work and split it up. Developers each took a branch, wrote the code, committed and opened a pull request. Someone reviewed the diff against the ticket and sent it back once. CI built a preview. Someone reported back on the ticket and tidied up. It is the same flow any agile team runs. The only difference is that most of those "someones" were language models.
 
@@ -38,7 +38,12 @@ Between your ticket and that link, nothing unusual happened. Someone read the ti
 We kept the old factory exactly as it was, and changed who sits at some of the stations.
 :::
 
-The tracker is [It's a Plan](https://github.com/croffasia/itsaplan), an open-source alternative to Linear, running at plan.mansus.org. The agents are Claude Code sessions, started and supervised by [Paseo](https://paseo.sh), which runs many coding agents side by side. The code lives on GitHub, and every pull request gets a preview from [the app platform that gives every PR a preview](/articles/gitops-deploys-argocd/). Everything except GitHub and the models runs on our own small cluster.
+The whole factory is four pieces, and none of them are new:
+
+- **The tracker** is [It's a Plan](https://github.com/croffasia/itsaplan), an open-source alternative to Linear, running at plan.mansus.org.
+- **The agents** are Claude Code sessions, started and supervised by [Paseo](https://paseo.sh), which runs many coding agents side by side.
+- **The code** lives on GitHub, and every pull request gets a preview from [the app platform that gives every PR a preview](/articles/gitops-deploys-argocd/).
+- **Where it runs**: everything except GitHub and the models runs on our own small cluster.
 
 ::: figure Fig. 1
 ![The factory in four bands. Ask: the product owner writes a ticket or chats in It's a Plan. Plan and delegate: the ticket becomes an agent run, the runner starts the coordinator agent, and the coordinator delegates to Paseo. Build: Paseo starts workers, each in its own worktree on its own branch; they push and open a pull request, and CI builds it on runners in the cluster. Check and ship: the preview site gets its URL, a human reads it, reviews and merges, and the live site updates.](/articles/images/factory-map.png){colour wide}
@@ -64,7 +69,19 @@ Follow one ticket through the factory. Each station is a step any developer woul
 
 **Ticket and refinement.** A person writes a ticket in It's a Plan, with acceptance criteria when they can. Projects have short keys, so a ticket is called something like BRAIN-44. Agents are members of the team there: you can mention them, delegate a ticket to them, chat with them, or schedule them. When a ticket is delegated, the tracker queues an *agent run*. A small program on our side, the It's a Plan runner, picks it up and starts the coordinator with the ticket. The coordinator reads the ticket and its comments. If what is wanted, or which repository it is about, is unclear, it asks before anything else happens. That is refinement, done in the same place it always was.
 
-**Planning and delegation.** The coordinator decides how to split the work. Most tickets need one worker. Independent parts, such as two repositories or two areas of one repository that don't touch the same files, get one worker each. Parts that depend on each other stay with one worker. Then the coordinator writes each worker a brief: the ticket's key, the goal and why, what to touch and what not to, how to tell it's done, how to test it, how to name commits, and what to reply with. Workers can read the ticket themselves, with its comments, attachments and linked documents, so the brief doesn't have to carry all of that. But the decisions are the coordinator's, so goal, scope and acceptance are written into the brief anyway, and the worker never has to guess what was decided. The ticket stays the coordinator's: workers only read it. They never move it, comment on it or edit it.
+**Planning and delegation.** The coordinator decides how to split the work. Most tickets need one worker. Independent parts get one worker each: two repositories, or two areas of one repository that don't touch the same files. Parts that depend on each other stay with one worker.
+
+Then it writes each worker a brief. The brief carries the decisions, so the worker never has to guess what was decided:
+
+- the ticket's key,
+- the goal and why,
+- what to touch and what not to,
+- how to tell it's done,
+- how to test it,
+- how to name commits,
+- what to reply with.
+
+Workers can read the ticket themselves, with its comments, attachments and linked documents, so the brief doesn't have to carry all of that. But the decisions are the coordinator's, so goal, scope and acceptance are written into the brief anyway. The ticket stays the coordinator's: workers only read it. They never move it, comment on it or edit it.
 
 **Building in isolation.** Paseo starts each worker in its own *git worktree*[^1]. That is a separate working copy of the repository on its own branch, named after the ticket, such as `BRAIN-44-reading-list`. Workers can run in parallel without touching each other's files. The person's own checkout, where they may have half-finished work, is never touched. By default the workers run a cheaper, faster model. A part that is hard or risky gets the stronger one.
 
@@ -74,7 +91,7 @@ A git worktree is a second working folder for the same repository, checked out o
 
 **The pull request.** The worker commits in small steps, with the ticket key at the start of each message, pushes, and opens a pull request. That is why the history of this site reads like any team's: commits named "BRAIN-44 Relay pivot articles…" and "BRAIN-64 About page…".
 
-**Review, twice.** The coordinator reads the worker's diff against the ticket's acceptance criteria. If it falls short, the coordinator tells the same worker exactly what to fix and waits again. When the change is complete and the checks pass, it marks the pull request ready for review. Then a person reviews it. Agents never merge.
+**Review, twice.** First the coordinator reads the worker's diff against the ticket's acceptance criteria. If it falls short, the coordinator tells the same worker exactly what to fix and waits again. When the change is complete and the checks pass, it marks the pull request ready for review. Then a person reviews it. Agents never merge.
 
 **QA on a live preview.** Every push to the pull request builds a preview: a real, running copy of the change at its own address, linked from the pull request. The human reviewer can try the change instead of reading the diff. For a website that means reading the page. For an app it means using it.
 
@@ -93,11 +110,11 @@ The articles on this site are made this way, this one included. Here is the run 
 
 The owner asked, in a chat in It's a Plan, for a document explaining our latest infrastructure change end to end, with a small app as the example. Answering questions and research don't need a worker, so the coordinator did that itself. It read the infrastructure repository, cloned the example app, checked the live site, drew diagrams, and ran the diagram tool's validator until it passed.
 
-Next the owner asked for that document to be added to the infrastructure repository and linked from its README. That is a code change, so it went to a worker. The coordinator wrote a brief with the goal, scope and acceptance, and started a worker in a fresh worktree. The worker copied the files, linked them, committed, pushed and opened a pull request. The coordinator checked the diff: only the intended files, copied exactly. Then it archived the worker.
+Next, the owner asked for that document to be added to the infrastructure repository and linked from its README. That is a code change, so it went to a worker. The coordinator wrote a brief with the goal, scope and acceptance, and started a worker in a fresh worktree. The worker copied the files, linked them, committed, pushed and opened a pull request. The coordinator checked the diff: only the intended files, copied exactly. Then it archived the worker.
 
 Later, preparing pictures for the article, the coordinator *looked* at the rendered diagrams instead of trusting the validator. It found its own mistake: one arrow showed the certificate check going to GitHub instead of Let's Encrypt. It fixed the source, checked it again, and sent a second worker to push the fix onto the same pull request. No reviewer had caught it yet. Looking at the output, not just at the checks, is what caught it.
 
-Then the owner asked for an article on this site. Writing well was the hard part, so this worker got the stronger model. It wrote the article, built the site, took screenshots at desktop and phone widths, fixed the layout, and opened a pull request. CI built a preview on runners inside our cluster, and the preview was live within a few minutes. The owner read the preview, not the diff.
+Finally, the owner asked for an article on this site. Writing well was the hard part, so this worker got the stronger model. It wrote the article, built the site, took screenshots at desktop and phone widths, fixed the layout, and opened a pull request. CI built a preview on runners inside our cluster, and the preview was live within a few minutes. The owner read the preview, not the diff.
 
 The review took three rounds, all on that preview:
 
@@ -118,11 +135,11 @@ One review round. The owner only ever reads the preview and writes feedback; the
 
 Each of these is a choice, and each has a cost.
 
-**The old process is the guard-rail.** Tickets, branches, pull requests and review exist because people make mistakes. Machines make mistakes too, and the same structure catches them. Every change is small, named after a ticket, reviewable and revertible, whoever wrote it. The cost is ceremony: a one-line fix still gets a branch, a worker and a pull request.
+**The old process is the guard-rail.** Tickets, branches, pull requests and review exist because people make mistakes. Machines make mistakes too, and the same structure catches them: every change is small, named after a ticket, reviewable and revertible, whoever wrote it. The cost is ceremony: a one-line fix still gets a branch, a worker and a pull request.
 
 **One worktree and one branch per worker.** Parallel workers can't step on each other, and a half-finished attempt never leaks into someone else's work. The rule that agents never edit the owner's own checkout matters as much: that folder may hold uncommitted work nobody else has seen. The cost is disk space and some setup per worker, and the coordinator has to clean up afterwards. It only deletes a worktree once everything in it is pushed.
 
-**A tech lead and developers, not one agent.** The coordinator runs on the strongest model. It reads, plans and reviews, where judgement matters most. Workers default to a cheaper, faster model that is good at typing code against a clear brief. Splitting the roles also means the reviewer is never the author: the coordinator didn't write the diff it reads. The cost is that the brief still has to be good: the worker can read the ticket, but only the brief says what the coordinator decided.
+**A tech lead and developers, not one agent.** The coordinator runs on the strongest model: it reads, plans and reviews, where judgement matters most. Workers default to a cheaper, faster model that is good at typing code against a clear brief. Splitting the roles also means the reviewer is never the author: the coordinator didn't write the diff it reads. The cost is that the brief still has to be good: the worker can read the ticket, but only the brief says what the coordinator decided.
 
 **The tracker is the memory and the audit trail.** Agent sessions end and forget. The ticket doesn't. The question that was asked, the answer, the pull request link and the final report all live on the ticket, where the next person or agent will look. The cost is discipline: an agent must write to the ticket, not only to its own chat.
 
@@ -156,23 +173,28 @@ It works, and it shipped this site. It also has real weak spots.
 
 ## How to replicate it
 
-You don't need our setup; the idea carries. Here are the ingredients in the order we would put them together. Each step works before the next is added.
+You don't need our setup; the idea carries. Here are the ingredients in the order we would put them together. Each one works on its own before the next is added.
 
-1. **A tracker that agents can use.** You need tickets with acceptance criteria, comments and states, an interface agents can use (we use It's a Plan's MCP server[^2], added once per host as a user-level server in Claude Code, so every worker session gets it with no per-repo setup), and a way to hand a ticket to an agent. It's a Plan queues *agent runs* for that.
+1. **A tracker that agents can use.** Tickets with acceptance criteria, comments and states, an interface agents can use, and a way to hand a ticket to an agent. We use It's a Plan's MCP server[^2], added once per host as a user-level server in Claude Code, so every worker session gets it with no per-repo setup. It's a Plan queues *agent runs* for the hand-off.
 2. **A runner.** Something has to pick up those runs and start a command-line coding agent with the ticket. It's a Plan's runner does this: it claims a run, starts the agent in a folder you choose, streams what the agent does back to the ticket, and posts the result.
 3. **A coordinator's folder with standing instructions.** The folder the runner starts in is not a repository. It holds a short file of standing orders: you coordinate, workers write code, never edit the owner's checkouts, never print the key.
 4. **An orchestrator for workers.** Something has to start agents in fresh worktrees on named branches, let the coordinator wait for them, read their logs, send follow-ups, and clean them up. We use Paseo, and a written skill that teaches the coordinator how.
 5. **GitHub and its command-line tool,** signed in on the machine, so workers can push and open pull requests without seeing a token.
 6. **CI and preview environments.** Every pull request should get a build and, ideally, a live preview. This is what turns review from reading into trying.
-7. **Memory,** last. Once the factory runs, write down what you had to correct, so you don't correct it twice.
+7. **Memory, last.** Once the factory runs, write down what you had to correct, so you don't correct it twice.
 
 ::: note 2
 MCP, the Model Context Protocol: a standard way for an AI agent to use an outside tool, here the tracker's issues and comments.
 :::
 
-A few things to decide up front, because they shape everything later. *Who merges*: we say only people, and we wrote it down. *Branch names*: put the ticket key in them and in every commit, so a change can always be traced back to why. *Which model sits where*: strong for planning and review, cheaper for typing, stronger again for the hard parts. *What the workers may touch*: their own worktree only, and the ticket read-only.
+A few things to decide up front, because they shape everything later:
 
-None of the parts are ours. The tracker, the runner, Paseo, Claude Code, git and GitHub are all off the shelf. What we wrote is a page of standing instructions and one skill. The real ones, trimmed, are in the annex.
+- *Who merges.* We say only people, and we wrote it down.
+- *Branch names.* Put the ticket key in them and in every commit, so a change can always be traced back to why.
+- *Which model sits where.* Strong for planning and review, cheaper for typing, stronger again for the hard parts.
+- *What the workers may touch.* Their own worktree only, and the ticket read-only.
+
+None of the parts are ours. The tracker, the runner, Paseo, Claude Code, git and GitHub are all off the shelf. What we wrote is a page of standing instructions and one skill. Both, trimmed, are in the annex.
 
 ## Annex: the config that matters
 
