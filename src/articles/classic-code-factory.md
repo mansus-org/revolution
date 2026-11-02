@@ -62,9 +62,15 @@ People keep the two seats that carry responsibility: the **product owner**, who 
 
 Follow one ticket through the factory. Each station is a step any developer would recognise.
 
-**Ticket and refinement.** A person writes a ticket in It's a Plan, with acceptance criteria when they can. Projects have short keys, so a ticket is called something like BRAIN-44. Agents are members of the team there: you can mention them, delegate a ticket to them, chat with them, or schedule them. When a ticket is delegated, the tracker queues an *agent run*. A small program on our side, the It's a Plan runner, picks it up and starts the coordinator with the ticket. The coordinator reads the ticket and its comments. If what is wanted, or which repository it is about, is unclear, it asks before anything else happens. That is refinement, done in the same place it always was.
+**Ticket and refinement.** A person writes a ticket in It's a Plan, with acceptance criteria when they can. Projects have short keys, so a ticket is called something like BRAIN-44. Agents are members of the team there: you can mention them, delegate a ticket to them, chat with them, or schedule them.
 
-**Planning and delegation.** The coordinator decides how to split the work. Most tickets need one worker. Independent parts, such as two repositories or two areas of one repository that don't touch the same files, get one worker each. Parts that depend on each other stay with one worker. Then the coordinator writes each worker a brief: the ticket's key, the goal and why, what to touch and what not to, how to tell it's done, how to test it, how to name commits, and what to reply with. Workers can read the ticket themselves, with its comments, attachments and linked documents, so the brief doesn't have to carry all of that. But the decisions are the coordinator's, so goal, scope and acceptance are written into the brief anyway, and the worker never has to guess what was decided. The ticket stays the coordinator's: workers only read it. They never move it, comment on it or edit it.
+When a ticket is delegated, the tracker queues an *agent run*. A small program on our side, the It's a Plan runner, picks it up and starts the coordinator with the ticket. The coordinator reads the ticket and its comments. If what is wanted, or which repository it is about, is unclear, it asks before anything else happens. That is refinement, done in the same place it always was.
+
+**Planning and delegation.** The coordinator decides how to split the work. Most tickets need one worker. Independent parts, such as two repositories or two areas of one repository that don't touch the same files, get one worker each. Parts that depend on each other stay with one worker.
+
+Then the coordinator writes each worker a brief: the ticket's key, the goal and why, what to touch and what not to, how to tell it's done, how to test it, how to name commits, and what to reply with. Workers can read the ticket themselves, with its comments, attachments and linked documents, so the brief doesn't have to carry all of that. But the decisions are the coordinator's, so goal, scope and acceptance are written into the brief anyway, and the worker never has to guess what was decided.
+
+The ticket stays the coordinator's: workers only read it. They never move it, comment on it or edit it.
 
 **Building in isolation.** Paseo starts each worker in its own *git worktree*[^1]. That is a separate working copy of the repository on its own branch, named after the ticket, such as `BRAIN-44-reading-list`. Workers can run in parallel without touching each other's files. The person's own checkout, where they may have half-finished work, is never touched. By default the workers run a cheaper, faster model. A part that is hard or risky gets the stronger one.
 
@@ -126,7 +132,7 @@ Each of these is a choice, and each has a cost.
 
 **The tracker is the memory and the audit trail.** Agent sessions end and forget. The ticket doesn't. The question that was asked, the answer, the pull request link and the final report all live on the ticket, where the next person or agent will look. The cost is discipline: an agent must write to the ticket, not only to its own chat.
 
-**Workers read the ticket; only the coordinator writes to it.** Workers have the tracker's tools, so they can read the ticket, its comments, attachments and linked documents for context. They never move it, comment on it or edit it. One writer per ticket means two agents never talk over each other on the same issue, and the history stays in one voice. The cost is that a worker who notices something worth saying has to say it in its reply, for the coordinator to pass on. We found this out by accident. The owner suspected workers "probably" had tracker access. A probe showed they didn't have the tools, but a stray config file on the host held a key in plain text, so they could have, by accident. We made it deliberate instead: the tools are set up once per host, for every worker.
+**Workers read the ticket; only the coordinator writes to it.** Workers have the tracker's tools, so they can read the ticket, its comments, attachments and linked documents for context. They never move it, comment on it or edit it. We found this out by accident. The owner suspected workers "probably" had tracker access. A probe showed they didn't have the tools, but a stray config file on the host held a key in plain text, so they could have. We made it deliberate instead: the tools are set up once per host, for every worker. One writer per ticket means two agents never talk over each other on the same issue, and the history stays in one voice. The cost is that a worker who notices something worth saying has to say it in its reply, for the coordinator to pass on.
 
 **Humans merge.** The coordinator marks a pull request ready. It never merges, unless a ticket explicitly says so. Merging is the moment a change becomes real, and that decision stays with a person.
 
@@ -137,22 +143,6 @@ Each of these is a choice, and each has a cost.
 **Secrets never go in prompts.** Workers get a brief, with no credentials in it. They use the tools already signed in on the machine, such as GitHub's command-line tool. The runner's own key to the tracker is never printed or copied. That rule is written into the coordinator's standing instructions.
 
 **Memory for preferences.** Agents keep a small set of notes that outlive a session: things the team corrected once and doesn't want to correct again. One says "use bun, not npm, in JavaScript projects, and tell the workers". Another says which git identity to commit with in personal repositories. Each note says why it exists, so it can be questioned later.
-
-## What doesn't work well yet
-
-It works, and it shipped this site. It also has real weak spots.
-
-**Workers can be confidently wrong.** A worker reports "done, tests pass" in the same tone whether it is right or not. The coordinator's review catches a lot, and our own diagram error shows it can catch its own mistakes too. It doesn't catch everything. That is why a person still reviews.
-
-**Review is still the bottleneck.** Agents produce pull requests faster than a person can read them carefully. Previews help, but the most expensive step is still a human paying attention.
-
-**Cost is not tracked.** We know roughly how long each worker ran. We don't yet know what a ticket costs, or whether a cheaper worker that needs two rounds beats a stronger one that needs one.
-
-**Long runs hit timeouts.** A coordinator run has a time limit (two hours for us). Workers belong to Paseo, not to the coordinator, so they keep running if it stops. But someone has to notice. The coordinator is told to report on the ticket what is still running instead of disappearing.
-
-**Briefs still carry the decisions.** Workers can read the ticket, but the ticket doesn't say what the coordinator decided: which part goes to whom, what to leave alone, what counts as done. That lives only in the brief, and a badly written brief still produces a confident, wrong pull request.
-
-**Workers share the coordinator's identity.** In the tracker, workers act as the same agent as the coordinator, with the same permissions. "Read only" is a rule in the brief, not something the tracker enforces. A separate agent identity for workers, limited to reading, would be cleaner, and we haven't set it up.
 
 ## How to replicate it
 
@@ -173,6 +163,22 @@ MCP, the Model Context Protocol: a standard way for an AI agent to use an outsid
 A few things to decide up front, because they shape everything later. *Who merges*: we say only people, and we wrote it down. *Branch names*: put the ticket key in them and in every commit, so a change can always be traced back to why. *Which model sits where*: strong for planning and review, cheaper for typing, stronger again for the hard parts. *What the workers may touch*: their own worktree only, and the ticket read-only.
 
 None of the parts are ours. The tracker, the runner, Paseo, Claude Code, git and GitHub are all off the shelf. What we wrote is a page of standing instructions and one skill. The real ones, trimmed, are in the annex.
+
+## What doesn't work well yet
+
+It works, and it shipped this site. It also has real weak spots.
+
+**Workers can be confidently wrong.** A worker reports "done, tests pass" in the same tone whether it is right or not. The coordinator's review catches a lot, and our own diagram error shows it can catch its own mistakes too. It doesn't catch everything. That is why a person still reviews.
+
+**Review is still the bottleneck.** Agents produce pull requests faster than a person can read them carefully. Previews help, but the most expensive step is still a human paying attention.
+
+**Cost is not tracked.** We know roughly how long each worker ran. We don't yet know what a ticket costs, or whether a cheaper worker that needs two rounds beats a stronger one that needs one.
+
+**Long runs hit timeouts.** A coordinator run has a time limit (two hours for us). Workers belong to Paseo, not to the coordinator, so they keep running if it stops. But someone has to notice. The coordinator is told to report on the ticket what is still running instead of disappearing.
+
+**Briefs still carry the decisions.** Workers can read the ticket, but the ticket doesn't say what the coordinator decided: which part goes to whom, what to leave alone, what counts as done. That lives only in the brief, and a badly written brief still produces a confident, wrong pull request.
+
+**Workers share the coordinator's identity.** In the tracker, workers act as the same agent as the coordinator, with the same permissions. "Read only" is a rule in the brief, not something the tracker enforces. A separate agent identity for workers, limited to reading, would be cleaner, and we haven't set it up.
 
 ## Annex: the config that matters
 
