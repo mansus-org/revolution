@@ -42,13 +42,13 @@ The factory's knowledge is a few written skills. A skill is a markdown file the 
 
 ## Picking the worker
 
-The first article said "a cheaper model, a stronger one for hard parts". Now there are three.
+The first article described a cheaper default model and a stronger one for hard parts. Now there are three.
 
 - **Qwen 3.8 27B**, self-hosted and free, on the pi harness. For well-specified work with a check you can run, a few files, and nobody waiting.
 - **Sonnet 5.5**, the default. Everything else, including review and analysis answers, urgent work, and security-sensitive or unclear tickets.
 - **Opus 5.5**, for the hard or risky parts.
 
-On 2026-11-03 we ran an eval behind this: 17 tasks, 2 Qwen runs each. 33 of 34 graded runs passed. Qwen is 5 to 20 times slower than Sonnet. A typical run takes 1 to 10 minutes. A from-scratch sqlite HTTP API took 37 minutes, about 30 of them silent planning. Sonnet took 1.
+On 2026-11-03 we ran an eval behind this: 17 tasks, 2 Qwen runs each. 33 of 34 graded runs passed, with code review scored separately. Qwen is 5 to 20 times slower than Sonnet. A typical run takes 1 to 10 minutes. A from-scratch sqlite HTTP API took 37 minutes, about 30 of them silent planning. Sonnet took 1.
 
 ::: pull
 A silent Qwen worker is usually planning, not stuck.
@@ -76,7 +76,7 @@ We learned these by breaking things. It is one small host: 7.7 GB of RAM, no swa
 - **Check the load before choosing Qwen.** At load around 85, a Qwen run made no commit in 1h45m.
 - **After a failed start, use a fresh worktree.** The daemon caches a failed model refresh per directory, so a retry in the same folder fails instantly. Nobody restarts the daemon from inside an agent, because that kills every running agent, including the one doing it.
 - **A failed start leaves its workspace behind.** Reuse it or archive it. Archive a worktree only after `git status` is clean and everything is pushed.
-- **Workers need bypassPermissions.** Without it they stall forever on a prompt nobody will answer.
+- **Claude workers need bypassPermissions.** Without it they stall forever on a prompt nobody will answer.
 - **Run agents through Paseo, never from a shell script.** Through Paseo they show in the app. From a script they are hidden.
 - **No Go on the PATH.** The host is a NixOS container. Workers are told to use `nix shell nixpkgs#go -c go ...`. Hardcoded store paths get garbage-collected.
 
@@ -86,7 +86,7 @@ The first article described small note files. Agents now also share a brain: [`m
 
 On 2026-11-01 and 02 we rewrote one article many times with different prompts. What is in the prime gets used on every run. The deeper graph gets read only when the prompt gives concrete lookup steps and asks what was used.
 
-We also tried a hook that injects search hits into each prompt. The owner rejected it as context pollution. The prime should say what the brain knows and when to fetch it,.
+We also tried a hook that injects search hits into each prompt. The owner rejected it as context pollution. The prime should say what the brain knows and when to fetch it.
 
 One warning. The host's environment points at the production brain, so a test run without isolation once wrote about 118 records to production. Tests now strip those variables.
 
