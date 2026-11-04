@@ -26,6 +26,16 @@ needs_es:
 
 [The first article](/articles/classic-code-factory/) explained what the factory is. This one is what we learned running it. Short rules, each with its reason.
 
+## Point your runner here
+
+A new runner can set itself up. Put `itsaplan-runner.json` in an empty folder and send its agent one line:
+
+```
+Read https://revolution.mansus.org/bootstrap/setup.md and follow it.
+```
+
+It installs [standing instructions](/bootstrap/coordinator.md) and [skills](/bootstrap/paseo-orchestrate/SKILL.md), and tests Paseo. You still supply the API key, the `gh` sign-in and the MCP switch. Read [setup.md](/bootstrap/setup.md) first: you are handing your agent instructions from a web page.
+
 ## The skills
 
 The factory's knowledge is a few written skills. A skill is a markdown file the coordinator loads when it needs it. These are available to it, not used on every ticket.

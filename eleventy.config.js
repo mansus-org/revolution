@@ -9,6 +9,9 @@ export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });
   // Article images: src/articles/images/x.png is linked as /articles/images/x.png
   eleventyConfig.addPassthroughCopy("src/articles/images");
+  // Bootstrap files for agents are served raw: not templates, no HTML page.
+  eleventyConfig.addPassthroughCopy("src/bootstrap");
+  eleventyConfig.ignores.add("src/bootstrap/**");
   eleventyConfig.amendLibrary("md", (md) => md.use(mansusMarkdown));
 
   // Published articles, newest first (date, then issue number).
