@@ -34,6 +34,8 @@ gh auth status; paseo --version
 - `paseo` missing: `npm install -g @getpaseo/cli`. If global npm fails (read-only
   system, such as Nix), tell the human. Do not work around it.
 - `gh` not signed in: a human step. Workers need it to push and open PRs.
+- `git config --global user.email` empty: a human step. Workers cannot commit without an
+  identity, and you must not invent one.
 - Daemon: `paseo status`. If it is not running, `paseo daemon start` (see
   `paseo daemon --help`). Never restart a running daemon, because that kills every
   running agent.
@@ -86,6 +88,9 @@ The runner exports `ITSAPLAN_API_KEY` to you.
   If the file exists without an `itsaplan` entry, add the entry inside its existing
   `mcpServers` and keep the rest. A `url` of `.../api` gives `.../api/mcp`, and that
   is correct.
+  Write it with a quoted heredoc (`<<'EOF'`) so the shell does not expand the placeholder
+  and put the key in the file. Then check: `grep -c 'Bearer \${ITSAPLAN_API_KEY}' .mcp.json`
+  must print 1.
 - Workers do not inherit the runner's environment, so they get a user-level server:
   ```bash
   claude mcp add --scope user --transport http itsaplan "$URL/mcp" \
