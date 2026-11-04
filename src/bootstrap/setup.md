@@ -1,9 +1,13 @@
 # Set up a new It's a Plan runner
 
 You were sent here by a person who runs an It's a Plan runner. Follow the steps in order.
-The files are next to this one. Take the URL you were given for this file, drop
-`setup.md`, and call the rest `BASE`. For example, if you were given
-`https://host/x/bootstrap/setup.md`, then `BASE=https://host/x/bootstrap`.
+The files are next to this one. Set `BASE` to the URL you were given, without
+`/setup.md`:
+
+```bash
+BASE="<the URL you were given, without /setup.md>"
+```
+
 Fetch with `curl`, never WebFetch, which summarises and would damage the files.
 
 ## 0. What this does, and the limits
@@ -11,13 +15,12 @@ Fetch with `curl`, never WebFetch, which summarises and would damage the files.
 It installs standing instructions (`CLAUDE.md`) and skills so you can orchestrate Paseo
 workers on your next run.
 
-- Never print, log or copy the API key. Never read it out of `itsaplan-runner.json` into
-  a command line.
-- If a step needs a human (sign-ins, enabling MCP), do everything else, then list what
-  the human must do.
+- Never print, log or copy the API key. Never read it out of `itsaplan-runner.json`. Use
+  only the `ITSAPLAN_API_KEY` variable, as step 4 shows.
+- If a step needs a human (sign-ins, enabling MCP), do the rest, then list what they must do.
+- Report at the end in chat (step 6).
 - Before overwriting an existing `CLAUDE.md` or skill whose content differs, ask. Compare
   first, for example `curl -fsSL "$BASE/coordinator.md" | cmp - ./CLAUDE.md`.
-- Report at the end in chat (step 6).
 
 ## 1. Prerequisites
 
@@ -46,7 +49,8 @@ curl -fsSL "$BASE/coordinator.md" -o ./CLAUDE.md
 
 ## 3. Skills
 
-Compare before overwriting, per step 0.
+Compare before overwriting, per step 0, for example
+`curl -fsSL "$BASE/paseo-orchestrate/SKILL.md" | cmp - ~/.claude/skills/paseo-orchestrate/SKILL.md`.
 
 ```bash
 mkdir -p ~/.claude/skills/paseo-orchestrate
@@ -55,6 +59,8 @@ npx -y skills add getpaseo/paseo -g -a claude-code -y \
   -s paseo paseo-advisor paseo-committee paseo-handoff paseo-help paseo-plugin
 ```
 
+If `~/.claude/skills/paseo` already exists, skip `npx skills add` unless the owner wants an
+update, because `-y` overwrites. It also writes `~/.agents`.
 That gives `paseo`, `paseo-advisor`, `paseo-committee`, `paseo-handoff`, `paseo-help` and
 `paseo-plugin` in `~/.claude/skills`. Optional, only if the owner wants them: `myself`
 for shared memory (https://github.com/mansus-org/myself) and archify for diagrams
@@ -72,16 +78,22 @@ URL=$(node -p 'require("./itsaplan-runner.json").url')
 The runner exports `ITSAPLAN_API_KEY` to you.
 
 - Coordinator (you): if `./.mcp.json` has no `itsaplan` entry, add one with the literal
-  placeholder, so the file never holds the key:
-  `"itsaplan": {"type": "http", "url": "<URL>/mcp", "headers": {"Authorization": "Bearer ${ITSAPLAN_API_KEY}"}}`
+  placeholder, so the file never holds the key. A new file is:
+  ```json
+  {"mcpServers": {"itsaplan": {"type": "http", "url": "<URL>/mcp",
+    "headers": {"Authorization": "Bearer ${ITSAPLAN_API_KEY}"}}}}
+  ```
+  If the file exists without an `itsaplan` entry, add the entry inside its existing
+  `mcpServers` and keep the rest. A `url` of `.../api` gives `.../api/mcp`, and that
+  is correct.
 - Workers do not inherit the runner's environment, so they get a user-level server:
   ```bash
   claude mcp add --scope user --transport http itsaplan "$URL/mcp" \
     --header "Authorization: Bearer $ITSAPLAN_API_KEY"
   ```
-  Say plainly in your report that this stores the key in `~/.claude.json`, and that
-  workers share the coordinator's identity. If `ITSAPLAN_API_KEY` is unset, skip this
-  and list it as a human step.
+  Say plainly in your report that this stores the key in `~/.claude.json` and
+  workers share your identity. If `ITSAPLAN_API_KEY` is unset, skip it and list it as a
+  human step.
 - Remind the human: MCP must be enabled per project in Settings, MCP Server. It is off
   by default.
 
@@ -89,12 +101,15 @@ The runner exports `ITSAPLAN_API_KEY` to you.
 
 No GitHub needed. Clean up only what this step creates.
 
-1. `T=$(mktemp -d)`, then make a git repo in it with one commit (set a local
+1. `T=$(mktemp -d)`, then `git init -b main` in it with one commit (set a local
    `user.name` and `user.email` only inside it if git has none; use a placeholder).
 2. `paseo project create "$T"`, and note the project id.
 3. Following the `paseo-orchestrate` skill, run one Sonnet worker in a new worktree on
    branch `SETUP-1-smoke`. Prompt: add a file and commit it, do not push, do not open
-   a PR.
+   a PR. No remote, so unlike the skill's start command: skip `git fetch`, use
+   `--base main`, and let the prompt override the template's push and PR lines. The
+   workspace id is not in `paseo run --json`: find it with `paseo workspace ls --json`,
+   matching the worker's cwd.
 4. `paseo wait <agentId>`, then check the commit is on that branch.
 5. Clean up: `paseo archive <agentId>`, `paseo workspace archive <workspaceId>`,
    `paseo project delete <projectId>`, then `rm -rf "$T"`.

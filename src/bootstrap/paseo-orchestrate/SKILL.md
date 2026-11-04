@@ -232,6 +232,8 @@ paseo archive <agentId>                 # each worker you started (also frees it
 paseo workspace archive <workspaceId>   # removes the worktree dir (runs the repo teardown hook)
 ```
 
+- The workspace id is not in `paseo run --json` output: find it with
+  `paseo workspace ls --json`, matching the worker's cwd.
 - Archive a workspace only after `git -C <cwd> status --short` is clean and everything is
   pushed. Archiving deletes the worktree directory, and anything unpushed in it is lost.
 - Keep the workspace (and say so on the issue) when review changes are likely soon.
