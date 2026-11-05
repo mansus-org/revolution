@@ -1,6 +1,6 @@
 ---
 name: paseo-orchestrate
-description: Coordinate coding work through Paseo. The Itsaplan runner owns the ticket and delegates all code changes to Paseo worker agents (Sonnet by default, Opus for hard parts, and optionally a free or cheap model on pi for well-specified, test-checkable work), each in its own git worktree on a branch named after the issue, then reviews their diffs, makes sure pull requests are opened with gh, reports on the issue, and cleans up. Use when an Itsaplan task or the user asks to change code in a repo, open, review or fix a PR, or work on several repos or subtasks in parallel. Do not use for questions that need no code changes.
+description: Coordinate coding work through Paseo. The Itsaplan runner owns the ticket and delegates all code changes to Paseo worker agents (a cheap self-hosted model for well-specified, test-checkable work when you have one, your default hosted model for everything else, your strongest model for hard parts), each in its own git worktree on a branch named after the issue, then reviews their diffs, makes sure pull requests are opened with gh, reports on the issue, and cleans up. Use when an Itsaplan task or the user asks to change code in a repo, open, review or fix a PR, or work on several repos or subtasks in parallel. Do not use for questions that need no code changes.
 ---
 
 # Coordinating work with Paseo
@@ -17,12 +17,16 @@ authenticated on GitHub.
   Even a one-line fix goes to a worker. That way every change lands in a worktree and a
   PR, with nothing left behind in a checkout.
 - **Workers (Paseo agents).** Each one works in its own worktree on its own branch,
-  commits, pushes, and opens a draft PR. Claude workers have the itsaplan MCP tools (user-scope
-  config in `~/.claude.json`, same agent identity as you), so they can read the issue,
-  its comments, attachments and linked docs themselves. The ticket stays yours: workers
+  commits, pushes, and opens a draft PR. Hosted workers can be given the itsaplan MCP
+  tools at user scope (same agent identity as you), so they can read the issue, its
+  comments, attachments and linked docs themselves. The ticket stays yours: workers
   only read it. They don't move it, comment on it or edit it. Still put the goal, scope
-  and acceptance in the prompt, so they don't have to guess what you decided. Pi (Qwen)
-  workers have no MCP tools at all, so their prompt must carry the ticket text itself.
+  and acceptance in the prompt, so they don't have to guess what you decided. Self-hosted
+  harnesses usually expose no MCP tools at all, so their prompt must carry the ticket
+  text itself.
+- **Reviewer (optional, and the strongest model you have).** It reviews diffs, does root
+  cause analysis and writes plans. It never opens a branch, commits, pushes, comments on
+  a ticket or merges. See section 3.
 
 Never edit files in a project's main checkout. It holds the owner's own uncommitted
 work.
@@ -32,6 +36,10 @@ work.
 - PR base branch: if it isn't `main`, ask, and use it for `--base` and `gh pr create --base`.
 - Git identity: if `git config user.name` and `user.email` are empty, ask the owner what
   to commit as. Never invent an identity.
+- Model lanes: which model is the cheap worker, the default worker, the strong worker and
+  the reviewer. List what the host has with `paseo provider ls` and
+  `paseo provider models <provider>`, then write the answer into your own copy of this
+  skill so you stop asking.
 
 ## 1. Understand the ticket and find the repo
 
@@ -60,49 +68,66 @@ paseo ls -g --label issue=<KEY-N> --json   # workers already started for this is
   (some do) parse this name to link the worktree to the issue, so keep the format
   exact.
 
-## 3. Pick the worker model
+## 3. Pick the lane
 
-| Model | Flags | Use for |
+| Lane | Flags | Use for |
 |---|---|---|
-| A free or cheap model on pi (optional) | `--provider pi --model <your-cheap-model>` | well-specified work with a check you can run |
-| Sonnet 5.5 (default) | `--provider claude --model claude-sonnet-5-5 --mode bypassPermissions` | everything else |
-| Opus 5.5 | `--provider claude --model claude-opus-5-5 --mode bypassPermissions` | hard or risky parts: tricky design, security-sensitive, large refactor |
+| Cheap worker (self-hosted, optional) | `--provider <provider> --model <cheap-model>` | well-specified work with a check you can run |
+| Default worker | `--provider <provider> --model <default-model> --mode <permission mode>` | everything else |
+| Strong worker | the same flags with your strongest model | hard or risky parts: tricky design, security-sensitive, large refactor |
+| Reviewer | your strongest model, with a read-only brief | review, root cause analysis, plans |
 
-If you have no such model, skip the first row: your workers are Sonnet and Opus, and
-the Qwen notes below don't apply to you.
+If you have no cheap self-hosted model, skip the first row and the notes below about
+slow workers.
 
-If you have a free or cheap model on pi, here is how we use ours (Qwen 3.8 27B). It costs
-nothing and its code is usually right, but it is 5 to 20 times slower than
-Sonnet. In a 2026-11-03 eval (17 tasks, 2 Qwen runs each) it passed 33 of 34 graded runs: renames, bug fixes against failing
+The reviewer lane has one rule: it reads and advises, it never writes. If the strong
+model is allowed to fix the code, every hard ticket quietly becomes an expensive one and
+the cheap model never gets used. Give the reviewer its own worktree on the same branch
+(`--worktree-mode checkout-branch --branch <branch>`) so there is nothing for it to
+dirty, tell it to change no file, and check `git status --porcelain` in its cwd when it
+answers.
+
+Here is how we use our cheap self-hosted model. It costs nothing and its code is usually
+right, but it is 5 to 20 times slower than our default. In a 2026-11-03 eval (17 tasks,
+2 runs each) it passed 33 of 34 graded runs: renames, bug fixes against failing
 tests, a small feature over 3 files, a refactor into modules, test writing (100%
 coverage, every mutant killed), shell scripts, git chores, log analysis, a concurrency
 lock, a strict-TS cleanup, a sqlite HTTP API, and Q&A on a codebase, including a real
 repo with correct file:line citations. Typical time was 1 to 10 minutes, and 30 to
-37 minutes for the from-scratch API and cron parser. Sonnet did each hard task in under
-a minute. The one failure: one of two cron-parser runs skipped a matching hour, and its
-own 57 tests didn't catch it. For logic-heavy code, give it the edge cases as tests in
-the prompt, or check them yourself.
+37 minutes for the from-scratch API and cron parser. Our default did each hard task in
+under a minute. The one failure: one of two cron-parser runs skipped a matching hour,
+and its own 57 tests didn't catch it. For logic-heavy code, give it the edge cases as
+tests in the prompt, or check them yourself.
 
-Use Qwen when all of these hold:
+Use the cheap model when all of these hold:
 - The ticket says exactly what to change, and the acceptance criteria are a command
   (tests, build, a script) or something you can check in the diff yourself.
 - The work stays in a few files of an existing codebase.
 - Nobody is waiting on it: a run can take 10 to 40 minutes.
-- The prompt can say everything the worker needs. **Pi workers have no MCP servers**,
-  so they can't read the itsaplan ticket. Paste in the relevant issue text.
+- The prompt can say everything the worker needs. A self-hosted harness usually has no
+  MCP servers, so it can't read the itsaplan ticket. Paste in the relevant issue text.
 
-Use Sonnet instead for:
+Use the default or strong model instead for:
 - **Answers with no tool calls** (code review, analysis, plans). In both review runs,
-  Qwen wrote its whole answer inside its reasoning and sent no final message. It also
-  missed one planted bug both times.
+  our cheap model wrote its whole answer inside its reasoning and sent no final
+  message. It also missed one planted bug both times.
 - **Building something sizeable from scratch from a long spec, when time matters.** On
-  an HTTP API task (sqlite, 6 routes, validation), Qwen spent ~30 minutes planning in
-  its reasoning before writing a file. It passed, but took 37 minutes where Sonnet
+  an HTTP API task (sqlite, 6 routes, validation) it spent about 30 minutes planning in
+  its reasoning before writing a file. It passed, but took 37 minutes where our default
   took 1.
 - Security-sensitive changes, unclear tickets, and anything urgent.
 
-A Qwen worker with no tool calls for a long stretch is usually still planning, not
-stuck. Give it up to 60 minutes in total, then stop it and give the task to Sonnet in a
+A worker with no tool calls for a long stretch is usually still planning, not stuck.
+Budget for it, and scale the budget to how many workers share your model server. We
+learned that the hard way on a second self-hosted model: eight tasks, four workers at
+once, a 14 minute cap, and two runs finished while six were stopped mid-flight. Repeated
+one at a time with a 55 minute backstop, the same tasks finished on their own in about 35
+minutes each. A capped run and a failed model look identical in the logs, so read the
+timeout before you blame the worker.
+
+When a worker fails and you have a stronger model, hand the task to it in a fresh
+worktree. If the cheap model is the only one you want writing code, keep the failure in
+the cheap lane: have the reviewer rewrite the brief and start the worker again in a
 fresh worktree.
 
 ## 4. Start workers
@@ -114,10 +139,10 @@ git -C <repo path> fetch origin
 paseo run -d --json \
   --new-workspace worktree --cwd <repo path> \
   --new-branch <KEY-N>-<slug> --base origin/main \
-  --provider claude --model claude-sonnet-5-5 --mode bypassPermissions \
+  --provider <provider> --model <model> --mode <permission mode> \
   --title "<KEY-N> <part>" --label issue=<KEY-N> \
   "$(cat /tmp/<KEY-N>-<slug>.md)"
-# → {"agentId":"…","cwd":"/home/paseo/.paseo/worktrees/<hash>/<KEY-N>-<slug>",…}
+# → {"agentId":"…","cwd":"<home>/.paseo/worktrees/<hash>/<KEY-N>-<slug>",…}
 ```
 
 Write the prompt to a file first, then pass it as the last argument. (`paseo run` has no
@@ -129,21 +154,24 @@ Other starting points:
 - Workspace you already have: `--workspace <wks_id>`. Reuse the issue's existing
   workspace when you continue earlier work.
 
-For a cheap pi worker, swap the provider line for `--provider pi --model <your-cheap-model>`
-(no `--mode`, because pi runs tools without asking).
+For a cheap self-hosted worker, swap the provider line for `--provider <provider> --model
+<cheap-model>` and drop `--mode` if the harness runs its tools without asking.
 
 Rules:
 - Always pass `--workspace` or `--new-workspace`. Without either, `paseo run` uses the
   caller's workspace (`$PASEO_WORKSPACE_ID`), which is your own folder.
-- Without `bypassPermissions`, an unattended Claude worker stalls on permission prompts.
-  Modes for `claude`: `plan`, `default`, `acceptEdits`, `auto`, `bypassPermissions`.
+- Without a permission mode that lets it act, an unattended hosted worker stalls on
+  permission prompts nobody is there to answer. `paseo provider ls --json` lists the
+  modes each provider offers.
 - Start workers one at a time and wait for each `paseo run` to return. Parallel
   `paseo run` calls overload the daemon, and most of them fail.
-- Keep at most 3 or 4 pi workers running. On a small host, count memory: each idle pi
-  agent holds about 80 MB, and about 25 of them once took a 7.7 GB host down. Every pi
-  agent, idle ones included, keeps a `pi --mode rpc` process until you archive it, and
-  with that many left around Paseo stopped responding.
-- `AGENT_CREATE_FAILED … Timed out refreshing Pi … get_available_models`: the daemon
+- Keep at most 3 or 4 self-hosted workers running, and fewer if they share one model
+  server. On a small host, count memory: each idle agent holds about 80 MB, and about 25
+  of them once took a 7.7 GB host down. Every agent, idle ones included, keeps a process
+  alive until you archive it, and with that many around Paseo stopped responding. On a
+  big host the machine is not the limit, the model server is: watch its own metrics
+  (queue depth, KV cache) before you blame a worker for being slow.
+- `AGENT_CREATE_FAILED … Timed out refreshing <provider> … get_available_models`: the daemon
   caches that failure for the directory, so every retry in the same cwd fails
   instantly. Start in a fresh worktree (new slug) instead. If that also fails, tell the
   user the Paseo daemon needs a restart. Don't restart it yourself, because that kills
@@ -173,14 +201,14 @@ End each commit message with the attribution lines your harness requires.
 When done: git push -u origin HEAD, then open a draft PR:
   gh pr create --draft --base main --title "<KEY-N> <summary>" --body "<what/why/how tested>"
 (if a PR for this branch exists, push to it instead). Never merge or force-push to main.
-Final reply: the PR URL, a 2–4 line summary, test results, anything left undone.
+Final reply: the PR URL, a 2 to 4 line summary, test results, anything left undone.
 ```
 
-For a pi (Qwen) worker, replace the "Ticket:" lines with the issue's title, description
-and any comments that matter, pasted in. Keep the acceptance concrete: name the test
-command, the expected output, the files to touch. Qwen does well against a check it can
-run and drifts without one. Also add: "Write the final reply as a normal message, not
-only in your reasoning."
+For a worker with no tracker tools, replace the "Ticket:" lines with the issue's title,
+description and any comments that matter, pasted in. Keep the acceptance concrete: name
+the test command, the expected output, the files to touch. A cheap model does well
+against a check it can run and drifts without one. Also add: "Write the final reply as a
+normal message, not only in your reasoning."
 
 ## 5. Watch, steer, review
 
@@ -197,14 +225,14 @@ paseo stop <agentId>                        # interrupt
 - Workers belong to the Paseo daemon, not to your process. They keep running if your run
   ends. If you run out of time, report what's still running (agent ids, branches) on the
   issue rather than abandoning it silently.
-- Qwen workers: wait in rounds of `--timeout 600` and check `paseo logs <id> --filter tools
+- Slow self-hosted workers: wait in rounds of `--timeout 600` and check `paseo logs <id> --filter tools
   --tail 5` between rounds. Long gaps with no tool calls are planning, so let it
-  run. Past 60 minutes, `paseo stop` it and give the task to Sonnet.
+  run. Past your budget, `paseo stop` it and move the task to the next lane.
 - If a worker goes idle with no final message, its answer may be in a `[Thought]` block
   of `paseo logs <id>`. Ask once: `paseo send <id> "Write your final answer now as a
   plain message."`
 - Don't trust a "tests pass" from a worker. Run the acceptance command yourself in the
-  worker's cwd. This matters most for Qwen.
+  worker's cwd. This matters most with the cheap model.
 - Review each worker's diff before you accept it:
   `git -C <worker cwd> fetch origin && git -C <worker cwd> diff origin/main...HEAD`.
   Check it against the ticket's acceptance criteria. If it falls short, `paseo send` the
@@ -239,8 +267,8 @@ paseo workspace archive <workspaceId>   # removes the worktree dir (runs the rep
 - Keep the workspace (and say so on the issue) when review changes are likely soon.
   Archive it once the PR is merged or closed.
 - The local branch survives archiving. Leave it, because the remote branch backs the PR.
-- Archive pi workers as soon as you have their result, even when you keep the
-  workspace. An idle pi agent still holds memory (see section 4).
+- Archive workers as soon as you have their result, even when you keep the
+  workspace. An idle agent still holds memory and a process (see section 4).
 - Never archive workspaces or agents you didn't start for this ticket.
 
 ## Quick reference
@@ -249,10 +277,11 @@ paseo workspace archive <workspaceId>   # removes the worktree dir (runs the rep
 |---|---|
 | Repos / workspaces | `paseo project ls --json` · `paseo workspace ls --json` |
 | Workers for an issue | `paseo ls -g --label issue=<KEY-N> --json` |
-| Worker in new worktree | `paseo run -d --json --new-workspace worktree --cwd <repo> --new-branch <b> --base origin/main --provider claude --model claude-sonnet-5-5 --mode bypassPermissions --label issue=<KEY-N> "<prompt>"` |
+| Worker in new worktree | `paseo run -d --json --new-workspace worktree --cwd <repo> --new-branch <b> --base origin/main --provider <provider> --model <model> --mode <permission mode> --label issue=<KEY-N> "<prompt>"` |
 | Worker on a PR | `… --new-workspace worktree --worktree-mode checkout-pr --pr-number <n> …` |
 | Wait / logs / follow-up | `paseo wait <id> --timeout 1500` · `paseo logs <id> --tail 20` · `paseo send <id> "…"` |
 | Review | `git -C <cwd> diff origin/main...HEAD` · `gh pr view` · `gh pr checks` |
 | Clean up | `paseo archive <agentId>` · `paseo workspace archive <wks>` |
-| Cheap pi worker | same, with `--provider pi --model <your-cheap-model>` (no `--mode`) |
-| Models | `paseo provider models claude` · `paseo provider models pi` |
+| Cheap worker | same, with `--provider <provider> --model <cheap-model>`, no `--mode` if the harness does not ask |
+| Reviewer | same, on `--worktree-mode checkout-branch --branch <b>`, strongest model, brief says change no file |
+| Models | `paseo provider ls` · `paseo provider models <provider>` |

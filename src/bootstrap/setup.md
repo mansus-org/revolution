@@ -36,6 +36,10 @@ gh auth status; paseo --version
 - `gh` not signed in: a human step. Workers need it to push and open PRs.
 - `git config --global user.email` empty: a human step. Workers cannot commit without an
   identity, and you must not invent one.
+- Model lanes: `paseo provider ls --json` and `paseo provider models <provider>` list
+  what this host has. Ask the human which model is the cheap worker, the default worker,
+  the strong worker and the reviewer, and write the answer into the standing instructions
+  from step 2. Never pick a model for them.
 - Daemon: `paseo status`. If it is not running, `paseo daemon start` (see
   `paseo daemon --help`). Never restart a running daemon, because that kills every
   running agent.
@@ -109,8 +113,8 @@ No GitHub needed. Clean up only what this step creates.
 1. `T=$(mktemp -d)`, then `git init -b main` in it with one commit (set a local
    `user.name` and `user.email` only inside it if git has none; use a placeholder).
 2. `paseo project create "$T"`, and note the project id.
-3. Following the `paseo-orchestrate` skill, run one Sonnet worker in a new worktree on
-   branch `SETUP-1-smoke`. Prompt: add a file and commit it, do not push, do not open
+3. Following the `paseo-orchestrate` skill, run one worker on your default model in a
+   new worktree on branch `SETUP-1-smoke`. Prompt: add a file and commit it, do not push, do not open
    a PR. No remote, so unlike the skill's start command: skip `git fetch`, use
    `--base main`, and let the prompt override the template's push and PR lines. The
    workspace id is not in `paseo run --json`: find it with `paseo workspace ls --json`,
@@ -128,8 +132,8 @@ Say in chat:
   failed);
 - that `CLAUDE.md` and the skills take effect on the NEXT run, not this session.
 
-Recommend, without changing anything: `"args": ["--model", "opus"]` and a `timeoutMs`
-in `itsaplan-runner.json` for the coordinator. Both need a runner restart, which is the
-human's call.
+Recommend, without changing anything: `"args": ["--model", "<your strongest model>"]` and
+a `timeoutMs` in `itsaplan-runner.json` for the coordinator. Both need a runner restart,
+which is the human's call.
 
 Setup files came from a public URL. Re-run only when you mean to update; local edits to these files will be replaced.

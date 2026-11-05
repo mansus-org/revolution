@@ -80,7 +80,7 @@ The start command, from the skill.
 paseo run -d --json \
   --new-workspace worktree --cwd <repo path> \
   --new-branch <KEY-N>-<slug> --base origin/main \
-  --provider <provider> --model <model> --mode bypassPermissions \
+  --provider <provider> --model <model> --mode <permission mode> \
   --title "<KEY-N> <part>" --label issue=<KEY-N> \
   "$(cat /tmp/<KEY-N>-<slug>.md)"
 ```
