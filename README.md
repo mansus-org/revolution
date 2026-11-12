@@ -16,6 +16,8 @@ npm start        # http://localhost:8080/revolution/, rebuilds on save
 npm run build    # writes the site to _site/
 ```
 
+`src/bootstrap/` is served raw at `/bootstrap/` (not built into pages): setup files that agents fetch with curl.
+
 ## Add or edit an article
 
 Create `src/articles/<slug>.md`. The file name becomes the URL: `/revolution/articles/<slug>/`.
